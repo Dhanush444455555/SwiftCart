@@ -2,18 +2,14 @@ const jwt = require('jsonwebtoken');
 
 const protect = async (req, res, next) => {
   let token;
-
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
       token = req.headers.authorization.split(' ')[1];
-      
-      // In a real app, verify token and find user
-      // const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      // req.user = await User.findById(decoded.id).select('-password');
-      
-      // Mock validation for now
-      if (token === 'mock-jwt-token-777') {
-        req.user = { id: 'mock-user-id', name: 'Demo User', role: 'user' };
+      if (token === 'mock-admin-token') {
+        req.user = { id: 'admin-id', name: 'Admin User', email: 'admin@swiftcart.com', role: 'admin' };
+        next();
+      } else if (token === 'mock-jwt-token' || token === 'mock-jwt-token-777') {
+        req.user = { id: 'consumer-id', name: 'Demo User', email: 'user@swiftcart.com', role: 'user' };
         next();
       } else {
         res.status(401).json({ message: 'Not authorized, token failed' });

@@ -1,0 +1,56 @@
+/* ── CrowdMeter.css ── */
+
+.crowd-meter {
+  margin-top: 0.75rem;
+}
+
+.cm-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.cm-emoji {
+  font-size: 0.85rem;
+}
+
+.cm-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  flex: 1;
+}
+
+.cm-percent {
+  font-size: 0.78rem;
+  color: #94A3B8;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+.cm-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.cm-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: crowdFillIn 1.2s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+}
+
+@keyframes crowdFillIn {
+  from { width: 0 !important; }
+}
+
+.cm-hint {
+  font-size: 0.68rem;
+  color: #475569;
+  margin-top: 0.3rem;
+  font-family: 'Poppins', sans-serif;
+}

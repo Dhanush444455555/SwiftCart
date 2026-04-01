@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Camera, MapPin, Tag } from 'lucide-react';
+import { Camera, Store, Tag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { productService } from '../services/productService';
 import { setProducts } from '../store/productSlice';
@@ -41,9 +41,9 @@ const Home = () => {
               <Camera size={24} className="btn-icon" />
               Scan Item
             </Button>
-            <Button variant="secondary" className="action-btn">
-              <MapPin size={24} className="btn-icon" />
-              Store Map
+            <Button variant="secondary" className="action-btn" onClick={() => navigate('/stores')}>
+              <Store size={24} className="btn-icon" />
+              Nearby Stores
             </Button>
           </div>
         </div>
@@ -65,6 +65,7 @@ const Home = () => {
            </div>
         </div>
       </section>
+
 
       {/* Featured Products */}
       <section className="featured-section">

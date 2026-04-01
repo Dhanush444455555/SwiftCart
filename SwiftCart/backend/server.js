@@ -4,10 +4,11 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 // Routes
-const authRoutes = require('./routes/authRoutes');
+const authRoutes    = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
-const cartRoutes = require('./routes/cartRoutes');
-const orderRoutes = require('./routes/orderRoutes');
+const cartRoutes    = require('./routes/cartRoutes');
+const orderRoutes   = require('./routes/orderRoutes');
+const storeRoutes   = require('./routes/storeRoutes');
 const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 
 dotenv.config();
@@ -20,10 +21,11 @@ app.use(cors());
 app.use(express.json());
 
 // Main Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth',     authRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/orders', orderRoutes);
+app.use('/api/cart',     cartRoutes);
+app.use('/api/orders',   orderRoutes);
+app.use('/api/stores',   storeRoutes);
 
 // Error Middleware
 app.use(notFound);

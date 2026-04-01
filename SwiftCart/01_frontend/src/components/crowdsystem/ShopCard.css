@@ -1,0 +1,239 @@
+/* ============================================================
+   ShopCard.css — Clickable premium card with clear crowd + stock
+   ============================================================ */
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.sc-card {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  animation: cardIn 0.45s ease both;
+}
+
+.sc-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(108, 99, 255, 0.45);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(108, 99, 255, 0.15);
+}
+
+/* ── Banner ─────────────────────────────────────────────── */
+.sc-banner {
+  position: relative;
+  height: 190px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.sc-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  display: block;
+}
+
+.sc-card:hover .sc-banner-img { transform: scale(1.06); }
+
+.sc-banner-grad {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(15, 23, 42, 0.05) 0%,
+    rgba(15, 23, 42, 0.75) 100%
+  );
+}
+
+/* "Tap to explore" hint */
+.sc-explore-hint {
+  position: absolute;
+  bottom: 12px; right: 12px;
+  font-size: 0.65rem; font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(15, 23, 42, 0.65);
+  padding: 3px 9px; border-radius: 20px;
+  letter-spacing: 0.3px;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.08);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all 0.25s ease;
+}
+.sc-card:hover .sc-explore-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Open pill */
+.sc-open-pill {
+  position: absolute;
+  top: 12px; left: 12px;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: 0.69rem; font-weight: 700;
+  letter-spacing: 0.3px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.sc-open-pill.open {
+  background: rgba(52, 211, 153, 0.2);
+  border: 1px solid rgba(52, 211, 153, 0.5);
+  color: #34d399;
+}
+.sc-open-pill.closed {
+  background: rgba(244, 63, 94, 0.2);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  color: #f43f5e;
+}
+.sc-pill-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+/* Crowd pill */
+.sc-crowd-pill {
+  position: absolute;
+  top: 12px; right: 12px;
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: 0.69rem; font-weight: 700;
+  border: 1px solid;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* ── Body ───────────────────────────────────────────────── */
+.sc-body {
+  padding: 1.1rem 1.2rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  flex: 1;
+}
+
+/* ── Store info ─────────────────────────────────────────── */
+.sc-info-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.sc-info-left { flex: 1; min-width: 0; }
+
+.sc-name {
+  font-size: 1rem; font-weight: 700;
+  color: #f1f5f9; margin: 0 0 0.25rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.sc-meta {
+  display: flex; align-items: center;
+  gap: 0.3rem; flex-wrap: wrap;
+  font-size: 0.72rem; color: #64748b;
+}
+.sc-type  { color: #a78bfa; font-weight: 600; }
+.sc-sep   { color: #1e293b; }
+.sc-addr  { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
+.sc-dist  { color: #6C63FF; font-weight: 600; }
+
+.sc-right-col {
+  display: flex; flex-direction: column;
+  align-items: flex-end; gap: 0.4rem; flex-shrink: 0;
+}
+.sc-rating {
+  display: flex; align-items: center; gap: 0.25rem;
+  font-size: 0.78rem; font-weight: 700; color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  padding: 2px 8px; border-radius: 20px;
+}
+.sc-maps-link {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: rgba(108, 99, 255, 0.1);
+  border: 1px solid rgba(108, 99, 255, 0.25);
+  color: #a78bfa; text-decoration: none;
+  transition: all 0.2s ease;
+}
+.sc-maps-link:hover { background: rgba(108, 99, 255, 0.25); }
+
+/* ── Crowd Bar ──────────────────────────────────────────── */
+.sc-crowd-section { display: flex; flex-direction: column; gap: 0.4rem; }
+.sc-crowd-label-row {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sc-crowd-label {
+  display: flex; align-items: center; gap: 0.3rem;
+  font-size: 0.71rem; font-weight: 600;
+  color: #475569; text-transform: uppercase; letter-spacing: 0.4px;
+}
+.sc-crowd-pct { font-size: 0.8rem; font-weight: 700; }
+.sc-bar-track {
+  height: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 99px; overflow: hidden;
+}
+.sc-bar-fill {
+  height: 100%; border-radius: 99px;
+  animation: barGrow 1s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+  transition: width 0.8s ease;
+}
+@keyframes barGrow { from { width: 0 !important; } }
+
+/* ── Stock Category Pills (compact) ─────────────────────── */
+.sc-stock-pills {
+  display: flex; flex-wrap: wrap; gap: 0.35rem;
+}
+.sc-stock-pill-item {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  font-size: 0.62rem; font-weight: 700;
+  padding: 3px 8px; border-radius: 20px;
+  white-space: nowrap;
+}
+.sc-stock-pill-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+
+/* ── CTA Button ─────────────────────────────────────────── */
+.sc-cta-btn {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(108,99,255,0.15), rgba(6,182,212,0.1));
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  color: #a78bfa;
+  font-size: 0.82rem; font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-top: auto;
+}
+.sc-cta-btn:hover {
+  background: linear-gradient(90deg, rgba(108,99,255,0.3), rgba(6,182,212,0.2));
+  border-color: rgba(108, 99, 255, 0.55);
+  color: #c4b5fd;
+  transform: translateY(-1px);
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 380px) {
+  .sc-banner { height: 155px; }
+}
