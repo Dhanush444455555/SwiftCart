@@ -88,3 +88,46 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Out of stock overlay badge */
+.product-out-badge {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,0.65);
+  color: #f87171;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Stock row */
+.product-stock-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+.product-stock-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.product-stock-text {
+  font-size: 0.73rem;
+  font-weight: 600;
+}
+.product-aisle {
+  font-size: 0.7rem;
+  color: #475569;
+  margin-left: auto;
+}
+
+/* Disabled add button */
+.product-add-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+

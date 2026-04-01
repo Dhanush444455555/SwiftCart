@@ -97,3 +97,47 @@
     font-size: 2.5rem;
   }
 }
+
+/* Category filter tabs */
+.category-tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+  margin-bottom: 1.5rem;
+  flex-wrap: nowrap;
+}
+.category-tabs::-webkit-scrollbar { display: none; }
+
+.cat-tab {
+  flex-shrink: 0;
+  padding: 0.45rem 1.1rem;
+  border-radius: 30px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: #94a3b8;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.cat-tab:hover {
+  border-color: rgba(108,99,255,0.4);
+  color: #c4b5fd;
+}
+.cat-tab.active {
+  background: linear-gradient(90deg, #6C63FF, #06B6D4);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(108,99,255,0.4);
+}
+
+.product-count {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #64748b;
+}
+

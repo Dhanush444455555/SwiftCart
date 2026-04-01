@@ -1,32 +1,95 @@
-const adjectives = ['Premium', 'Wireless', 'Smart', 'Ergonomic', 'Minimalist', 'Eco-friendly', 'Heavy-duty', 'Portable', 'Luxury', 'Classic'];
-const nouns = ['Headphones', 'Speaker', 'Monitor', 'Keyboard', 'Watch', 'Backpack', 'Jacket', 'Sunglasses', 'Coffee Maker', 'Desk Lamp'];
-const categories = ['Electronics', 'Accessories', 'Apparel', 'Home', 'Office'];
-const imagePool = [
-  'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80',
-  'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80',
-  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80',
-  'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500&q=80',
-  'https://images.unsplash.com/photo-1627123424574-724758594e93?w=500&q=80',
-  'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=500&q=80',
-  'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&q=80',
-  'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=500&q=80'
+// 80 curated SwiftCart products across Groceries, Vegetables, Snacks, Chocolates, Toys, Beverages, Dairy, Personal Care
+const PRODUCTS = [
+  // ── GROCERIES ──
+  { _id: 'g001', name: 'Aashirvaad Whole Wheat Flour 5kg', description: 'Stone-ground atta for soft rotis everyday.', price: 249, category: 'Groceries', image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&q=80', stockCount: 120, aisle: 'A-1' },
+  { _id: 'g002', name: 'Tata Salt Iodised 1kg', description: 'Vacuum evaporated iodised salt for daily cooking.', price: 28, category: 'Groceries', image: 'https://images.unsplash.com/photo-1518110925495-5fe2fda17c0c?w=500&q=80', stockCount: 200, aisle: 'A-1' },
+  { _id: 'g003', name: 'Fortune Sunflower Oil 1L', description: 'Refined sunflower oil, light and healthy.', price: 135, category: 'Groceries', image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500&q=80', stockCount: 85, aisle: 'A-2' },
+  { _id: 'g004', name: 'Daawat Basmati Rice 5kg', description: 'Long-grain aged basmati with rich aroma.', price: 449, category: 'Groceries', image: 'https://images.unsplash.com/photo-1536304993881-ff86e0c9b107?w=500&q=80', stockCount: 60, aisle: 'A-2' },
+  { _id: 'g005', name: 'Toor Dal 1kg', description: 'Premium split pigeon peas for dal tadka.', price: 145, category: 'Groceries', image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&q=80', stockCount: 90, aisle: 'A-3' },
+  { _id: 'g006', name: 'Saffola Oats 1kg', description: 'Heart-healthy breakfast oats, no added sugar.', price: 199, category: 'Groceries', image: 'https://images.unsplash.com/photo-1517673408408-af8c3e19d8fe?w=500&q=80', stockCount: 75, aisle: 'A-3' },
+  { _id: 'g007', name: 'Rajma (Kidney Beans) 500g', description: 'Handpicked red kidney beans for rich curries.', price: 88, category: 'Groceries', image: 'https://images.unsplash.com/photo-1590779033100-9f60a05a013d?w=500&q=80', stockCount: 110, aisle: 'A-3' },
+  { _id: 'g008', name: 'Chana Dal 1kg', description: 'Yellow split chickpeas, protein rich.', price: 98, category: 'Groceries', image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=500&q=80', stockCount: 95, aisle: 'A-3' },
+  { _id: 'g009', name: 'MDH Garam Masala 100g', description: 'Authentic blend of 15+ aromatic spices.', price: 72, category: 'Groceries', image: 'https://images.unsplash.com/photo-1596040033229-a9821eea7b67?w=500&q=80', stockCount: 150, aisle: 'A-4' },
+  { _id: 'g010', name: 'Everest Turmeric Powder 200g', description: 'Pure haldi powder for vibrant colour & flavour.', price: 55, category: 'Groceries', image: 'https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=500&q=80', stockCount: 130, aisle: 'A-4' },
+
+  // ── VEGETABLES ──
+  { _id: 'v001', name: 'Fresh Tomatoes 500g', description: 'Farm-fresh, vine-ripened red tomatoes.', price: 30, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=500&q=80', stockCount: 80, aisle: 'B-1' },
+  { _id: 'v002', name: 'Onions 1kg', description: 'Medium-sized red onions, pungent and fresh.', price: 40, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1518977676405-19e3b4b91c98?w=500&q=80', stockCount: 100, aisle: 'B-1' },
+  { _id: 'v003', name: 'Potatoes 1kg', description: 'Fresh yellow potatoes, great for curries and fries.', price: 35, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1518977822534-7049a61ee0c2?w=500&q=80', stockCount: 120, aisle: 'B-1' },
+  { _id: 'v004', name: 'Cauliflower (1 pc)', description: 'Large white cauliflower head, crisp and fresh.', price: 45, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1568584711075-3d021a7c3ca3?w=500&q=80', stockCount: 50, aisle: 'B-2' },
+  { _id: 'v005', name: 'Spinach Bunch', description: 'Tender green spinach leaves, iron-rich.', price: 25, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=500&q=80', stockCount: 60, aisle: 'B-2' },
+  { _id: 'v006', name: 'Capsicum (Mixed) 3 pcs', description: 'Red, yellow & green capsicum trio, fresh.', price: 60, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=500&q=80', stockCount: 45, aisle: 'B-2' },
+  { _id: 'v007', name: 'Brinjal 500g', description: 'Glossy purple brinjal for bharwa or curry.', price: 32, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1629126827793-6d7c7e0b1e4f?w=500&q=80', stockCount: 55, aisle: 'B-3' },
+  { _id: 'v008', name: 'Green Peas 250g', description: 'Fresh shelled green peas, sweet and tender.', price: 48, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1587735243615-c03f25aaff15?w=500&q=80', stockCount: 70, aisle: 'B-3' },
+  { _id: 'v009', name: 'Bottle Gourd (Lauki) 1 pc', description: 'Tender lauki for healthy sabzi and dals.', price: 28, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=500&q=80', stockCount: 40, aisle: 'B-3' },
+  { _id: 'v010', name: 'Carrot 500g', description: 'Crunchy orange carrots, sweet and nutritious.', price: 38, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1598170845058-23729a6e90bf?w=500&q=80', stockCount: 65, aisle: 'B-4' },
+
+  // ── SNACKS ──
+  { _id: 's001', name: "Lays Classic Salted Chips 26g", description: "Crispy potato chips with just the right salt.", price: 20, category: 'Snacks', image: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=500&q=80', stockCount: 200, aisle: 'C-1' },
+  { _id: 's002', name: "Haldiram's Aloo Bhujia 200g", description: "Crispy spiced potato sev, a classic Indian snack.", price: 75, category: 'Snacks', image: 'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=500&q=80', stockCount: 150, aisle: 'C-1' },
+  { _id: 's003', name: "Kurkure Masala Munch 90g", description: "Crunchy corn puffs with tangy masala seasoning.", price: 30, category: 'Snacks', image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&q=80', stockCount: 180, aisle: 'C-2' },
+  { _id: 's004', name: "Parle-G Biscuits 250g", description: "India's most loved glucose biscuits since 1939.", price: 20, category: 'Snacks', image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=500&q=80', stockCount: 250, aisle: 'C-2' },
+  { _id: 's005', name: "Hide & Seek Choco Chip Cookies", description: "Buttery cookies loaded with chocolate chips.", price: 60, category: 'Snacks', image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=500&q=80', stockCount: 130, aisle: 'C-2' },
+  { _id: 's006', name: "PopCorners Sea Salt 142g", description: "Popped corn chips, light & airy, gluten free.", price: 199, category: 'Snacks', image: 'https://images.unsplash.com/photo-1578849278619-e73505e9610f?w=500&q=80', stockCount: 80, aisle: 'C-3' },
+  { _id: 's007', name: "Maggi 2-Minute Noodles 4pk", description: "The iconic instant noodles loved by all ages.", price: 84, category: 'Snacks', image: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=500&q=80', stockCount: 200, aisle: 'C-3' },
+  { _id: 's008', name: "Pringle's Original 165g", description: "Stacked potato crisps in mouthwatering original flavour.", price: 175, category: 'Snacks', image: 'https://images.unsplash.com/photo-1527150122806-f682d2fd8b09?w=500&q=80', stockCount: 90, aisle: 'C-4' },
+  { _id: 's009', name: "Trail Mix Nuts & Berries 150g", description: "A power-packed mix of cashews, almonds, raisins & cranberries.", price: 249, category: 'Snacks', image: 'https://images.unsplash.com/photo-1519996529931-28324d5a630e?w=500&q=80', stockCount: 65, aisle: 'C-4' },
+  { _id: 's010', name: "Bikano Khatta Meetha 400g", description: "Sweet and spicy namkeen mix, perfect tea-time snack.", price: 120, category: 'Snacks', image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500&q=80', stockCount: 110, aisle: 'C-4' },
+
+  // ── CHOCOLATES ──
+  { _id: 'c001', name: "Dairy Milk Silk 60g", description: "Silky smooth milk chocolate with velvety texture.", price: 99, category: 'Chocolates', image: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=500&q=80', stockCount: 180, aisle: 'D-1' },
+  { _id: 'c002', name: "Kit Kat 4-Finger Bar 42g", description: "Crispy wafer fingers covered in smooth chocolate.", price: 50, category: 'Chocolates', image: 'https://images.unsplash.com/photo-1601945179167-ac7dcf11a27c?w=500&q=80', stockCount: 200, aisle: 'D-1' },
+  { _id: 'c003', name: "Ferrero Rocher Box (16 pcs)", description: "Whole roasted hazelnuts in a creamy chocolatey shell.", price: 549, category: 'Chocolates', image: 'https://images.unsplash.com/photo-1548907040-4baa42d10919?w=500&q=80', stockCount: 60, aisle: 'D-2' },
+  { _id: 'c004', name: "Toblerone Milk 100g", description: "Swiss milk chocolate with honey and almond nougat.", price: 299, category: 'Chocolates', image: 'https://images.unsplash.com/photo-1611175603428-7d22efafc5bb?w=500&q=80', stockCount: 75, aisle: 'D-2' },
+  { _id: 'c005', name: "Lindt Dark Chocolate 70% 100g", description: "Intense dark chocolate with bold cocoa flavour.", price: 399, category: 'Chocolates', image: 'https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=500&q=80', stockCount: 50, aisle: 'D-2' },
+  { _id: 'c006', name: "5 Star Chocolate Bar 40g", description: "Caramel and chocolate layered in every bite.", price: 30, category: 'Chocolates', image: 'https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=500&q=80', stockCount: 220, aisle: 'D-1' },
+  { _id: 'c007', name: "Bounty Milk Chocolate 57g", description: "Coconut filling dipped in smooth milk chocolate.", price: 85, category: 'Chocolates', image: 'https://images.unsplash.com/photo-1616016957977-4a83f9aec997?w=500&q=80', stockCount: 95, aisle: 'D-3' },
+  { _id: 'c008', name: "Milkybar White Chocolate 30g", description: "Creamy white chocolate, a gentle sweet treat.", price: 40, category: 'Chocolates', image: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=500&q=80', stockCount: 160, aisle: 'D-1' },
+
+  // ── TOYS ──
+  { _id: 't001', name: "LEGO Classic Bricks 200pcs", description: "Timeless building blocks for creative play, ages 4+.", price: 1299, category: 'Toys', image: 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=500&q=80', stockCount: 40, aisle: 'E-1' },
+  { _id: 't002', name: "Remote Control Racing Car", description: "Fast 2.4GHz RC car with 360° drift stunts.", price: 899, category: 'Toys', image: 'https://images.unsplash.com/photo-1620735692151-26a7e0748429?w=500&q=80', stockCount: 30, aisle: 'E-1' },
+  { _id: 't003', name: "Rubik's Cube 3x3", description: "The original brain-teasing puzzle, classic colours.", price: 349, category: 'Toys', image: 'https://images.unsplash.com/photo-1577401239170-897942555fb3?w=500&q=80', stockCount: 55, aisle: 'E-2' },
+  { _id: 't004', name: "Soft Teddy Bear 40cm", description: "Super-soft plush teddy bear, huggable and safe.", price: 499, category: 'Toys', image: 'https://images.unsplash.com/photo-1559454403-b8fb88521f11?w=500&q=80', stockCount: 45, aisle: 'E-2' },
+  { _id: 't005', name: "Wooden Jigsaw Puzzle 100pcs", description: "Educational wooden puzzle with bright animal prints.", price: 599, category: 'Toys', image: 'https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=500&q=80', stockCount: 35, aisle: 'E-3' },
+  { _id: 't006', name: "Badminton Set (2 rackets)", description: "Lightweight rackets with 3 shuttlecocks, family fun.", price: 449, category: 'Toys', image: 'https://images.unsplash.com/photo-1622547748225-3fc4abd2cca0?w=500&q=80', stockCount: 25, aisle: 'E-3' },
+  { _id: 't007', name: "Building Block Train Set", description: "Colourful 50-piece train track set for toddlers.", price: 749, category: 'Toys', image: 'https://images.unsplash.com/photo-1535572290543-960a8046f5af?w=500&q=80', stockCount: 20, aisle: 'E-4' },
+  { _id: 't008', name: "Play-Doh Fun Factory Set", description: "8 bright colours of modelling clay with tools.", price: 699, category: 'Toys', image: 'https://images.unsplash.com/photo-1567057419565-4349c49d8a04?w=500&q=80', stockCount: 38, aisle: 'E-4' },
+
+  // ── BEVERAGES ──
+  { _id: 'b001', name: "Bisleri Water 1L", description: "Pure and safe mineral water for daily hydration.", price: 20, category: 'Beverages', image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=500&q=80', stockCount: 300, aisle: 'F-1' },
+  { _id: 'b002', name: "Coca-Cola 750ml", description: "The original cola, ice-cold refreshment.", price: 45, category: 'Beverages', image: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=500&q=80', stockCount: 200, aisle: 'F-1' },
+  { _id: 'b003', name: "Real Active Orange Juice 1L", description: "100% fruit juice, no added sugar, fresh orange.", price: 135, category: 'Beverages', image: 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=500&q=80', stockCount: 90, aisle: 'F-2' },
+  { _id: 'b004', name: "Red Bull Energy Drink 250ml", description: "Provides wings with caffeine, B-vitamins & taurine.", price: 120, category: 'Beverages', image: 'https://images.unsplash.com/photo-1601924582970-9238bcb495d9?w=500&q=80', stockCount: 110, aisle: 'F-2' },
+  { _id: 'b005', name: "Tropicana Mixed Fruit Juice 1L", description: "A refreshing blend of fruits with vitamin C.", price: 120, category: 'Beverages', image: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=500&q=80', stockCount: 80, aisle: 'F-2' },
+  { _id: 'b006', name: "Nescafé Classic Coffee 100g", description: "Rich and smooth instant coffee for every morning.", price: 299, category: 'Beverages', image: 'https://images.unsplash.com/photo-1580933073521-dc49ac0d4e6a?w=500&q=80', stockCount: 120, aisle: 'F-3' },
+  { _id: 'b007', name: "Lipton Green Tea 25 bags", description: "Pure green tea bags for a refreshing detox experience.", price: 165, category: 'Beverages', image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&q=80', stockCount: 100, aisle: 'F-3' },
+  { _id: 'b008', name: "Starbucks Cold Brew 250ml", description: "Smooth, less acidic cold brew coffee, ready to drink.", price: 199, category: 'Beverages', image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&q=80', stockCount: 55, aisle: 'F-4' },
+
+  // ── DAIRY ──
+  { _id: 'd001', name: "Amul Full Cream Milk 1L", description: "Fresh pasteurised full cream milk, daily essential.", price: 58, category: 'Dairy', image: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=500&q=80', stockCount: 150, aisle: 'G-1' },
+  { _id: 'd002', name: "Mother Dairy Dahi 400g", description: "Creamy and fresh set curd, made from toned milk.", price: 45, category: 'Dairy', image: 'https://images.unsplash.com/photo-1593952046553-64fe53bcfb7a?w=500&q=80', stockCount: 100, aisle: 'G-1' },
+  { _id: 'd003', name: "Amul Butter 500g", description: "Pasteurised cream butter with that classic golden taste.", price: 275, category: 'Dairy', image: 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=500&q=80', stockCount: 80, aisle: 'G-2' },
+  { _id: 'd004', name: "Amul Paneer 200g", description: "Soft and fresh Indian cottage cheese block.", price: 99, category: 'Dairy', image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=500&q=80', stockCount: 70, aisle: 'G-2' },
+  { _id: 'd005', name: "Britannia Cheese Slices 200g", description: "Ready-to-use processed cheese slices for sandwiches.", price: 149, category: 'Dairy', image: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=500&q=80', stockCount: 75, aisle: 'G-3' },
+  { _id: 'd006', name: "Epigamia Greek Yogurt 90g", description: "Thick and creamy Greek style yogurt with live cultures.", price: 55, category: 'Dairy', image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500&q=80', stockCount: 90, aisle: 'G-3' },
+
+  // ── PERSONAL CARE ──
+  { _id: 'p001', name: "Dove Body Wash 250ml", description: "Gentle moisturising body wash with 1/4 cream formula.", price: 265, category: 'Personal Care', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500&q=80', stockCount: 90, aisle: 'H-1' },
+  { _id: 'p002', name: "Head & Shoulders Shampoo 340ml", description: "Anti-dandruff shampoo with clinically proven formula.", price: 299, category: 'Personal Care', image: 'https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=500&q=80', stockCount: 80, aisle: 'H-1' },
+  { _id: 'p003', name: "Colgate Max Fresh Toothpaste 150g", description: "Spearmint freshness, long-lasting clean feeling.", price: 99, category: 'Personal Care', image: 'https://images.unsplash.com/photo-1584515933487-779824d29309?w=500&q=80', stockCount: 150, aisle: 'H-2' },
+  { _id: 'p004', name: "Nivea Men Face Wash 100ml", description: "Deep cleaning face wash with active charcoal.", price: 199, category: 'Personal Care', image: 'https://images.unsplash.com/photo-1627384113743-6bd5a479fffd?w=500&q=80', stockCount: 70, aisle: 'H-2' },
+  { _id: 'p005', name: "Neutrogena Sunscreen SPF 50+ 30ml", description: "Lightweight, non-greasy broad spectrum sun protection.", price: 399, category: 'Personal Care', image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=500&q=80', stockCount: 60, aisle: 'H-3' },
+  { _id: 'p006', name: "Gillette Mach3 Razor", description: "Triple blade razor for a close, comfortable shave.", price: 249, category: 'Personal Care', image: 'https://images.unsplash.com/photo-1621607511220-49dc8b7b8a82?w=500&q=80', stockCount: 55, aisle: 'H-3' },
+
+  // ── FRUITS ──
+  { _id: 'f001', name: "Bananas (6 pcs) 500g", description: "Ripe Robusta bananas, naturally sweet and creamy.", price: 42, category: 'Fruits', image: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=500&q=80', stockCount: 90, aisle: 'B-5' },
+  { _id: 'f002', name: "Red Apple (4 pcs)", description: "Crisp Washington red apples, sweet and juicy.", price: 120, category: 'Fruits', image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=500&q=80', stockCount: 70, aisle: 'B-5' },
+  { _id: 'f003', name: "Watermelon (whole ~2kg)", description: "Sweet and refreshing, seedless summer delight.", price: 89, category: 'Fruits', image: 'https://images.unsplash.com/photo-1563114773-84221bd62daa?w=500&q=80', stockCount: 30, aisle: 'B-6' },
+  { _id: 'f004', name: "Pomegranate (2 pcs)", description: "Ruby-red pomegranates packed with antioxidants.", price: 95, category: 'Fruits', image: 'https://images.unsplash.com/photo-1617112848923-cc2234396a8d?w=500&q=80', stockCount: 45, aisle: 'B-6' },
+  { _id: 'f005', name: "Mango Alphonso 1kg", description: "The king of fruits — sweet, aromatic Alphonso mango.", price: 189, category: 'Fruits', image: 'https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=500&q=80', stockCount: 50, aisle: 'B-5' },
+  { _id: 'f006', name: "Grapes Green Seedless 500g", description: "Plump, seedless Thompson green grapes — chilled & sweet.", price: 79, category: 'Fruits', image: 'https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=500&q=80', stockCount: 55, aisle: 'B-6' },
 ];
 
-export const generateMassiveMockData = () => {
-  const products = [];
-  for (let i = 1; i <= 100; i++) {
-    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-    const noun = nouns[Math.floor(Math.random() * nouns.length)];
-    products.push({
-      _id: `mock-fp-${i}`,
-      name: `${adj} ${noun}`,
-      description: `High quality, best in class ${noun.toLowerCase()} designed for modern lifestyles.`,
-      price: Math.floor(Math.random() * 5000) + 99,
-      category: categories[Math.floor(Math.random() * categories.length)],
-      image: imagePool[Math.floor(Math.random() * imagePool.length)],
-      stockCount: Math.floor(Math.random() * 200) + 10,
-      aisle: `${String.fromCharCode(65 + Math.floor(Math.random() * 8))}-${Math.floor(Math.random() * 20) + 1}`,
-    });
-  }
-  return products;
-};
+export const getMockProducts = () => [...PRODUCTS];
+export const generateMassiveMockData = () => [...PRODUCTS];

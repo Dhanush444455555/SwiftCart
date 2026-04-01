@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { CreditCard, Smartphone, ShieldCheck } from 'lucide-react';
+import { CreditCard, ShieldCheck, Zap } from 'lucide-react';
 import { clearCart, saveOrderToHistory } from '../store/cartSlice';
+import { decreaseStock } from '../store/productSlice';
 import { orderService } from '../services/orderService';
 import toast from 'react-hot-toast';
 import { useAuth } from '../hooks/useAuth';
@@ -69,6 +70,8 @@ const Checkout = () => {
              
              if(verifyRes.status === 200) {
                toast.success("Payment Successful!");
+               // Decrease stock for each purchased item
+               dispatch(decreaseStock(items.map(i => ({ productId: i.product._id, quantity: i.quantity }))));
                dispatch(saveOrderToHistory({ finalAmount: parseFloat(finalAmount) }));
                dispatch(clearCart());
                navigate('/success');
@@ -156,13 +159,29 @@ const Checkout = () => {
           </div>
         </div>
 
-        <div className="flex gap-4 relative z-10">
-           <button onClick={() => navigate('/cart')} className="btn-secondary flex-1 py-4 text-lg">
-             Back to Cart
-           </button>
-           <button onClick={handlePayment} disabled={isProcessing} className="btn-gradient flex-1 py-4 text-lg font-bold flex justify-center items-center">
-             {isProcessing ? 'Processing...' : `Pay ₹${finalAmount}`}
-           </button>
+        <div className="flex gap-4 relative z-10" style={{flexDirection:'column'}}>
+          <div style={{display:'flex', gap:'1rem'}}>
+            <button onClick={() => navigate('/cart')} className="btn-secondary flex-1 py-4 text-lg">
+              Back to Cart
+            </button>
+            <button onClick={handlePayment} disabled={isProcessing} className="btn-gradient flex-1 py-4 text-lg font-bold flex justify-center items-center">
+              {isProcessing ? 'Processing...' : `Pay ₹${finalAmount}`}
+            </button>
+          </div>
+          {/* Demo Pay — works without backend, reduces stock immediately */}
+          <button
+            onClick={() => {
+              dispatch(decreaseStock(items.map(i => ({ productId: i.product._id, quantity: i.quantity }))));
+              dispatch(saveOrderToHistory({ finalAmount: parseFloat(finalAmount) }));
+              dispatch(clearCart());
+              toast.success('Order placed! Stock updated.');
+              navigate('/success');
+            }}
+            className="btn-gradient w-full py-3 font-bold flex justify-center items-center gap-2"
+            style={{background:'linear-gradient(90deg,#34d399,#06B6D4)'}}
+          >
+            <Zap size={17} /> Pay Now (Demo — No Backend)
+          </button>
         </div>
       </div>
     </div>
