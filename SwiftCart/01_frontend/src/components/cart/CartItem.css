@@ -1,0 +1,231 @@
+/* ============================================================
+   CartItem.css — Premium SwiftCart Dark Glassmorphism
+   ============================================================ */
+
+.cart-item-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.cart-item-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(108, 99, 255, 0.06) 0%, transparent 60%);
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cart-item-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(108, 99, 255, 0.35);
+  box-shadow: 0 12px 40px rgba(108, 99, 255, 0.2);
+}
+
+.cart-item-card:hover::before {
+  opacity: 1;
+}
+
+/* ── Image ── */
+.cart-item-img-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.cart-item-img {
+  width: 86px;
+  height: 86px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.cart-item-card:hover .cart-item-img {
+  transform: scale(1.04);
+}
+
+.cart-item-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: linear-gradient(90deg, #6C63FF, #06B6D4);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ── Details ── */
+.cart-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-item-name {
+  font-size: 0.97rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Poppins', sans-serif;
+}
+
+.cart-item-unit-price {
+  font-size: 0.8rem;
+  color: #94A3B8;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ── Quantity Controls ── */
+.cart-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  padding: 0.35rem 0.6rem;
+}
+
+.qty-ctrl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.qty-ctrl-btn.inc {
+  background: linear-gradient(135deg, #6C63FF, #06B6D4);
+  box-shadow: 0 2px 8px rgba(108, 99, 255, 0.4);
+}
+
+.qty-ctrl-btn.inc:hover {
+  transform: scale(1.12);
+  box-shadow: 0 4px 14px rgba(108, 99, 255, 0.6);
+}
+
+.qty-ctrl-btn.dec {
+  background: rgba(251, 113, 133, 0.18);
+  border: 1px solid rgba(251, 113, 133, 0.3);
+  color: #fb7185;
+}
+
+.qty-ctrl-btn.dec:hover {
+  background: rgba(251, 113, 133, 0.35);
+  transform: scale(1.12);
+}
+
+.qty-number {
+  font-size: 0.95rem;
+  font-weight: 700;
+  min-width: 22px;
+  text-align: center;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  transition: transform 0.25s ease, color 0.25s ease;
+  display: inline-block;
+}
+
+.qty-number.qty-up {
+  animation: qtyBounceUp 0.28s ease;
+}
+
+.qty-number.qty-down {
+  animation: qtyBounceDown 0.28s ease;
+}
+
+@keyframes qtyBounceUp {
+  0%   { transform: translateY(0); color: #a5f3fc; }
+  40%  { transform: translateY(-6px); color: #06B6D4; }
+  100% { transform: translateY(0); color: #fff; }
+}
+
+@keyframes qtyBounceDown {
+  0%   { transform: translateY(0); color: #fda4af; }
+  40%  { transform: translateY(4px); color: #fb7185; }
+  100% { transform: translateY(0); color: #fff; }
+}
+
+/* ── Total Price ── */
+.cart-item-total-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 90px;
+  gap: 0.15rem;
+}
+
+.total-label {
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.total-amount {
+  font-size: 1.15rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #a78bfa, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .cart-item-card {
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .cart-item-info {
+    flex: 1 1 calc(100% - 100px);
+  }
+
+  .cart-item-qty {
+    order: 3;
+  }
+
+  .cart-item-total-price {
+    order: 4;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding-top: 0.75rem;
+    margin-top: 0.25rem;
+  }
+}

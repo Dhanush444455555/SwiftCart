@@ -35,7 +35,10 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/swiftcart',
   useUnifiedTopology: true,
 }).then(() => {
   console.log('MongoDB Connected');
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }).catch(err => {
-  console.error('Database connection error:', err);
+  console.error('Database connection error:', err.message);
+  console.log('App will continue running with fallback mock data.');
 });
+
+// Start server whether DB connects or not
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

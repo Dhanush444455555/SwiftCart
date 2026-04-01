@@ -1,17 +1,26 @@
 import apiClient from './apiClient';
+import { generateMassiveMockData } from '../data/mockProducts';
 
 export const productService = {
-  // Directly intercepting and pulling 100 realistic dummy products for the frontend prototype
   getAllProducts: async () => {
+    let localData = [];
     try {
-      // First try your local backend (if MongoDB is running)
-      return await apiClient.get('/products');
-    } catch {
-      // Fallback: Fetch massive Flipkart-style mock dataset
-      const res = await fetch('https://dummyjson.com/products?limit=100');
-      const data = await res.json();
-      return data.products.map(p => ({
-        _id: String(p.id),
+      localData = await apiClient.get('/products');
+      if (!Array.isArray(localData)) localData = [];
+    } catch (e) {
+      console.warn("Local DB unreachable, relying on external APIs only.");
+    }
+    
+    try {
+      // Unconditionally fetch external massive datasets
+      const dummyRes = await fetch('https://dummyjson.com/products?limit=194');
+      const dummyData = await dummyRes.json();
+      
+      const fakeStoreRes = await fetch('https://fakestoreapi.com/products');
+      const fakeStoreData = await fakeStoreRes.json();
+      
+      const dummyProducts = dummyData.products.map(p => ({
+        _id: `dj-${p.id}`,
         name: p.title,
         description: p.description,
         price: p.price,
@@ -20,6 +29,25 @@ export const productService = {
         stockCount: p.stock,
         aisle: `${String.fromCharCode(65 + Math.floor(Math.random() * 8))}-${Math.floor(Math.random() * 20) + 1}`,
       }));
+
+      const fakeStoreProducts = fakeStoreData.map(p => ({
+        _id: `fs-${p.id}`,
+        name: p.title,
+        description: p.description,
+        price: p.price,
+        category: p.category.charAt(0).toUpperCase() + p.category.slice(1),
+        image: p.image,
+        stockCount: p.rating ? p.rating.count : 50,
+        aisle: `${String.fromCharCode(65 + Math.floor(Math.random() * 8))}-${Math.floor(Math.random() * 20) + 1}`,
+      }));
+
+      // Combine local DB items + the 200+ external items
+      const combined = [...localData, ...fakeStoreProducts, ...dummyProducts];
+      return combined.sort(() => Math.random() - 0.5);
+    } catch {
+      // API BLOCKED BY NETWORK: Generating massive dataset locally to bypass firewall!
+      const generatedMocks = generateMassiveMockData();
+      return [...localData, ...generatedMocks].sort(() => Math.random() - 0.5);
     }
   },
   searchProducts: (query) => apiClient.get(`/products/search?query=${encodeURIComponent(query)}`),

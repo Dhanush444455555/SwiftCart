@@ -20,14 +20,7 @@ const Home = () => {
         const data = await productService.getAllProducts();
         dispatch(setProducts(data));
       } catch (err) {
-        console.error('Failed to fetch from backend, maybe not running?', err);
-        // Fallback dummy for demo UI
-        const dummy = [
-          { _id: '1', name: 'Wireless Headphones', description: 'Noise Canceling', price: 299, category: 'Electronics', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80', aisle: 'A12' },
-          { _id: '2', name: 'Almond Milk', description: '1L unsweetened', price: 4.99, category: 'Groceries', image: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=500&q=80', aisle: 'G3' },
-          { _id: '3', name: 'Minimalist Watch', description: 'Black leather', price: 199.50, category: 'Accessories', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80', aisle: 'A14' }
-        ];
-        dispatch(setProducts(dummy));
+        console.error('Failed to load products from service:', err);
       } finally {
         setLoading(false);
       }
