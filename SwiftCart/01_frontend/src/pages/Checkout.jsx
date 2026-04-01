@@ -159,8 +159,8 @@ const Checkout = () => {
           </div>
         </div>
 
-        <div className="flex gap-4 relative z-10" style={{flexDirection:'column'}}>
-          <div style={{display:'flex', gap:'1rem'}}>
+        <div className="flex gap-4 relative z-10 flex-col">
+          <div className="flex gap-4">
             <button onClick={() => navigate('/cart')} className="btn-secondary flex-1 py-4 text-lg">
               Back to Cart
             </button>
@@ -168,7 +168,7 @@ const Checkout = () => {
               {isProcessing ? 'Processing...' : `Pay ₹${finalAmount}`}
             </button>
           </div>
-          {/* Demo Pay — works without backend, reduces stock immediately */}
+
           <button
             onClick={() => {
               dispatch(decreaseStock(items.map(i => ({ productId: i.product._id, quantity: i.quantity }))));
