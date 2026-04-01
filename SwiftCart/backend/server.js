@@ -9,6 +9,7 @@ const productRoutes = require('./routes/productRoutes');
 const cartRoutes    = require('./routes/cartRoutes');
 const orderRoutes   = require('./routes/orderRoutes');
 const storeRoutes   = require('./routes/storeRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart',     cartRoutes);
 app.use('/api/orders',   orderRoutes);
 app.use('/api/stores',   storeRoutes);
+app.use('/api/payment',  paymentRoutes);
 
 // Error Middleware
 app.use(notFound);

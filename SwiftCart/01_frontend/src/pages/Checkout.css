@@ -1,94 +1,391 @@
+/* ============================================================
+   Checkout.css — Real UPI QR payment UI
+   ============================================================ */
 .checkout-page {
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 4rem 1rem;
+  align-items: flex-start;
+  padding: 3rem 1rem 5rem;
+  font-family: 'Poppins', sans-serif;
 }
 
 .checkout-container {
   width: 100%;
-  max-width: 500px;
-  padding: 3rem 2rem;
-  text-align: center;
+  max-width: 480px;
+  padding: 2rem 1.75rem;
 }
 
-.checkout-container h1 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.amount-display {
-  font-size: 1.25rem;
-  color: var(--text-secondary);
-  margin-bottom: 2.5rem;
-}
-
-.amount-display span {
-  font-weight: 700;
-  color: var(--bg-cyan);
-  font-size: 1.5rem;
-  margin-left: 0.5rem;
-}
-
-.payment-methods {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.method-btn {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
-  color: var(--text-primary);
-  padding: 1rem;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: var(--transition-smooth);
-}
-
-.method-btn.active {
-  border-color: var(--bg-accent);
-  background: rgba(108, 99, 255, 0.1);
-}
-
-.payment-details {
-  background: rgba(15, 23, 42, 0.5);
-  padding: 2rem;
-  border-radius: 12px;
-  margin-bottom: 2rem;
-}
-
-.mock-qr {
-  width: 150px;
-  height: 150px;
-  background: white;
-  margin: 0 auto;
+/* ── Header ──────────────────────────────────────────────── */
+.ck-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: black;
-  font-weight: 700;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+.ck-header h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0;
+}
+.ck-amount-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: rgba(6, 182, 212, 0.07);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 14px;
+  margin: 1rem 0 1.5rem;
+}
+.ck-amount-label { font-size: 0.82rem; color: #64748b; }
+.ck-amount-value { font-size: 1.5rem; font-weight: 800; color: #06b6d4; }
+
+/* ── Method Tabs ─────────────────────────────────────────── */
+.payment-methods {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.method-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94A3B8;
+  padding: 0.8rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s ease;
+}
+.method-btn:hover { background: rgba(108,99,255,0.08); color: #c4b5fd; }
+.method-btn.active {
+  border-color: rgba(108, 99, 255, 0.5);
+  background: rgba(108, 99, 255, 0.12);
+  color: #a78bfa;
+}
+
+/* ── UPI Panel ───────────────────────────────────────────── */
+.ck-upi-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* QR Code */
+.ck-qr-wrap {
+  position: relative;
+  padding: 14px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.ck-qr-img {
+  display: block;
+  width: 220px;
+  height: 220px;
   border-radius: 8px;
 }
-
-.mb-3 {
-  margin-bottom: 1rem;
+.ck-qr-overlay-text {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(6, 182, 212, 0.95);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-.w-full {
+/* Apps row */
+.ck-apps-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+.ck-apps-label { font-size: 0.72rem; color: #475569; font-weight: 600; }
+.ck-app-chip {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #94A3B8;
+}
+
+/* UPI ID row */
+.ck-upi-id-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+}
+.ck-upi-id-label { font-size: 0.7rem; color: #475569; font-weight: 700; white-space: nowrap; }
+.ck-upi-id-val   { flex: 1; font-size: 0.82rem; font-weight: 700; color: #6C63FF; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ck-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(108,99,255,0.15);
+  border: 1px solid rgba(108,99,255,0.3);
+  color: #a78bfa;
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ck-copy-btn:hover { background: rgba(108,99,255,0.28); }
+
+/* Open app button */
+.ck-open-app-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.65rem;
+  border-radius: 12px;
+  background: rgba(108,99,255,0.1);
+  border: 1px solid rgba(108,99,255,0.3);
+  color: #a78bfa;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.ck-open-app-btn:hover { background: rgba(108,99,255,0.22); }
+
+/* ── Card Details ────────────────────────────────────────── */
+.card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 1.5rem;
+}
+.ck-card-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* ── Pay Button ──────────────────────────────────────────── */
+.ck-pay-btn {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #6C63FF, #06b6d4);
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  box-shadow: 0 4px 20px rgba(108,99,255,0.35);
+}
+.ck-pay-btn:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(108,99,255,0.5);
+}
+.ck-pay-btn:disabled { opacity: 0.75; cursor: not-allowed; }
+.ck-pay-sub {
+  font-size: 0.65rem;
+  font-weight: 500;
+  opacity: 0.75;
+  letter-spacing: 0.3px;
+}
+
+.ck-spinner {
+  width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Secure note */
+.ck-secure-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  color: #334155;
+  margin-top: 0.75rem;
+}
+
+/* ── Quick-app buttons ───────────────────────────────────── */
+.ck-quick-apps {
+  display: flex;
+  gap: 0.6rem;
   width: 100%;
 }
+.ck-app-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.6rem 0.4rem;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: #94A3B8;
+  transition: all 0.2s ease;
+}
+.ck-app-btn:hover { transform: translateY(-2px); }
+.ck-app-btn.phonePe:hover { background: rgba(120,58,219,0.15); border-color: rgba(120,58,219,0.4); color: #a78bfa; }
+.ck-app-btn.gpay:hover    { background: rgba(52,168,83,0.12);  border-color: rgba(52,168,83,0.4);  color: #34d399; }
+.ck-app-btn.paytm:hover   { background: rgba(0,147,201,0.12);  border-color: rgba(0,147,201,0.4);  color: #38bdf8; }
+.ck-app-icon { font-size: 1.2rem; }
 
-.pay-btn {
+/* ── Waiting state ───────────────────────────────────────── */
+.ck-waiting-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
   padding: 1rem;
-  font-size: 1.2rem;
+  border-radius: 14px;
+  background: rgba(108,99,255,0.07);
+  border: 1px solid rgba(108,99,255,0.25);
+  flex-wrap: wrap;
+}
+.ck-waiting-title {
+  font-size: 0.88rem; font-weight: 700; color: #e2e8f0; margin: 0;
+}
+.ck-waiting-sub {
+  font-size: 0.72rem; color: #64748b; margin: 0;
+}
+.ck-spinner-lg {
+  width: 26px; height: 26px; flex-shrink: 0;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: #6C63FF;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+.ck-paid-btn {
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  background: rgba(52,211,153,0.15);
+  border: 1px solid rgba(52,211,153,0.35);
+  color: #34d399;
+  font-size: 0.8rem; font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.ck-paid-btn:hover { background: rgba(52,211,153,0.28); }
+
+/* ── Shared inputs ───────────────────────────────────────── */
+.mb-3 { margin-bottom: 1rem; }
+.mt-3 { margin-top: 1rem; }
+.w-full { width: 100%; }
+
+/* ── Razorpay main button ─────────────────────────────────── */
+.ck-rzp-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(90deg, #6C63FF, #06b6d4);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 20px rgba(108, 99, 255, 0.35);
+}
+.ck-rzp-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(108, 99, 255, 0.5);
+}
+.ck-rzp-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+/* ── Divider ─────────────────────────────────────────────── */
+.ck-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  color: #334155;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.ck-divider::before,
+.ck-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.06);
 }
 
-.text-secondary {
-  color: var(--text-secondary);
+/* ── Error banner ────────────────────────────────────────── */
+.ck-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  background: rgba(244,63,94,0.1);
+  border: 1px solid rgba(244,63,94,0.3);
+  color: #f87171;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Card note ───────────────────────────────────────────── */
+.ck-rzp-note {
+  font-size: 0.78rem;
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 1rem;
 }
