@@ -1,9 +1,16 @@
 import React from 'react';
 import { User, Package, Settings, LogOut } from 'lucide-react';
 import Button from '../components/common/Button';
+import { useAuth } from '../hooks/useAuth';
 import './Profile.css';
 
 const Profile = () => {
+  const { user } = useAuth();
+
+  const currentUserName = user?.name || 'John Doe';
+  const currentUserEmail = user?.email || 'john.doe@example.com';
+  const currentUserRole = user?.role || 'customer';
+
   return (
     <div className="profile-page animate-fade-in">
       <div className="profile-header glass-card">
@@ -11,8 +18,9 @@ const Profile = () => {
           <User size={48} color="#fff" />
         </div>
         <div className="profile-info">
-          <h1>John Doe</h1>
-          <p>john.doe@example.com</p>
+          <h1>{currentUserName}</h1>
+          <p>{currentUserEmail}</p>
+          <small>Role: {currentUserRole}</small>
         </div>
       </div>
 

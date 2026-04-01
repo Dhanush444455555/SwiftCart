@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 const protect = async (req, res, next) => {
   let token;
@@ -7,17 +8,14 @@ const protect = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1];
       
-      // In a real app, verify token and find user
-      // const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      // req.user = await User.findById(decoded.id).select('-password');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
+      req.user = await User.findById(decoded.id).select('-password');
       
-      // Mock validation for now
-      if (token === 'mock-jwt-token-777') {
-        req.user = { id: 'mock-user-id', name: 'Demo User', role: 'user' };
-        next();
-      } else {
-        res.status(401).json({ message: 'Not authorized, token failed' });
+      if (!req.user) {
+        return res.status(401).json({ message: 'Not authorized, user missing' });
       }
+      
+      next();
     } catch (error) {
       res.status(401).json({ message: 'Not authorized, token failed' });
     }

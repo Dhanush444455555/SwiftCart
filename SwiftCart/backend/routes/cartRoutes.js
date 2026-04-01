@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const Cart = require('../models/Cart');
+const { protect } = require('../middleware/authMiddleware');
 
-router.get('/:userId', async (req, res) => {
+router.get('/', protect, async (req, res) => {
   try {
-    let cart = await Cart.findOne({ user: req.params.userId }).populate('items.product');
+    let cart = await Cart.findOne({ user: req.user._id }).populate('items.product');
     if (!cart) {
-      cart = new Cart({ user: req.params.userId, items: [], totalPrice: 0 });
+      cart = new Cart({ user: req.user._id, items: [], totalPrice: 0 });
       await cart.save();
     }
     res.json(cart);
@@ -15,13 +16,13 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
-router.post('/sync', async (req, res) => {
-  // Mock endpoint to sync local frontend cart with backend DB
+router.post('/sync', protect, async (req, res) => {
+  // Sync logic for authenticated user
   try {
-    const { userId, items, totalPrice } = req.body;
-    let cart = await Cart.findOne({ user: userId });
+    const { items, totalPrice } = req.body;
+    let cart = await Cart.findOne({ user: req.user._id });
     if (!cart) {
-      cart = new Cart({ user: userId, items, totalPrice });
+      cart = new Cart({ user: req.user._id, items, totalPrice });
     } else {
       cart.items = items;
       cart.totalPrice = totalPrice;

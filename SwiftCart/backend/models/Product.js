@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema({
   image: { type: String }, // URL or path
   inStock: { type: Boolean, default: true },
   stockCount: { type: Number, default: 0 },
+  qrCode: { type: String, required: true, unique: true }, // Add qrCode
   aisle: { type: String }, // For in-store navigation mock
 }, { timestamps: true });
 

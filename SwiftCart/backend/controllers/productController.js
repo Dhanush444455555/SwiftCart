@@ -19,6 +19,16 @@ exports.getProductById = async (req, res) => {
   }
 };
 
+exports.getProductByQrCode = async (req, res) => {
+  try {
+    const product = await Product.findOne({ qrCode: req.params.qrCode });
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.searchProducts = async (req, res) => {
   try {
     const { query } = req.query;

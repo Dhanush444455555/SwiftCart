@@ -1,6 +1,7 @@
 import apiClient from './apiClient';
 
 export const orderService = {
-  createOrder: (orderData) => apiClient.post('/orders', orderData),
-  getUserOrders: (userId) => apiClient.get(`/orders/${userId}`),
+  createRazorpayOrder: (data) => apiClient.post('/orders/create-order', data),
+  verifyPayment: (data) => apiClient.post('/orders/verify-payment', data),
+  getMyOrders: () => apiClient.get('/orders/my-orders'),
 };

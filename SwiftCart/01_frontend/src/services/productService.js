@@ -52,4 +52,5 @@ export const productService = {
   },
   searchProducts: (query) => apiClient.get(`/products/search?query=${encodeURIComponent(query)}`),
   getProductById: (id) => apiClient.get(`/products/${id}`),
+  getProductByQrCode: (qrCode) => apiClient.get(`/products/qr/${encodeURIComponent(qrCode)}`),
 };

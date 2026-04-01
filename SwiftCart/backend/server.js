@@ -31,13 +31,43 @@ app.use(errorHandler);
 
 // Database Connection Mock
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/swiftcart', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log('MongoDB Connected');
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(async() => {
+    console.log('MongoDB Connected');
+
+    try {
+        const User = require('./models/User');
+        const adminEmail = 'admin@example.com';
+        const userEmail = 'user@example.com';
+
+        const admin = await User.findOne({ email: adminEmail });
+        if (!admin) {
+            await User.create({
+                name: 'Admin',
+                email: adminEmail,
+                password: 'admin123',
+                role: 'admin',
+            });
+            console.log('Created default admin account: admin@example.com/admin123');
+        }
+
+        const customer = await User.findOne({ email: userEmail });
+        if (!customer) {
+            await User.create({
+                name: 'Customer',
+                email: userEmail,
+                password: 'user123',
+                role: 'user',
+            });
+            console.log('Created default customer account: user@example.com/user123');
+        }
+    } catch (e) {
+        console.error('Could not ensure default users: ', e.message);
+    }
 }).catch(err => {
-  console.error('Database connection error:', err.message);
-  console.log('App will continue running with fallback mock data.');
+    console.error('Database connection error:', err.message);
+    console.log('App will continue running with fallback mock data.');
 });
 
 // Start server whether DB connects or not

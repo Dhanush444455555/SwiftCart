@@ -11,7 +11,9 @@ const orderSchema = new mongoose.Schema({
   ],
   totalAmount: { type: Number, required: true },
   paymentStatus: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
-  transactionId: { type: String }, // mock UPI transaction id
+  razorpayOrderId: { type: String },
+  razorpayPaymentId: { type: String },
+  razorpaySignature: { type: String },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema);
