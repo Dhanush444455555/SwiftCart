@@ -13,6 +13,7 @@ import Stores from './pages/Stores';
 import Login from './pages/Login';
 import AdminProducts from './pages/AdminProducts';
 import Feedback from './pages/Feedback/Feedback';
+import OffersPage from './pages/OffersPage';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/login"    element={<Login />} />
         <Route path="/admin"    element={<AdminProducts />} />
         <Route path="/feedback" element={<Feedback />} />
+        <Route path="/offers"   element={<OffersPage />} />
       </Routes>
     </Layout>
   );

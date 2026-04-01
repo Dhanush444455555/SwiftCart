@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, Search, Home, Store, ShieldCheck, LogOut, MessageSquare } from 'lucide-react';
+import { ShoppingCart, User, Search, Home, Store, ShieldCheck, LogOut, MessageSquare, Sparkles } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectIsAuthenticated, selectIsAdmin, selectUser, logout } from '../../store/authSlice';
 import './Navbar.css';
@@ -35,6 +35,9 @@ const Navbar = () => {
           </Link>
           <Link to="/stores" className="nav-icon-link" title="Nearby Stores">
             <Store size={24} />
+          </Link>
+          <Link to="/offers" className="nav-icon-link" title="AI Offers">
+            <Sparkles size={24} />
           </Link>
           <Link to="/feedback" className="nav-icon-link" title="Feedback">
             <MessageSquare size={24} />

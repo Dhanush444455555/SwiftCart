@@ -1,75 +1,149 @@
 import React, { useState } from 'react';
-import { Plus, Minus, Trash2 } from 'lucide-react';
-import { useCart } from '../../hooks/useCart';
+import { useDispatch } from 'react-redux';
+import { Minus, Plus, Trash2, Bookmark, CheckCircle, AlertTriangle } from 'lucide-react';
+import { updateQuantity, removeFromCart, saveForLater } from '../../store/cartSlice';
 import './CartItem.css';
 
-const CartItem = ({ item }) => {
-  const { addItem, removeItem } = useCart();
-  const [animating, setAnimating] = useState(null); // 'inc' | 'dec' | null
+const CartItem = ({ item, index = 0 }) => {
+  const dispatch = useDispatch();
+  const { product, quantity } = item;
 
-  const triggerAnimation = (type) => {
-    setAnimating(type);
-    setTimeout(() => setAnimating(null), 300);
+  const [qtyAnim, setQtyAnim] = useState('');  // 'up' | 'down' | ''
+  const [removing, setRemoving] = useState(false);
+
+  const originalPrice = product.originalPrice || product.price * 1.2;
+  const hasDiscount   = originalPrice > product.price;
+  const discountPct   = hasDiscount
+    ? Math.round(((originalPrice - product.price) / originalPrice) * 100)
+    : 0;
+
+  const stock = product.stockCount ?? 99;
+  const isLow = stock > 0 && stock <= 10;
+  const isOut = stock <= 0;
+
+  const animateQty = (dir) => {
+    setQtyAnim(dir);
+    setTimeout(() => setQtyAnim(''), 320);
   };
 
   const handleIncrease = () => {
-    triggerAnimation('inc');
-    addItem(item.product);
+    if (isOut) return;
+    animateQty('up');
+    dispatch(updateQuantity({ id: product._id, quantity: quantity + 1 }));
   };
 
   const handleDecrease = () => {
-    triggerAnimation('dec');
-    removeItem(item.product);
+    if (quantity <= 1) return handleRemove();
+    animateQty('down');
+    dispatch(updateQuantity({ id: product._id, quantity: quantity - 1 }));
   };
 
-  const lineTotal = (item.product.price * item.quantity).toFixed(2);
+  const handleRemove = () => {
+    setRemoving(true);
+    setTimeout(() => dispatch(removeFromCart(product)), 280);
+  };
+
+  const handleSaveForLater = () => {
+    setRemoving(true);
+    setTimeout(() => dispatch(saveForLater(product)), 280);
+  };
+
+  const lineTotal = (product.price * quantity).toLocaleString('en-IN', { minimumFractionDigits: 2 });
 
   return (
-    <div className="cart-item-card glass-card animate-fade-in">
-      {/* Product Image */}
-      <div className="cart-item-img-wrap">
+    <div
+      className={`ci-card ${removing ? 'ci-removing' : 'ci-enter'}`}
+      style={{ animationDelay: `${index * 0.07}s` }}
+    >
+      {/* Discount ribbon */}
+      {hasDiscount && (
+        <div className="ci-ribbon">{discountPct}% OFF</div>
+      )}
+
+      {/* Product image */}
+      <div className="ci-img-wrap">
         <img
-          src={item.product.image}
-          alt={item.product.name}
-          className="cart-item-img"
-          onError={(e) => { e.target.src = 'https://placehold.co/90x90/1e3a8a/ffffff?text=IMG'; }}
+          src={product.image}
+          alt={product.name}
+          className="ci-img"
+          onError={(e) => {
+            e.target.src = `https://placehold.co/100x100/1e293b/6366f1?text=${encodeURIComponent(product.name?.[0] || '?')}`;
+          }}
         />
-        {item.product.category && (
-          <span className="cart-item-badge">{item.product.category}</span>
+        {product.category && (
+          <span className="ci-cat-badge">{product.category}</span>
         )}
       </div>
 
-      {/* Details */}
-      <div className="cart-item-info">
-        <h4 className="cart-item-name">{item.product.name}</h4>
-        <p className="cart-item-unit-price">₹{item.product.price.toFixed(2)} / unit</p>
+      {/* Info */}
+      <div className="ci-info">
+        <h4 className="ci-name">{product.name}</h4>
+
+        {/* Stock badge */}
+        <div className="ci-stock-row">
+          {isOut ? (
+            <span className="ci-stock ci-out">
+              <AlertTriangle size={11} /> Out of Stock
+            </span>
+          ) : isLow ? (
+            <span className="ci-stock ci-low">
+              <AlertTriangle size={11} /> Only {stock} left
+            </span>
+          ) : (
+            <span className="ci-stock ci-in">
+              <CheckCircle size={11} /> In Stock
+            </span>
+          )}
+        </div>
+
+        {/* Price */}
+        <div className="ci-price-row">
+          <span className="ci-price">₹{product.price.toLocaleString('en-IN')}</span>
+          {hasDiscount && (
+            <span className="ci-orig-price">₹{Math.round(originalPrice).toLocaleString('en-IN')}</span>
+          )}
+        </div>
+
+        {/* Actions */}
+        <div className="ci-actions">
+          <button className="ci-action-btn ci-save-btn" onClick={handleSaveForLater} title="Save for later">
+            <Bookmark size={13} /> Save for later
+          </button>
+          <button className="ci-action-btn ci-remove-btn" onClick={handleRemove} title="Remove">
+            <Trash2 size={13} /> Remove
+          </button>
+        </div>
       </div>
 
-      {/* Quantity Controls */}
-      <div className="cart-item-qty">
-        <button
-          className="qty-ctrl-btn dec"
-          onClick={handleDecrease}
-          aria-label="Decrease quantity"
-        >
-          {item.quantity === 1 ? <Trash2 size={14} /> : <Minus size={14} />}
-        </button>
-        <span className={`qty-number ${animating === 'inc' ? 'qty-up' : ''} ${animating === 'dec' ? 'qty-down' : ''}`}>
-          {item.quantity}
-        </span>
-        <button
-          className="qty-ctrl-btn inc"
-          onClick={handleIncrease}
-          aria-label="Increase quantity"
-        >
-          <Plus size={14} />
-        </button>
-      </div>
+      {/* Quantity + Total */}
+      <div className="ci-right">
+        {/* Qty controls */}
+        <div className="ci-qty-wrap">
+          <button
+            className="ci-qty-btn ci-minus"
+            onClick={handleDecrease}
+            aria-label="Decrease"
+          >
+            {quantity === 1 ? <Trash2 size={13} /> : <Minus size={13} />}
+          </button>
+          <span className={`ci-qty-num ${qtyAnim === 'up' ? 'qty-anim-up' : qtyAnim === 'down' ? 'qty-anim-down' : ''}`}>
+            {quantity}
+          </span>
+          <button
+            className="ci-qty-btn ci-plus"
+            onClick={handleIncrease}
+            disabled={isOut}
+            aria-label="Increase"
+          >
+            <Plus size={13} />
+          </button>
+        </div>
 
-      {/* Total Price */}
-      <div className="cart-item-total-price">
-        <span className="total-label">Total</span>
-        <span className="total-amount">₹{lineTotal}</span>
+        {/* Line total */}
+        <div className="ci-total-wrap">
+          <span className="ci-total-label">Total</span>
+          <span className="ci-total">₹{lineTotal}</span>
+        </div>
       </div>
     </div>
   );

@@ -1,108 +1,216 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { CreditCard, ShieldCheck, Zap } from 'lucide-react';
+import {
+  CreditCard, Smartphone, Copy, CheckCircle,
+  ShieldCheck, Zap, Wallet, ExternalLink,
+} from 'lucide-react';
 import { clearCart, saveOrderToHistory } from '../store/cartSlice';
 import { decreaseStock } from '../store/productSlice';
 import { orderService } from '../services/orderService';
 import toast from 'react-hot-toast';
 import { useAuth } from '../hooks/useAuth';
+import './Checkout.css';
 
-const loadScript = (src) => {
+const BACKEND      = 'http://localhost:5000';
+const MERCHANT_UPI = '8904062827@ibl';
+const MERCHANT_NAME= 'SwiftCart';
+
+// QR that encodes the full UPI deep link (amount pre-filled)
+const makeUpiLink = (amount) =>
+  `upi://pay?pa=${MERCHANT_UPI}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${amount}&cu=INR&tn=${encodeURIComponent('SwiftCart Order')}`;
+
+const makeQrUrl = (upiStr) =>
+  `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=12&data=${encodeURIComponent(upiStr)}`;
+
+// App-specific deep links
+const APP_LINKS = (amount) => [
+  { label: 'PhonePe', emoji: '📱', color: '#7B3FE4', link: `phonepe://pay?pa=${MERCHANT_UPI}&pn=SwiftCart&am=${amount}&cu=INR` },
+  { label: 'GPay',    emoji: '💳', color: '#34d399', link: `tez://upi/pay?pa=${MERCHANT_UPI}&pn=SwiftCart&am=${amount}&cu=INR` },
+  { label: 'Paytm',   emoji: '🔵', color: '#38bdf8', link: `paytmmp://pay?pa=${MERCHANT_UPI}&pn=SwiftCart&am=${amount}&cu=INR` },
+];
+
+function loadRazorpay() {
   return new Promise((resolve) => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
+    if (window.Razorpay) return resolve(true);
+    const s = document.createElement('script');
+    s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    s.onload  = () => resolve(true);
+    s.onerror = () => resolve(false);
+    document.body.appendChild(s);
   });
-};
+}
 
 const Checkout = () => {
   const { items, totalPrice } = useSelector(state => state.cart);
   const { user } = useAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [method, setMethod] = useState('razorpay');
-  const [isProcessing, setIsProcessing] = useState(false);
 
-  const finalAmount = (totalPrice).toFixed(2);
+  const [method,   setMethod]  = useState('upi');
+  const [copied,   setCopied]  = useState(false);
+  const [paying,   setPaying]  = useState(false);
+  const [waiting,  setWaiting] = useState(false); // "waiting for user to pay in app"
+  const [rzpReady, setRzpReady]= useState(true);  // false if backend not configured
 
-  useEffect(() => {
-    loadScript('https://checkout.razorpay.com/v1/checkout.js');
-  }, []);
+  const finalAmount = (totalPrice * 1.08).toFixed(2);
+  const upiLink     = makeUpiLink(finalAmount);
+  const qrUrl       = makeQrUrl(upiLink);
 
-  const handlePayment = async () => {
+  /* ── Confirm order after payment ── */
+  const finishOrder = () => {
+    // Decrease stock for each purchased item
+    dispatch(decreaseStock(items.map(i => ({ productId: i.product._id, quantity: i.quantity }))));
+    dispatch(saveOrderToHistory({ finalAmount: parseFloat(finalAmount) }));
+    dispatch(clearCart());
+    toast.success('Payment Successful! Stock updated.');
+    navigate('/success');
+  };
+
+  /* ── Razorpay flow ── */
+  const handleRazorpayPay = async () => {
     if (items.length === 0) {
       toast.error("Your cart is empty");
       return;
     }
+    setPaying(true);
+    const loaded = await loadRazorpay();
+    if (!loaded) { setPaying(false); setRzpReady(false); return; }
 
+    let orderData;
     try {
-      setIsProcessing(true);
-      
+      // 1. Create Order on Server
       const orderItems = items.map(i => ({
          product: i.product._id,
          quantity: i.quantity,
          price: i.product.price
       }));
 
-      // 1. Create Order on Server
       const res = await orderService.createRazorpayOrder({ items: orderItems, totalAmount: finalAmount });
-      const { razorpayOrder, order: dbOrder } = res.data;
-
-      // 2. Initialize Razorpay Checkout
+      const { razorpayOrder } = res.data;
+      
       const options = {
-        key: 'rzp_test_mockkey', // In real app, fetch from backend or env
-        amount: razorpayOrder.amount,
-        currency: razorpayOrder.currency,
-        name: "SwiftCart Smart Checkout",
-        description: "Zero Queue Checkout Payment",
-        order_id: razorpayOrder.id,
-        handler: async function (response) {
+        key:         'rzp_test_mockkey', // In real app, fetch from backend or env
+        amount:      razorpayOrder.amount,
+        currency:    razorpayOrder.currency,
+        name:        'SwiftCart Smart Checkout',
+        description: 'Zero Queue Checkout Payment',
+        order_id:    razorpayOrder.id,
+        prefill:     { name: user?.name || '', email: user?.email || '', contact: "9999999999" },
+        theme:       { color: '#6C63FF' },
+        handler: async (response) => {
           try {
-             // 3. Verify Payment
-             const verifyRes = await orderService.verifyPayment({
-               razorpay_order_id: response.razorpay_order_id,
-               razorpay_payment_id: response.razorpay_payment_id,
-               razorpay_signature: response.razorpay_signature
-             });
-             
-             if(verifyRes.status === 200) {
-               toast.success("Payment Successful!");
-               // Decrease stock for each purchased item
-               dispatch(decreaseStock(items.map(i => ({ productId: i.product._id, quantity: i.quantity }))));
-               dispatch(saveOrderToHistory({ finalAmount: parseFloat(finalAmount) }));
-               dispatch(clearCart());
-               navigate('/success');
-             }
-          } catch (err) {
-             toast.error("Payment verification failed");
+            // Verify Payment
+            const vRes = await orderService.verifyPayment({
+              razorpay_order_id:   response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature:  response.razorpay_signature,
+            });
+            if (vRes.status === 200) finishOrder();
+          } catch (err) { 
+            toast.error("Payment verification failed");
           }
+          setPaying(false);
         },
-        prefill: {
-          name: user?.name || "Demo User",
-          email: user?.email || "user@example.com",
-          contact: "9999999999"
-        },
-        theme: {
-          color: "#6C63FF"
-        }
+        modal: { ondismiss: () => setPaying(false) },
       };
-
-      const rzp1 = new window.Razorpay(options);
-      rzp1.on('payment.failed', function (response){
-        toast.error(`Payment failed: ${response.error.description}`);
-      });
-      rzp1.open();
+      new window.Razorpay(options).open();
 
     } catch (err) {
-      toast.error('Failed to initiate payment');
-      console.error(err);
-    } finally {
-      setIsProcessing(false);
+      // Razorpay not configured → fall back to QR/UPI
+      setPaying(false);
+      setRzpReady(false);
+      toast.error('Razorpay initialization failed, using UPI fallback.');
     }
   };
+
+  /* ── Open UPI app (mobile) ── */
+  const openUpiApp = (link) => {
+    window.location.href = link;
+    setWaiting(true);
+  };
+
+  const copyUpiId = () => {
+    navigator.clipboard.writeText(MERCHANT_UPI).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    });
+  };
+
+  /* ── QR / UPI panel (always shown, primary on fallback) ── */
+  const UpiPanel = () => (
+    <div className="ck-upi-panel">
+      {rzpReady && (
+        <>
+          <button className="ck-rzp-btn" onClick={handleRazorpayPay} disabled={paying}>
+            {paying
+              ? <><span className="ck-spinner" /> Opening payment…</>
+              : <><Wallet size={18} /> Pay ₹{finalAmount} via Razorpay</>}
+          </button>
+          <div className="ck-divider"><span>or pay directly via UPI</span></div>
+        </>
+      )}
+
+      <div className="ck-qr-wrap">
+        <img src={qrUrl} alt="Scan to pay" className="ck-qr-img"
+             onError={(e) => { e.target.style.display = 'none'; }} />
+        <div className="ck-qr-badge">
+          <Zap size={11} /> ₹{finalAmount} pre-filled · scan from phone
+        </div>
+      </div>
+
+      <div className="ck-apps-row">
+        <span className="ck-apps-label">Scan with</span>
+        {['PhonePe', 'GPay', 'Paytm', 'BHIM'].map((a) => (
+          <span key={a} className="ck-app-chip">{a}</span>
+        ))}
+      </div>
+
+      <div className="ck-quick-apps">
+        {APP_LINKS(finalAmount).map(({ label, emoji, color, link }) => (
+          <button key={label} className="ck-app-btn" style={{ '--app-color': color }}
+                  onClick={() => openUpiApp(link)}>
+            <span className="ck-app-icon">{emoji}</span>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div className="ck-upi-id-row">
+        <span className="ck-upi-id-label">UPI ID</span>
+        <span className="ck-upi-id-val">{MERCHANT_UPI}</span>
+        <button className="ck-copy-btn" onClick={copyUpiId}>
+          {copied ? <CheckCircle size={13} color="#34d399" /> : <Copy size={13} />}
+          {copied ? 'Copied!' : 'Copy'}
+        </button>
+      </div>
+
+      {waiting ? (
+        <div className="ck-waiting-box">
+          <span className="ck-spinner-lg" />
+          <div>
+            <p className="ck-waiting-title">Waiting for payment…</p>
+            <p className="ck-waiting-sub">Complete payment in your UPI app, then tap below</p>
+          </div>
+          <button className="ck-paid-btn" onClick={finishOrder}>✅ I've Paid</button>
+        </div>
+      ) : (
+        <button className="ck-pay-btn" onClick={() => openUpiApp(upiLink)}>
+          <Wallet size={17} /> Pay ₹{finalAmount} Now
+          <span className="ck-pay-sub">Opens your UPI app</span>
+        </button>
+      )}
+
+      {/* Demo Pay — No Backend Bypass */}
+      <button
+        onClick={finishOrder}
+        className="btn-gradient w-full py-3 mt-4 font-bold flex justify-center items-center gap-2"
+        style={{background:'linear-gradient(90deg,#34d399,#06B6D4)', borderRadius: '12px', border:'none', color:'#fff', cursor:'pointer'}}
+      >
+        <Zap size={17} /> Pay Now (Demo — Direct Stock Update)
+      </button>
+    </div>
+  );
 
   if (items.length === 0) {
     return (
@@ -114,75 +222,43 @@ const Checkout = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 flex justify-center animate-fade-in">
-      <div className="glass-card w-full max-w-lg p-8 relative overflow-hidden rounded-3xl">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
-        
-        <h1 className="text-3xl font-bold text-white mb-2 relative z-10">Checkout</h1>
-        <p className="text-slate-400 mb-8 relative z-10">Complete your secure payment to exit the store.</p>
-        
-        <div className="bg-slate-800/50 p-6 rounded-2xl mb-8 border border-slate-700 relative z-10">
-          <div className="flex justify-between items-center mb-4 pb-4 border-b border-slate-700">
-             <span className="text-slate-300">Items ({items.length})</span>
-             <span className="text-white font-medium">₹{finalAmount}</span>
-          </div>
-          <div className="flex justify-between items-center mb-4 pb-4 border-b border-slate-700">
-             <span className="text-slate-300">Taxes</span>
-             <span className="text-white font-medium">Inclusive</span>
-          </div>
-          <div className="flex justify-between items-center">
-             <span className="text-xl font-bold text-white">Total Amount</span>
-             <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent to-cyan-400">
-               ₹{finalAmount}
-             </span>
-          </div>
+    <div className="checkout-page animate-fade-in">
+      <div className="checkout-container glass-card">
+        <div className="ck-header">
+          <ShieldCheck size={20} color="#34d399" />
+          <h1>Complete Payment</h1>
         </div>
-
-        <div className="mb-8 relative z-10">
-          <h3 className="text-lg font-medium text-white mb-4">Payment Method</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <button 
-              className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all duration-200 ${method === 'razorpay' ? 'bg-accent/20 border-accent text-white' : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:border-slate-500'}`}
-              onClick={() => setMethod('razorpay')}
-            >
-              <ShieldCheck size={28} className={method === 'razorpay' ? 'text-accent' : ''} />
-              <span className="font-medium">Razorpay</span>
-               <span className="text-xs opacity-70">UPI/Cards</span>
-            </button>
-            <button 
-              className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all duration-200 cursor-not-allowed opacity-50 bg-slate-800/50 border-slate-700 text-slate-400`}
-            >
-              <CreditCard size={28} />
-              <span className="font-medium">Card In-Store</span>
-              <span className="text-xs text-red-400">Not Available</span>
-            </button>
-          </div>
+        <div className="ck-amount-row">
+          <span className="ck-amount-label">Total (incl. 8% tax)</span>
+          <span className="ck-amount-value">₹{finalAmount}</span>
         </div>
-
-        <div className="flex gap-4 relative z-10 flex-col">
-          <div className="flex gap-4">
-            <button onClick={() => navigate('/cart')} className="btn-secondary flex-1 py-4 text-lg">
-              Back to Cart
-            </button>
-            <button onClick={handlePayment} disabled={isProcessing} className="btn-gradient flex-1 py-4 text-lg font-bold flex justify-center items-center">
-              {isProcessing ? 'Processing...' : `Pay ₹${finalAmount}`}
-            </button>
-          </div>
-
-          <button
-            onClick={() => {
-              dispatch(decreaseStock(items.map(i => ({ productId: i.product._id, quantity: i.quantity }))));
-              dispatch(saveOrderToHistory({ finalAmount: parseFloat(finalAmount) }));
-              dispatch(clearCart());
-              toast.success('Order placed! Stock updated.');
-              navigate('/success');
-            }}
-            className="btn-gradient w-full py-3 font-bold flex justify-center items-center gap-2"
-            style={{background:'linear-gradient(90deg,#34d399,#06B6D4)'}}
-          >
-            <Zap size={17} /> Pay Now (Demo — No Backend)
+        <div className="payment-methods">
+          <button className={`method-btn ${method === 'upi' ? 'active' : ''}`} onClick={() => setMethod('upi')}>
+            <Smartphone size={18} /> UPI / QR Code
+          </button>
+          <button className={`method-btn ${method === 'card' ? 'active' : ''}`} onClick={() => setMethod('card')}>
+            <CreditCard size={18} /> Credit / Debit Card
           </button>
         </div>
+        {method === 'upi'  && <UpiPanel />}
+        {method === 'card' && (
+          <div className="card-details">
+            <p className="ck-rzp-note">Enter card details — payment secured by Razorpay.</p>
+            <input type="text" className="input-glass mb-3" placeholder="Card Number" maxLength={19} />
+            <div className="ck-card-row">
+              <input type="text" className="input-glass" placeholder="MM / YY" maxLength={5} />
+              <input type="text" className="input-glass" placeholder="CVV" maxLength={3} />
+            </div>
+            <input type="text" className="input-glass mt-3" placeholder="Name on Card" />
+            <button className="ck-rzp-btn" style={{ marginTop: '1rem' }}
+                    onClick={handleRazorpayPay} disabled={paying}>
+              {paying ? <><span className="ck-spinner" /> Processing…</> : <>Pay ₹{finalAmount}</>}
+            </button>
+          </div>
+        )}
+        <p className="ck-secure-note">
+          <ShieldCheck size={11} /> Secured · Payments go to {MERCHANT_UPI}
+        </p>
       </div>
     </div>
   );
