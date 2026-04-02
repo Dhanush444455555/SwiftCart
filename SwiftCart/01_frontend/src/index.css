@@ -6,36 +6,40 @@
   --font-heading:   'Bebas Neue', sans-serif;
   --font-label:     'DM Sans', sans-serif;
 
-  /* ── Color Palette — Pure Black Theme ── */
-  --bg-base:        #000000;
-  --bg-card:        rgb(18, 18, 18);
-  --bg-input:       #0a0a0a;
-  --bg-divider:     #222222;
+  /* ── Color Palette — Vibrant Deep Space Theme ── */
+  --bg-base:        #06041a; /* Deep violet black */
+  --bg-card:        rgba(15, 12, 41, 0.6); /* Translucent dark indigo */
+  --bg-input:       rgba(20, 16, 50, 0.7);
+  --bg-divider:     rgba(95, 82, 168, 0.2);
 
   --text-primary:   #ffffff;
-  --text-secondary: #888888;
-  --text-muted:     #dddddd;
+  --text-secondary: #a39ec8;
+  --text-muted:     #706b9b;
 
-  --border-card:    #333333;
-  --border-divider: #222222;
+  --border-card:    rgba(108, 99, 255, 0.25);
+  --border-divider: rgba(108, 99, 255, 0.15);
 
-  /* ── Accents (kept for badges / status only) ── */
-  --accent-green:   #34d399;
-  --accent-red:     #f87171;
-  --accent-amber:   #fbbf24;
+  /* ── Accents (Vibrant Neon) ── */
+  --accent-primary: #6C63FF; /* Vibrant Purple */
+  --accent-secondary: #06B6D4; /* Neon Cyan */
+  --accent-tertiary: #EC4899; /* Hot Pink */
+  
+  --accent-green:   #10B981;
+  --accent-red:     #EF4444;
+  --accent-amber:   #F59E0B;
 
-  /* ── Legacy aliases (keeps old components working) ── */
-  --bg-dark-1:      #000000;
-  --bg-dark-2:      rgb(18, 18, 18);
-  --bg-accent:      #ffffff;
-  --bg-cyan:        #dddddd;
-  --glass-bg:       rgba(18, 18, 18, 0.95);
-  --glass-border:   #333333;
-  --glass-shadow:   0 8px 32px 0 rgba(0, 0, 0, 0.8);
-  --glass-blur:     blur(12px);
+  /* ── Legacy aliases ── */
+  --bg-dark-1:      #06041a;
+  --bg-dark-2:      rgba(15, 12, 41, 0.8);
+  --bg-accent:      var(--accent-primary);
+  --bg-cyan:        var(--accent-secondary);
+  --glass-bg:       rgba(15, 12, 41, 0.5);
+  --glass-border:   rgba(108, 99, 255, 0.2);
+  --glass-shadow:   0 8px 32px 0 rgba(108, 99, 255, 0.15);
+  --glass-blur:     blur(16px);
 
-  --border-radius:      14px;
-  --transition-smooth:  all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --border-radius:      16px;
+  --transition-smooth:  all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* ── Reset ── */
@@ -46,31 +50,52 @@ body {
   font-weight: 300;
   color: var(--text-primary);
   background: var(--bg-base);
+  /* Animated gradient background */
+  background: radial-gradient(circle at 15% 50%, rgba(108, 99, 255, 0.08), transparent 25%),
+              radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.08), transparent 25%),
+              var(--bg-base);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Card (replaces glass-card) ── */
+/* ── Card (Vibrant Glassmorphism) ── */
 .glass-card {
   background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-card);
   border-radius: var(--border-radius);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  transition: var(--transition-smooth);
 }
 
 .glass-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+  transform: translateY(-5px) scale(1.01);
+  border-color: rgba(108, 99, 255, 0.6);
+  box-shadow: 0 12px 40px rgba(108, 99, 255, 0.2), 
+              0 0 15px rgba(6, 182, 212, 0.1) inset;
 }
 
-/* ── Primary Button (white/black SliceButton style) ── */
+/* ── Primary Button (Vibrant Glow & Ripple) ── */
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(108, 99, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0); }
+}
+
+@keyframes textGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .btn-gradient {
-  background: #ffffff;
-  color: #000000;
-  border: 1px solid #ffffff;
-  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
+  background-size: 200% 200%;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
   padding: 10px 28px;
   font-family: var(--font-label);
   font-weight: 700;
@@ -78,27 +103,40 @@ body {
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;
-  transition: var(--transition-smooth);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, filter 0.3s ease;
 }
 
 .btn-gradient::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: #000000;
-  transform: translateX(-101%);
-  transition: transform 0.3s ease;
-  z-index: 0;
+  top: 50%; left: 50%;
+  width: 300%; height: 300%;
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+  opacity: 0;
+  border-radius: 50%;
+  pointer-events: none;
 }
 
-.btn-gradient:hover::before { transform: translateX(0); }
-
 .btn-gradient:hover {
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(6, 182, 212, 0.6);
+  animation: textGradient 3s ease infinite, pulseGlow 2s infinite;
+  filter: brightness(1.1);
+}
+
+.btn-gradient:active {
+  transform: translateY(2px) scale(0.98);
+}
+
+.btn-gradient:active::before {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  transition: 0s;
 }
 
 .btn-gradient span,

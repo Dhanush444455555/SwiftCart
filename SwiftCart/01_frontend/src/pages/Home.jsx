@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Camera, Store, Tag, Grid } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Tilt } from 'react-tilt';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import ProductCard from '../components/common/ProductCard';
 import Button from '../components/common/Button';
 import BarcodeScannerModal from '../components/scanner/BarcodeScannerModal';
@@ -14,12 +16,43 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [showScanner, setShowScanner] = useState(false);
 
+  // Parallax Scroll Hooks
+  const { scrollY } = useScroll();
+  const yHero = useTransform(scrollY, [0, 500], [0, 150]);
+  const opacityHero = useTransform(scrollY, [0, 300], [1, 0]);
+
+  const floatingVariant = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 1, ease: 'easeOut', staggerChildren: 0.2 }
+    },
+    float: {
+      y: [-10, 10],
+      transition: { duration: 3, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }
+    }
+  };
+
+  const tiltOptions = {
+    max: 15, perspective: 1000, scale: 1.05, speed: 1000,
+    transition: true, axis: null, reset: true,
+    easing: "cubic-bezier(.03,.98,.52,.99)",
+    glare: true, "max-glare": 0.4
+  };
+
   return (
     <>
     <div className="home-container">
       {/* Hero Section */}
-      <section className="hero-section glass-card">
-        <div className="hero-content">
+      <motion.section 
+        className="hero-section glass-card"
+        initial="hidden"
+        animate="visible"
+        variants={floatingVariant}
+        style={{ y: yHero, opacity: opacityHero }}
+      >
+        <motion.div className="hero-content" variants={floatingVariant} animate="float">
           <h1 className="hero-title">Welcome to <span className="text-gradient">SwiftCart</span></h1>
           <p className="hero-subtitle">Smart Shopping, Zero Queues.</p>
           <div className="hero-actions">
@@ -32,8 +65,8 @@ const Home = () => {
               Nearby Stores
             </Button>
           </div>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* AI Offers Section */}
       <section className="offers-section">
@@ -41,14 +74,18 @@ const Home = () => {
           <h2><Tag size={24} /> Personalized For You</h2>
         </div>
         <div className="offers-grid">
-          <div className="offer-card glass-card">
-            <h3>20% OFF</h3>
-            <p>On Chocolates Today</p>
-          </div>
-          <div className="offer-card glass-card">
-            <h3>Buy 1 Get 1</h3>
-            <p>Snacks &amp; Beverages Aisle C</p>
-          </div>
+          <Tilt options={tiltOptions} style={{ height: '100%', width: '100%' }}>
+            <div className="offer-card glass-card">
+              <h3>20% OFF</h3>
+              <p>On Chocolates Today</p>
+            </div>
+          </Tilt>
+          <Tilt options={tiltOptions} style={{ height: '100%', width: '100%' }}>
+            <div className="offer-card glass-card">
+              <h3>Buy 1 Get 1</h3>
+              <p>Snacks &amp; Beverages Aisle C</p>
+            </div>
+          </Tilt>
         </div>
       </section>
 

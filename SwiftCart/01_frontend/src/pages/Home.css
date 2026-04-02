@@ -9,23 +9,40 @@
 .hero-section {
   padding: 4rem 2rem;
   text-align: center;
-  background: rgb(18, 18, 18);
-  border: 1px solid #222;
-  border-radius: 14px;
-  transition: transform 0.3s ease;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--border-radius);
+  transition: var(--transition-smooth);
 }
 
-.hero-section:hover { transform: translateY(-2px); }
+.hero-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px rgba(108, 99, 255, 0.15);
+}
 
 .hero-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 4rem;
+  font-size: 4.5rem;
   letter-spacing: 3px;
   color: #fff;
   margin-bottom: 1rem;
 }
 
-.text-gradient { color: #fff; }
+@keyframes gradientPan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.text-gradient {
+  background: linear-gradient(270deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary), var(--accent-primary));
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: gradientPan 6s ease infinite;
+}
 
 .hero-subtitle {
   font-family: 'Oxanium', sans-serif;
@@ -113,29 +130,53 @@
 }
 
 .offer-card {
-  padding: 2rem;
-  background: #0a0a0a;
-  border: 1px solid #222;
-  border-radius: 14px;
+  padding: 2.5rem 2rem;
+  background: rgba(20, 16, 50, 0.5);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--border-radius);
   text-align: center;
-  transition: all 0.3s ease;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.offer-card::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
 .offer-card:hover {
-  transform: translateY(-3px);
-  border-color: #444;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  transform: translateY(-5px) scale(1.02);
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
 }
+
+.offer-card:hover::before { opacity: 1; }
 
 .offer-card h3 {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   letter-spacing: 2px;
-  color: #fff;
+  background: linear-gradient(135deg, #fff, var(--text-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
 }
 
-.offer-card p { color: #888; font-weight: 300; }
+.offer-card p {
+  color: var(--text-secondary);
+  font-weight: 400;
+  position: relative;
+  z-index: 1;
+}
 
 .products-grid {
   display: grid;
