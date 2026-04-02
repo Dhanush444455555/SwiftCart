@@ -32,6 +32,9 @@ app.use('/api/stores',   storeRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/payment',  paymentRoutes);
 
+// 404 for unknown API routes (before catch-all)
+app.use('/api', notFound);
+
 // Serve frontend build
 const frontendDist = path.join(__dirname, '..', '01_frontend', 'dist');
 app.use(express.static(frontendDist));
@@ -41,47 +44,43 @@ app.get('/{*path}', (req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
 });
 
-// Error Middleware
-app.use(notFound);
+// Global error handler — must be last
 app.use(errorHandler);
 
-// Database Connection Mock
+// Database Connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/swiftcart')
 .then(async () => {
-    console.log('MongoDB Connected');
-
+    console.log('✅ MongoDB Connected');
     try {
-        const User = require('./models/User');
-        const adminEmail = 'admin@example.com';
-        const userEmail = 'user@example.com';
+        const bcrypt = require('bcryptjs');
+        const User   = require('./models/User');
 
-        const admin = await User.findOne({ email: adminEmail });
-        if (!admin) {
-            await User.create({
-                name: 'Admin',
-                email: adminEmail,
-                password: 'admin123',
-                role: 'admin',
+        // Use insertOne directly to bypass pre-save hook (passwords already hashed)
+        const adminEmail = 'admin@swiftcart.com';
+        if (!(await User.findOne({ email: adminEmail }))) {
+            await User.collection.insertOne({
+                name: 'Admin User', email: adminEmail,
+                password: await bcrypt.hash('admin123', 10),
+                role: 'admin', createdAt: new Date(), updatedAt: new Date(),
             });
-            console.log('Created default admin account: admin@example.com/admin123');
+            console.log('👤 Seeded admin: admin@swiftcart.com / admin123');
         }
 
-        const customer = await User.findOne({ email: userEmail });
-        if (!customer) {
-            await User.create({
-                name: 'Customer',
-                email: userEmail,
-                password: 'user123',
-                role: 'user',
+        const userEmail = 'user@swiftcart.com';
+        if (!(await User.findOne({ email: userEmail }))) {
+            await User.collection.insertOne({
+                name: 'Demo User', email: userEmail,
+                password: await bcrypt.hash('user123', 10),
+                role: 'user', createdAt: new Date(), updatedAt: new Date(),
             });
-            console.log('Created default customer account: user@example.com/user123');
+            console.log('👤 Seeded user: user@swiftcart.com / user123');
         }
     } catch (e) {
-        console.error('Could not ensure default users: ', e.message);
+        console.error('⚠️  Seed warning:', e.message);
     }
 }).catch(err => {
-    console.error('Database connection error:', err.message);
-    console.log('App will continue running with fallback mock data.');
+    console.error('❌ Database connection error:', err.message);
+    console.log('App will continue running with in-memory fallback.');
 });
 
 // Start server whether DB connects or not
