@@ -18,6 +18,7 @@ import Register from './pages/Register';
 import AdminProducts from './pages/AdminProducts';
 import Feedback from './pages/Feedback/Feedback';
 import OffersPage from './pages/OffersPage';
+import Help from './pages/Help';
 
 const PageTransition = ({ children }) => (
   <motion.div
@@ -63,6 +64,7 @@ function App() {
           <Route path="/admin"    element={<PageTransition><AdminProducts /></PageTransition>} />
           <Route path="/feedback" element={<PageTransition><Feedback /></PageTransition>} />
           <Route path="/offers"   element={<PageTransition><OffersPage /></PageTransition>} />
+          <Route path="/help"     element={<PageTransition><Help /></PageTransition>} />
         </Routes>
       </AnimatePresence>
     </Layout>

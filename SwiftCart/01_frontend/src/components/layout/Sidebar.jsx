@@ -52,7 +52,6 @@ const Sidebar = () => {
   const navLinks = [
     { to: '/',        icon: <Home size={19} />,         label: 'Home' },
     { to: '/search',  icon: <Search size={19} />,       label: 'Search' },
-    { to: '/scan',    icon: <ScanLine size={19} />,     label: 'Scan Items' },
     { to: '/offers',  icon: <Sparkles size={19} />,     label: 'AI Offers' },
     { to: '/stores',  icon: <Store size={19} />,        label: 'Nearby Stores' },
     ...(!isAdmin ? [{ to: '/cart', icon: <ShoppingCart size={19} />, label: 'Cart', badge: cartCount }] : []),
@@ -176,14 +175,18 @@ const Sidebar = () => {
             ))}
 
             {/* ── Notifications row ── */}
-            <div className="sb-nav-item" style={{ cursor: 'default', justifyContent: 'space-between' }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span className="sb-nav-icon-box"><span>🔔</span></span>
-                <span className="sb-nav-label">Notifications</span>
-                {unreadCount > 0 && (
-                  <span className="sb-nav-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
-                )}
+            <div className="sb-nav-item sb-nav-item--notif">
+              <span className="sb-nav-icon-box">
+                <span style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                  🔔
+                  {unreadCount > 0 && (
+                    <span className="sb-nav-badge sb-notif-badge">
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  )}
+                </span>
               </span>
+              <span className="sb-nav-label">Notifications</span>
               <NotificationPanel />
             </div>
           </nav>

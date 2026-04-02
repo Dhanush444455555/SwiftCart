@@ -8,16 +8,17 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #e0e0e0;
-  padding: 8px;
-  border-radius: 50%;
+  color: #666;
+  padding: 4px 6px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, color 0.2s;
+  transition: color 0.2s;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 .notif-bell-btn:hover {
-  background: rgba(255,255,255,0.08);
   color: #fff;
 }
 .notif-bell-badge {
@@ -48,19 +49,21 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  margin-left: auto;
 }
 
-/* ── Panel ── */
+/* ── Panel — opens to the right of sidebar ── */
 .notif-panel {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  width: 360px;
+  position: fixed;
+  top: 50%;
+  left: 280px;        /* right edge of sidebar */
+  transform: translateY(-50%);
+  width: 340px;
   max-height: 520px;
   background: #0f0f0f;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.85);
   display: flex;
   flex-direction: column;
   z-index: 9999;

@@ -302,6 +302,32 @@
   transform: translateX(0);
 }
 
+/* ── Notification row ── */
+.sb-nav-item--notif {
+  cursor: default;
+  justify-content: flex-start;
+}
+.sb-nav-item--notif:hover {
+  transform: none; /* no slide for this row */
+}
+.sb-notif-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  background: #e11d48;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
 /* ── Footer ── */
 .sb-footer {
   margin-top: auto;

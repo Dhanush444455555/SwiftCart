@@ -1,0 +1,265 @@
+/* ── Help.css — Black Theme ── */
+.help-page { padding-bottom: 4rem; display: flex; flex-direction: column; gap: 2rem; }
+
+/* ── Hero ── */
+.help-hero {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgb(18, 18, 18);
+  border: 1px solid #333;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.help-hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 3px;
+  color: #fff;
+  margin: 0;
+}
+
+.help-hero p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.help-search-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 0.5rem;
+}
+
+.help-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #555;
+}
+
+.help-search-input {
+  width: 100%;
+  padding: 0.75rem 0.9rem 0.75rem 2.6rem;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.help-search-input:focus { border-color: #666; }
+.help-search-input::placeholder { color: #444; }
+
+/* ── Contact cards ── */
+.help-contact-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.help-contact-card {
+  background: rgb(18, 18, 18);
+  border: 1px solid #333;
+  border-radius: 14px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  transition: transform 0.25s, border-color 0.25s;
+}
+.help-contact-card:hover { transform: translateY(-3px); border-color: #555; }
+
+.help-contact-card h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  letter-spacing: 1.5px;
+  color: #fff;
+}
+
+.help-contact-card p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.help-contact-btn {
+  margin-top: 0.5rem;
+  padding: 0.55rem 1.25rem;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s;
+  display: inline-block;
+}
+.help-contact-btn:hover { opacity: 0.85; }
+
+/* ── FAQ Section ── */
+.help-faq-section { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.help-section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+.help-faq-category {
+  background: rgb(18, 18, 18);
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.help-faq-cat-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.25rem;
+  background: #0a0a0a;
+  border-bottom: 1px solid #1a1a1a;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+}
+
+.help-faq-item { border-bottom: 1px solid #1a1a1a; }
+.help-faq-item:last-child { border-bottom: none; }
+.help-faq-item.open { background: #050505; }
+
+.help-faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: transparent;
+  border: none;
+  color: #ccc;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  gap: 1rem;
+  transition: color 0.2s;
+}
+.help-faq-question:hover { color: #fff; }
+.help-faq-item.open .help-faq-question { color: #fff; }
+
+.help-faq-answer {
+  padding: 0 1.25rem 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: #666;
+  line-height: 1.7;
+}
+
+.help-no-results {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.75rem; padding: 3rem 0;
+  font-family: 'DM Sans', sans-serif;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* ── Feedback ── */
+.help-feedback {
+  background: rgb(18, 18, 18);
+  border: 1px solid #333;
+  border-radius: 14px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+}
+
+.help-feedback h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  color: #fff;
+}
+.help-feedback p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.help-feedback-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.help-feedback-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.help-feedback-input:focus { border-color: #555; }
+.help-feedback-input::placeholder { color: #444; }
+
+.help-feedback-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0.65rem 1.5rem;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.help-feedback-btn:hover { opacity: 0.85; }
+
+.help-feedback-success {
+  font-family: 'DM Sans', sans-serif;
+  color: #34d399;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(52,211,153,0.06);
+  border: 1px solid rgba(52,211,153,0.2);
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .help-contact-row { grid-template-columns: 1fr; }
+}
