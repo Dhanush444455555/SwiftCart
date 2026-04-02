@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { predictOffers, getTimeOfDay, getDayType } = require('../model/offerPredictor');
+const { predictOffers, getTimeOfDay, getDayType, addOffer } = require('../model/offerPredictor');
 
 /**
  * POST /api/offers/predict
@@ -24,6 +24,32 @@ router.post('/predict', (req, res) => {
     count:     offers.length,
     offers,
   });
+});
+
+/**
+ * POST /api/offers/add
+ * Body: { category, title, description, originalPrice, offerPrice, discount, brand, qty, tags, img }
+ */
+router.post('/add', (req, res) => {
+  const { category, ...offerData } = req.body;
+  if (!['ration', 'clothing', 'electronics'].includes(category)) {
+    return res.status(400).json({ message: 'Category must be ration, clothing, or electronics' });
+  }
+  
+  // Default boosts if missing
+  const newOffer = {
+    ...offerData,
+    timeBoost: offerData.timeBoost || { morning: 1, afternoon: 1, evening: 1, night: 1 },
+    dayBoost: offerData.dayBoost || { weekday: 1, weekend: 1 },
+    monthBoost: offerData.monthBoost || Array(12).fill(1)
+  };
+
+  try {
+    const added = addOffer(category, newOffer);
+    res.json({ message: 'Offer added successfully', offer: added });
+  } catch(err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 /**

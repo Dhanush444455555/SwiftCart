@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, ShoppingCart, Tag, Clock, TrendingUp, Zap, ChevronRight, Star, RefreshCw } from 'lucide-react';
+import { Sparkles, ShoppingCart, Tag, Clock, TrendingUp, Zap, ChevronRight, Star, RefreshCw, Plus, X } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../store/cartSlice';
 import './OffersPage.css';
@@ -42,6 +42,40 @@ const OffersPage = () => {
   const [loading, setLoading]       = useState(false);
   const [meta, setMeta]             = useState(null);
   const [addedIds, setAddedIds]     = useState(new Set());
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addForm, setAddForm] = useState({
+    title: '', description: '', category: 'ration', originalPrice: '', offerPrice: '', brand: '', qty: '', tags: '', img: ''
+  });
+
+  const handleAddSubmit = async (e) => {
+    e.preventDefault();
+    const discount = Math.round((1 - (addForm.offerPrice / addForm.originalPrice)) * 100) || 0;
+    const body = {
+      ...addForm,
+      originalPrice: Number(addForm.originalPrice),
+      offerPrice: Number(addForm.offerPrice),
+      discount,
+      tags: addForm.tags.split(',').map(t => t.trim()).filter(Boolean)
+    };
+    
+    try {
+      const res = await fetch(`${AI_URL}/api/offers/add`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        setShowAddModal(false);
+        setAddForm({ title: '', description: '', category: 'ration', originalPrice: '', offerPrice: '', brand: '', qty: '', tags: '', img: '' });
+        fetchOffers();
+      } else {
+        alert('Failed to add offer');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error adding offer');
+    }
+  };
 
   const fetchOffers = async (cat = category, prefs = preferences) => {
     setLoading(true);
@@ -110,9 +144,16 @@ const OffersPage = () => {
             Smart deals predicted for you based on time, trends &amp; preferences
           </p>
         </div>
-        <button className="op-refresh-btn" onClick={() => fetchOffers()} title="Re-predict offers">
-          <RefreshCw size={15} className={loading ? 'op-spin' : ''} />
-        </button>
+        <div className="op-hero-actions">
+          {isAdmin && (
+            <button className="op-add-ai-btn" onClick={() => setShowAddModal(true)} title="Add AI Offer">
+              <Plus size={15} /> Add Offer
+            </button>
+          )}
+          <button className="op-refresh-btn" onClick={() => fetchOffers()} title="Re-predict offers">
+            <RefreshCw size={15} className={loading ? 'op-spin' : ''} />
+          </button>
+        </div>
       </div>
 
       {/* ── Context pills ── */}
@@ -228,6 +269,36 @@ const OffersPage = () => {
         <div className="op-empty">
           <Sparkles size={40} color="#334155" />
           <p>No offers found. Try changing preferences.</p>
+        </div>
+      )}
+
+      {/* ── Add Offer Modal ── */}
+      {showAddModal && (
+        <div className="op-modal-overlay">
+          <div className="op-modal animate-fade-in">
+            <div className="op-modal-header">
+              <h2>Add AI Offer</h2>
+              <button onClick={() => setShowAddModal(false)} className="op-modal-close"><X size={20} /></button>
+            </div>
+            <form onSubmit={handleAddSubmit} className="op-modal-form">
+              <div className="op-form-grid">
+                <input required placeholder="Offer Title (e.g. Best Earbuds)" value={addForm.title} onChange={e => setAddForm({...addForm, title: e.target.value})} />
+                <input required placeholder="Brand" value={addForm.brand} onChange={e => setAddForm({...addForm, brand: e.target.value})} />
+                <select value={addForm.category} onChange={e => setAddForm({...addForm, category: e.target.value})}>
+                  <option value="ration">Ration & Groceries</option>
+                  <option value="clothing">Clothing & Apparel</option>
+                  <option value="electronics">Electronics</option>
+                </select>
+                <input required placeholder="Quantity (e.g. 1kg)" value={addForm.qty} onChange={e => setAddForm({...addForm, qty: e.target.value})} />
+                <input required type="number" placeholder="Original Price" value={addForm.originalPrice} onChange={e => setAddForm({...addForm, originalPrice: e.target.value})} />
+                <input required type="number" placeholder="Offer Price" value={addForm.offerPrice} onChange={e => setAddForm({...addForm, offerPrice: e.target.value})} />
+                <input required placeholder="Tags (comma separated)" value={addForm.tags} onChange={e => setAddForm({...addForm, tags: e.target.value})} />
+                <input placeholder="Image URL" value={addForm.img} onChange={e => setAddForm({...addForm, img: e.target.value})} />
+              </div>
+              <textarea placeholder="Description" rows="2" value={addForm.description} onChange={e => setAddForm({...addForm, description: e.target.value})} />
+              <button type="submit" className="op-modal-submit">Add Offer to AI Dataset</button>
+            </form>
+          </div>
         </div>
       )}
 

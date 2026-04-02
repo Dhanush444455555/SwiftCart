@@ -19,6 +19,7 @@ import AdminProducts from './pages/AdminProducts';
 import Feedback from './pages/Feedback/Feedback';
 import OffersPage from './pages/OffersPage';
 import Help from './pages/Help';
+import NotFound from './pages/NotFound';
 
 const PageTransition = ({ children }) => (
   <motion.div
@@ -64,7 +65,9 @@ function App() {
           <Route path="/admin"    element={<PageTransition><AdminProducts /></PageTransition>} />
           <Route path="/feedback" element={<PageTransition><Feedback /></PageTransition>} />
           <Route path="/offers"   element={<PageTransition><OffersPage /></PageTransition>} />
+          <Route path="/ai-offers" element={<PageTransition><OffersPage /></PageTransition>} />
           <Route path="/help"     element={<PageTransition><Help /></PageTransition>} />
+          <Route path="*"         element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>
       </AnimatePresence>
     </Layout>

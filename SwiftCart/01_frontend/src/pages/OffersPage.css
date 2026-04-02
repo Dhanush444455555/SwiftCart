@@ -287,3 +287,141 @@
   .op-cat-grid { grid-template-columns: repeat(2, 1fr); }
   .op-hero-title { font-size: 1.6rem; }
 }
+
+/* ── Add Offer Modal ── */
+.op-hero-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.op-add-ai-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.op-add-ai-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+.op-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.op-modal {
+  background: #1e293b;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #334155;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.op-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.op-modal-header h2 {
+  color: #f1f5f9;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.op-modal-close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.op-modal-close:hover {
+  background: #334155;
+  color: #fff;
+}
+
+.op-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.op-modal-form input,
+.op-modal-form select,
+.op-modal-form textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.op-modal-form input:focus,
+.op-modal-form select:focus,
+.op-modal-form textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+}
+
+.op-modal-form textarea {
+  resize: vertical;
+  margin-bottom: 16px;
+}
+
+.op-modal-submit {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.op-modal-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+@media (max-width: 600px) {
+  .op-form-grid {
+    grid-template-columns: 1fr;
+  }
+}

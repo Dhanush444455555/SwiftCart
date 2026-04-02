@@ -78,6 +78,28 @@ const OFFERS = {
       monthBoost:  [1.0, 1.0, 1.0, 1.0, 1.1, 1.2, 1.2, 1.1, 1.0, 1.0, 1.0, 1.1],
       description: 'Stock up on Maggi noodles — family pack at a steal price.',
     },
+    {
+      id: 'R007', title: 'Premium Wheat Atta',
+      originalPrice: 450, offerPrice: 380,
+      discount: 15, brand: 'Aashirvaad', qty: '10kg',
+      img: 'https://images.unsplash.com/photo-1596647952909-17bf929bdca5?w=400&q=80',
+      tags: ['staples', 'wheat', 'cooking'],
+      timeBoost:   { morning: 1.2, afternoon: 1.0, evening: 1.1, night: 0.9 },
+      dayBoost:    { weekday: 1.1, weekend: 1.3 },
+      monthBoost:  [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+      description: 'High-quality whole wheat atta for soft, fluffy rotis.',
+    },
+    {
+      id: 'R008', title: 'Mixed Nuts Combo',
+      originalPrice: 900, offerPrice: 650,
+      discount: 27, brand: 'Nutty Gritties', qty: '500g',
+      img: 'https://images.unsplash.com/photo-1599933560731-bf393664d6fb?w=400&q=80',
+      tags: ['snacks', 'breakfast', 'staples'],
+      timeBoost:   { morning: 1.5, afternoon: 1.1, evening: 1.2, night: 0.8 },
+      dayBoost:    { weekday: 1.0, weekend: 1.4 },
+      monthBoost:  [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.5, 1.5, 1.5, 1.5],
+      description: 'Healthy mix of almonds, cashews, and walnuts.',
+    },
   ],
 
   clothing: [
@@ -147,6 +169,28 @@ const OFFERS = {
       monthBoost:  [1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.5, 1.0, 1.0, 1.0, 1.0, 1.0],
       description: 'Complete school uniform set — shirt, trousers, and belt. Durable fabric.',
     },
+    {
+      id: 'C007', title: 'Classic Polo T-Shirt',
+      originalPrice: 1599, offerPrice: 899,
+      discount: 43, brand: 'US Polo Assn', qty: '1 T-Shirt',
+      img: 'https://images.unsplash.com/photo-1522026132410-b986cc08d88e?w=400&q=80',
+      tags: ['casual', 'men', 'western'],
+      timeBoost:   { morning: 1.0, afternoon: 1.2, evening: 1.3, night: 1.0 },
+      dayBoost:    { weekday: 1.0, weekend: 1.5 },
+      monthBoost:  [1.0, 1.0, 1.2, 1.2, 1.2, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+      description: 'Comfortable and stylish polo t-shirt for casual outings.',
+    },
+    {
+      id: 'C008', title: 'Running Shoes',
+      originalPrice: 4999, offerPrice: 2499,
+      discount: 50, brand: 'Nike', qty: '1 Pair',
+      img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80',
+      tags: ['sports', 'active', 'men'],
+      timeBoost:   { morning: 1.8, afternoon: 1.0, evening: 1.5, night: 0.8 },
+      dayBoost:    { weekday: 1.2, weekend: 1.6 },
+      monthBoost:  [1.1, 1.1, 1.1, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+      description: 'Lightweight running shoes with responsive cushioning.',
+    },
   ],
 
   electronics: [
@@ -160,6 +204,39 @@ const OFFERS = {
       dayBoost:    { weekday: 1.1, weekend: 1.5 },
       monthBoost:  [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.5, 1.5, 1.0, 1.0, 1.5, 1.5],
       description: '40H battery life, ENx noise cancellation. Best budget TWS earbuds.',
+    },
+    {
+      id: 'E002', title: 'Noise Cancelling Headphones',
+      originalPrice: 14999, offerPrice: 9999,
+      discount: 33, brand: 'Sony', qty: 'WH-1000XM4',
+      img: 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=400&q=80',
+      tags: ['audio', 'wireless'],
+      timeBoost:   { morning: 1.1, afternoon: 1.1, evening: 1.3, night: 1.5 },
+      dayBoost:    { weekday: 1.0, weekend: 1.4 },
+      monthBoost:  [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.2, 1.2, 1.5],
+      description: 'Industry-leading noise cancellation and premium sound.',
+    },
+    {
+      id: 'E003', title: 'Smart Fitness Watch',
+      originalPrice: 5999, offerPrice: 2999,
+      discount: 50, brand: 'Amazfit', qty: 'GTS 2 Mini',
+      img: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400&q=80',
+      tags: ['gadgets', 'fitness', 'wireless', 'accessories'],
+      timeBoost:   { morning: 1.6, afternoon: 1.0, evening: 1.2, night: 0.9 },
+      dayBoost:    { weekday: 1.2, weekend: 1.5 },
+      monthBoost:  [1.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.2],
+      description: 'Track your health and fitness metrics round the clock.',
+    },
+    {
+      id: 'E004', title: 'Gaming Mouse',
+      originalPrice: 2499, offerPrice: 1499,
+      discount: 40, brand: 'Logitech', qty: 'G502 Hero',
+      img: 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=400&q=80',
+      tags: ['gaming', 'accessories'],
+      timeBoost:   { morning: 0.8, afternoon: 1.1, evening: 1.4, night: 1.8 },
+      dayBoost:    { weekday: 1.0, weekend: 1.6 },
+      monthBoost:  [1.0, 1.0, 1.0, 1.0, 1.0, 1.5, 1.5, 1.0, 1.0, 1.0, 1.0, 1.2],
+      description: 'High-performance gaming mouse with programmable buttons.',
     },
   ],
 
@@ -260,4 +337,20 @@ function buildReason(offer, time, dayType, prefs) {
   return reasons.join(' · ');
 }
 
-module.exports = { predictOffers, getTimeOfDay, getDayType };
+function addOffer(category, offer) {
+  if (!OFFERS[category]) {
+    throw new Error('Invalid category. Must be ration, clothing, or electronics');
+  }
+  
+  // Assign a random ID if not provided
+  if (!offer.id) {
+    offer.id = `A${Date.now().toString().slice(-4)}${Math.random().toString(36).substring(2, 5)}`;
+  }
+  
+  OFFERS[category].unshift(offer); // Add to the beginning of the list
+  // Rebuild the all array
+  OFFERS.all = [...OFFERS.ration, ...OFFERS.clothing, ...OFFERS.electronics];
+  return offer;
+}
+
+module.exports = { predictOffers, getTimeOfDay, getDayType, addOffer };
