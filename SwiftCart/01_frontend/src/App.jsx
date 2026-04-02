@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { setProducts } from './store/productSlice';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
 import Search from './pages/Search';
@@ -30,6 +32,18 @@ const PageTransition = ({ children }) => (
 
 function App() {
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/products')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.length > 0) {
+          dispatch(setProducts(data));
+        }
+      })
+      .catch(err => console.error("Failed to fetch products from backend:", err));
+  }, [dispatch]);
   
   return (
     <Layout>
