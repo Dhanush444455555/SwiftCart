@@ -1,0 +1,31 @@
+﻿  Γû▓ Next.js 14.2.35
+
+   Linting and checking validity of types ...
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Collecting page data ...
+   Generating static pages (0/9) ...
+   Generating static pages (2/9) 
+   Generating static pages (4/9) 
+   Generating static pages (6/9) 
+ Γ£ô Generating static pages (9/9)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (pages)                             Size     First Load JS
+Γöî Γùï / (359 ms)                            1.17 kB        90.7 kB
+Γö£   /_app                                 0 B            89.5 kB
+Γö£ Γùï /404                                  180 B          89.7 kB
+Γö£ Γùï /cart (356 ms)                        1.35 kB        94.8 kB
+Γö£ Γùï /checkout (350 ms)                    2.14 kB         113 kB
+Γö£ Γùï /login (333 ms)                       1.32 kB         112 kB
+Γö£ Γùï /order-success                        9.31 kB         120 kB
+Γö£ Γùï /products (327 ms)                    1.56 kB         116 kB
+Γöö Γùï /register (349 ms)                    1.35 kB         112 kB
++ First Load JS shared by all             93.2 kB
+  Γö£ chunks/framework-64ad27b21261a9ce.js  44.8 kB
+  Γö£ chunks/main-fc56ac81e639fb5e.js       34 kB
+  Γöö other shared chunks (total)           14.3 kB
+
+Γùï  (Static)  prerendered as static content
+

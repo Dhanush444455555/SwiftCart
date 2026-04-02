@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { useCartStore, useAuthStore } from '@/lib/store';
@@ -20,8 +20,14 @@ export default function Checkout() {
     phone: '',
   });
 
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
   if (!user) {
-    return router.push('/login');
+    return null;
   }
 
   if (items.length === 0) {

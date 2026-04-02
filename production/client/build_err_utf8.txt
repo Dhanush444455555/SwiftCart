@@ -1,0 +1,319 @@
+﻿  Γû▓ Next.js 14.2.35
+
+   Linting and checking validity of types ...
+   Creating an optimized production build ...
+node.exe : <w> [webpack.ca
+che.PackFileCacheStrategy]
+ Skipped not serializable 
+cache item 'Compilation/mo
+dules|C:\Users\Dhanush D\O
+neDrive\Documents\SwiftCar
+t\production\client\node_m
+odules\next\dist\build\web
+pack\loaders\css-loader\sr
+c\index.js??ruleSet[1].rul
+es[7].oneOf[14].use[1]!C:\
+Users\Dhanush D\OneDrive\D
+ocuments\SwiftCart\product
+ion\client\node_modules\ne
+xt\dist\build\webpack\load
+ers\postcss-loader\src\ind
+ex.js??ruleSet[1].rules[7]
+.oneOf[14].use[2]!C:\Users
+\Dhanush D\OneDrive\Docume
+nts\SwiftCart\production\c
+lient\styles\globals.css':
+ No serializer registered 
+for PostCSSSyntaxError
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (<  
+  w> [webpack.ca...tCSS   
+ SyntaxError:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+<w> while serializing webp
+ack/lib/cache/PackFileCach
+eStrategy.PackContentItems
+ -> 
+webpack/lib/NormalModule 
+-> webpack/lib/ModuleBuild
+Error -> 
+PostCSSSyntaxError
+Failed to compile.
+
+./styles/globals.css:21:5
+Syntax error: 
+C:\Users\Dhanush D\OneDriv
+e\Documents\SwiftCart\prod
+uction\client\styles\globa
+ls.css The `hover:` class 
+does not exist. If 
+`hover:` is a custom 
+class, make sure it is 
+defined within a `@layer` 
+directive.
+
+ [90m 19 | [39m
+ [90m 20 | [39m[33m.btn
+-primary[39m [33m{[39m
+[1m[31m>[39m[22m[90m 
+21 | [39m    
+[36m@apply[39m btn 
+bg-blue-600 text-white 
+hover[33m:[39m 
+bg-blue-700[33m;[39m
+ [90m    | [39m    
+[1m[31m^[39m[22m
+ [90m 22 | 
+[39m[33m}[39m
+ [90m 23 | [39m
+
+./styles/globals.css
+Error: Your custom 
+PostCSS configuration 
+must export a `plugins` 
+key.
+    at getPostCssPlugins 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\build\webpack\
+config\blocks\css\plugins.
+js:106:15)
+    at async 
+C:\Users\Dhanush D\OneDriv
+e\Documents\SwiftCart\prod
+uction\client\node_modules
+\next\dist\build\webpack\c
+onfig\blocks\css\index.js:
+124:36
+    at async 
+C:\Users\Dhanush D\OneDriv
+e\Documents\SwiftCart\prod
+uction\client\node_modules
+\next\dist\build\webpack\l
+oaders\postcss-loader\src\
+index.js:51:40
+    at async 
+Span.traceAsyncFn 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\trace\trace.js
+:154:20)
+    at 
+tryRunOrWebpackError 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\compiled\webpa
+ck\bundle5.js:28:312989)
+    at __webpack_require_m
+odule__ (C:\Users\Dhanush 
+D\OneDrive\Documents\Swift
+Cart\production\client\nod
+e_modules\next\dist\compil
+ed\webpack\bundle5.js:28:1
+31165)
+    at __nested_webpack_re
+quire_153728__ 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\compiled\webpa
+ck\bundle5.js:28:130607)
+    at C:\Users\Dhanush D\
+OneDrive\Documents\SwiftCa
+rt\production\client\node_
+modules\next\dist\compiled
+\webpack\bundle5.js:28:131
+454
+    at symbolIterator 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\compiled\neo-a
+sync\async.js:1:14444)
+    at done 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\compiled\neo-a
+sync\async.js:1:14824)
+    at Hook.eval [as 
+callAsync] (eval at 
+create (C:\Users\Dhanush D
+\OneDrive\Documents\SwiftC
+art\production\client\node
+_modules\next\dist\compile
+d\webpack\bundle5.js:13:28
+858), <anonymous>:15:1)
+    at 
+Hook.CALL_ASYNC_DELEGATE 
+[as _callAsync] 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\compiled\webpa
+ck\bundle5.js:13:26012)
+    at C:\Users\Dhanush D\
+OneDrive\Documents\SwiftCa
+rt\production\client\node_
+modules\next\dist\compiled
+\webpack\bundle5.js:28:130
+328
+    at symbolIterator 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\compiled\neo-a
+sync\async.js:1:14402)
+-- inner error --
+Error: Your custom 
+PostCSS configuration 
+must export a `plugins` 
+key.
+    at getPostCssPlugins 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\build\webpack\
+config\blocks\css\plugins.
+js:106:15)
+    at async 
+C:\Users\Dhanush D\OneDriv
+e\Documents\SwiftCart\prod
+uction\client\node_modules
+\next\dist\build\webpack\c
+onfig\blocks\css\index.js:
+124:36
+    at async 
+C:\Users\Dhanush D\OneDriv
+e\Documents\SwiftCart\prod
+uction\client\node_modules
+\next\dist\build\webpack\l
+oaders\postcss-loader\src\
+index.js:51:40
+    at async 
+Span.traceAsyncFn 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\trace\trace.js
+:154:20)
+    at Object.<anonymous> 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\build\webpack\
+loaders\css-loader\src\ind
+ex.js??ruleSet[1].rules[7]
+.oneOf[14].use[1]!C:\Users
+\Dhanush D\OneDrive\Docume
+nts\SwiftCart\production\c
+lient\node_modules\next\di
+st\build\webpack\loaders\p
+ostcss-loader\src\index.js
+??ruleSet[1].rules[7].oneO
+f[14].use[2]!C:\Users\Dhan
+ush D\OneDrive\Documents\S
+wiftCart\production\client
+\styles\globals.css:1:7)
+    at C:\Users\Dhanush D\
+OneDrive\Documents\SwiftCa
+rt\production\client\node_
+modules\next\dist\compiled
+\webpack\bundle5.js:28:922
+493
+    at Hook.eval [as 
+call] (eval at create 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\compiled\webpa
+ck\bundle5.js:13:28636), 
+<anonymous>:7:1)
+    at Hook.CALL_DELEGATE 
+[as _call] 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\compiled\webpa
+ck\bundle5.js:13:25906)
+    at C:\Users\Dhanush D\
+OneDrive\Documents\SwiftCa
+rt\production\client\node_
+modules\next\dist\compiled
+\webpack\bundle5.js:28:131
+198
+    at 
+tryRunOrWebpackError 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\compiled\webpa
+ck\bundle5.js:28:312943)
+    at __webpack_require_m
+odule__ (C:\Users\Dhanush 
+D\OneDrive\Documents\Swift
+Cart\production\client\nod
+e_modules\next\dist\compil
+ed\webpack\bundle5.js:28:1
+31165)
+    at __nested_webpack_re
+quire_153728__ 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\compiled\webpa
+ck\bundle5.js:28:130607)
+    at C:\Users\Dhanush D\
+OneDrive\Documents\SwiftCa
+rt\production\client\node_
+modules\next\dist\compiled
+\webpack\bundle5.js:28:131
+454
+    at symbolIterator 
+(C:\Users\Dhanush D\OneDri
+ve\Documents\SwiftCart\pro
+duction\client\node_module
+s\next\dist\compiled\neo-a
+sync\async.js:1:14444)
+
+Generated code for 
+C:\Users\Dhanush D\OneDriv
+e\Documents\SwiftCart\prod
+uction\client\node_modules
+\next\dist\build\webpack\l
+oaders\css-loader\src\inde
+x.js??ruleSet[1].rules[7].
+oneOf[14].use[1]!C:\Users\
+Dhanush D\OneDrive\Documen
+ts\SwiftCart\production\cl
+ient\node_modules\next\dis
+t\build\webpack\loaders\po
+stcss-loader\src\index.js?
+?ruleSet[1].rules[7].oneOf
+[14].use[2]!C:\Users\Dhanu
+sh D\OneDrive\Documents\Sw
+iftCart\production\client\
+styles\globals.css
+
+Import trace for 
+requested module:
+./styles/globals.css
+
+
+> Build failed because of 
+webpack errors

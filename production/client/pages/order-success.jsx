@@ -1,15 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import QRCode from 'qrcode.react';
 import toast from 'react-hot-toast';
 import apiClient from '@/lib/apiClient';
 
 export default function OrderSuccess() {
-  const searchParams = useSearchParams();
-  const orderId = searchParams.get('orderId');
+  const router = useRouter();
+  const orderId = router.query.orderId;
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
