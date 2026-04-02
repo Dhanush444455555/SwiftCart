@@ -11,6 +11,7 @@ import Success from './pages/Success';
 import Profile from './pages/Profile';
 import Stores from './pages/Stores';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import AdminProducts from './pages/AdminProducts';
 import Feedback from './pages/Feedback/Feedback';
 import OffersPage from './pages/OffersPage';
@@ -29,6 +30,7 @@ function App() {
         <Route path="/profile"  element={<Profile />} />
         <Route path="/stores"   element={<Stores />} />
         <Route path="/login"    element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/admin"    element={<AdminProducts />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/offers"   element={<OffersPage />} />
