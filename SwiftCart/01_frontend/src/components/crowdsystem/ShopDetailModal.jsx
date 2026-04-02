@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X, MapPin, Star, Users, ExternalLink, ShoppingCart, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
+import { X, MapPin, Star, Users, ExternalLink, ShoppingCart, CheckCircle, AlertCircle, XCircle, Navigation } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../store/cartSlice';
 import './ShopDetailModal.css';
@@ -70,6 +70,29 @@ function getProductStock(storeStock, category) {
   return { label: match.label, color: match.color, bg: match.bg };
 }
 
+// ── In-store aisle map per category ──────────────────────────────
+const AISLE_MAP = {
+  'Dairy':         { floor: 'GF', aisle: 'A1', zone: 'Cold Storage' },
+  'Bakery':        { floor: 'GF', aisle: 'A2', zone: 'Bakery Corner' },
+  'Fresh Produce': { floor: 'GF', aisle: 'A3', zone: 'Fresh Zone' },
+  'Beverages':     { floor: 'GF', aisle: 'B1', zone: 'Drinks Aisle' },
+  'Grains':        { floor: 'GF', aisle: 'B2', zone: 'Staples' },
+  'Snacks':        { floor: 'GF', aisle: 'B3', zone: 'Snacks & Munchies' },
+  'Personal Care': { floor: '1F', aisle: 'C1', zone: 'Health & Beauty' },
+  'Electronics':   { floor: '1F', aisle: 'D1', zone: 'Electronics Zone' },
+  'Phones':        { floor: '1F', aisle: 'D2', zone: 'Mobile Section' },
+  'Audio':         { floor: '1F', aisle: 'D3', zone: 'Audio & Gadgets' },
+  'Computers':     { floor: '1F', aisle: 'D4', zone: 'Computing' },
+  'Clothing':      { floor: '2F', aisle: 'E1', zone: 'Fashion Floor' },
+  'Accessories':   { floor: '2F', aisle: 'E2', zone: 'Accessories Hub' },
+  'Footwear':      { floor: '2F', aisle: 'E3', zone: 'Shoe World' },
+  'Kitchen':       { floor: '1F', aisle: 'C2', zone: 'Home & Kitchen' },
+  'General':       { floor: 'GF', aisle: 'A0', zone: 'General' },
+};
+function getAisle(category) {
+  return AISLE_MAP[category] || { floor: 'GF', aisle: 'B0', zone: category };
+}
+
 function StockIcon({ label }) {
   if (label === 'In Stock')     return <CheckCircle  size={14} color="#34d399" />;
   if (label === 'Low Stock')    return <AlertCircle  size={14} color="#fbbf24" />;
@@ -106,6 +129,12 @@ const ShopDetailModal = ({ shop, onClose }) => {
   const mapsUrl = shop.lat && shop.lng
     ? `https://www.openstreetmap.org/?mlat=${shop.lat}&mlon=${shop.lng}#map=17/${shop.lat}/${shop.lng}`
     : null;
+
+  // Opens Google Maps searching for the product at the store
+  const productNavUrl = (productName) =>
+    shop.lat && shop.lng
+      ? `https://www.google.com/maps/search/${encodeURIComponent(productName + ' ' + shop.name)}/@${shop.lat},${shop.lng},17z`
+      : `https://www.google.com/maps/search/${encodeURIComponent(productName + ' ' + shop.name)}`;
 
   return (
     <div className="sdm-backdrop" onClick={onClose}>
@@ -191,6 +220,29 @@ const ShopDetailModal = ({ shop, onClose }) => {
                   <div className="sdm-product-info">
                     <span className="sdm-product-cat">{product.category}</span>
                     <p className="sdm-product-name">{product.name}</p>
+
+                    {/* In-store location badge */}
+                    {(() => {
+                      const aisle = getAisle(product.category);
+                      return (
+                        <div className="sdm-aisle-row">
+                          <span className="sdm-aisle-badge">
+                            <MapPin size={10} /> {aisle.floor} · {aisle.aisle} · {aisle.zone}
+                          </span>
+                          <a
+                            href={productNavUrl(product.name)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="sdm-nav-icon"
+                            title={`Navigate to ${product.name}`}
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <Navigation size={11} />
+                          </a>
+                        </div>
+                      );
+                    })()}
+
                     <div className="sdm-product-bottom">
                       <span className="sdm-product-price">₹{product.price.toLocaleString('en-IN')}</span>
                       <span className="sdm-stock-chip" style={{ color: stockInfo.color, background: stockInfo.bg }}>
