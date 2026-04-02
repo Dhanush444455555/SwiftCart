@@ -1,0 +1,412 @@
+/* ============================================================
+   BarcodeScannerModal.css — SwiftCart Premium Scanner UI
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+/* ── Overlay ─────────────────────────────────────────────────── */
+.bsm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 1rem;
+}
+
+/* ── Modal card ──────────────────────────────────────────────── */
+.bsm-modal {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 22px;
+  padding: 1.5rem;
+  background: rgba(15, 20, 40, 0.92);
+  border: 1px solid rgba(108, 99, 255, 0.25);
+  box-shadow: 0 24px 72px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255,255,255,0.04);
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.bsm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.bsm-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+.bsm-cam-icon { color: #6C63FF; }
+
+.bsm-close {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: #94a3b8;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.bsm-close:hover { background: rgba(244,63,94,0.15); color: #f87171; border-color: rgba(244,63,94,0.3); }
+
+/* ── Camera viewport ─────────────────────────────────────────── */
+#sc-scanner-view {
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid rgba(108, 99, 255, 0.4);
+  background: #000;
+  position: relative;
+  min-height: 240px;
+}
+
+/* Hide the default html5-qrcode UI bits we don't want */
+#sc-scanner-view img[alt="File Upload"] { display: none !important; }
+#sc-scanner-view select                  { display: none !important; }
+#qr-shaded-region { border: 3px solid rgba(108,99,255,0.7) !important; box-shadow: none !important; }
+
+.bsm-viewport-hidden {
+  display: none !important;
+}
+
+/* animated corner scanline */
+#sc-scanner-view::after {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #6C63FF, #06b6d4, transparent);
+  animation: bsm-scanline 2s ease-in-out infinite;
+  top: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+@keyframes bsm-scanline {
+  0%   { top: 10%; opacity: 1; }
+  50%  { top: 88%; opacity: 1; }
+  100% { top: 10%; opacity: 1; }
+}
+
+.bsm-hint {
+  text-align: center;
+  font-size: 0.76rem;
+  color: #64748b;
+  margin: 0;
+  padding: 0 0.5rem;
+}
+.bsm-hint strong { color: #e2e8f0; }
+
+/* ── Live barcode number display ─────────────────────────────── */
+.bsm-live-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bsm-live-code {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0.35rem 0.6rem;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: border-color 0.2s;
+}
+.bsm-live-code.bsm-live-active {
+  border-color: rgba(108,99,255,0.45);
+  box-shadow: 0 0 16px rgba(108,99,255,0.15);
+}
+
+.bsm-live-placeholder {
+  font-size: 0.72rem;
+  color: #334155;
+  align-self: center;
+  letter-spacing: 0.5px;
+}
+
+.bsm-live-digit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 28px;
+  border-radius: 5px;
+  background: rgba(108,99,255,0.12);
+  border: 1px solid rgba(108,99,255,0.25);
+  color: #a78bfa;
+  font-size: 0.9rem;
+  font-weight: 800;
+  font-family: 'Courier New', monospace;
+  animation: digit-pop 0.12s ease both;
+}
+@keyframes digit-pop {
+  from { transform: scale(0.6); opacity: 0; color: #22d3ee; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* loading state code display */
+.bsm-loading-code {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.4rem;
+}
+.bsm-loading-code .bsm-live-digit {
+  opacity: 0.6;
+  animation: none;
+}
+
+
+/* ── State box (loading / found / error / added) ─────────────── */
+.bsm-state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+.bsm-state-title {
+  font-size: 1rem; font-weight: 700; color: #e2e8f0; margin: 0;
+}
+.bsm-state-sub {
+  font-size: 0.78rem; color: #64748b; margin: 0;
+}
+
+.bsm-spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.bsm-icon-purple { color: #6C63FF; }
+.bsm-icon-green  { color: #34d399; }
+.bsm-icon-red    { color: #f87171; }
+
+.bsm-added .bsm-icon-green { animation: bsm-pop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes bsm-pop {
+  0%   { transform: scale(0.5); }
+  100% { transform: scale(1); }
+}
+
+/* ── Product result ──────────────────────────────────────────── */
+.bsm-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bsm-found-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(52,211,153,0.1);
+  border: 1px solid rgba(52,211,153,0.25);
+  border-radius: 10px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #34d399;
+}
+
+.bsm-product-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 0.75rem;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+/* Image wrapper with discount badge */
+.bsm-img-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.bsm-product-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #fff;
+  padding: 4px;
+}
+.bsm-discount-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #ef4444, #f59e0b);
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+  padding: 4px 6px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(239,68,68,0.5);
+  animation: bsm-badge-pulse 1.4s ease-in-out infinite alternate;
+}
+@keyframes bsm-badge-pulse {
+  from { transform: scale(1); }
+  to   { transform: scale(1.12); }
+}
+
+.bsm-product-info { flex: 1; min-width: 0; }
+.bsm-pcat  { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; color: #6C63FF; }
+.bsm-pname { font-size: 0.9rem; font-weight: 700; color: #e2e8f0; margin: 0.15rem 0; line-height: 1.25; }
+.bsm-pbrand { font-size: 0.72rem; color: #64748b; margin: 0; }
+.bsm-pweight { font-size: 0.72rem; color: #94a3b8; margin: 0; }
+/* Price block: orig (struck) + discounted */
+.bsm-price-block {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  flex-wrap: wrap;
+}
+.bsm-orig-price {
+  font-size: 0.82rem;
+  color: #64748b;
+  text-decoration: line-through;
+  font-weight: 500;
+}
+.bsm-disc-price {
+  font-size: 1.15rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, #34d399, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.bsm-savings {
+  font-size: 0.72rem;
+  color: #f59e0b;
+  font-weight: 700;
+  margin: 0.1rem 0 0;
+}
+.bsm-savings-confirm {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f59e0b;
+  margin: 0;
+}
+
+/* ── Nutrition chips ─────────────────────────────────────────── */
+.bsm-nutrition {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.bsm-nutrition span {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+/* ── Actions ─────────────────────────────────────────────────── */
+.bsm-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+.bsm-add-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #6C63FF, #06b6d4);
+  border: none;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(108,99,255,0.35);
+}
+.bsm-add-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.bsm-scan-again {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.bsm-scan-again:hover { background: rgba(255,255,255,0.1); color: #e2e8f0; }
+
+/* ── Fallback banner (product not in DB) ─────────────────────── */
+.bsm-fallback-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(251,191,36,0.08);
+  border: 1px solid rgba(251,191,36,0.25);
+  color: #fbbf24;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.bsm-fallback-banner strong { color: #f59e0b; }
+
+/* ── Barcode number label ────────────────────────────────────── */
+.bsm-barcode-txt {
+  font-size: 0.65rem;
+  color: #475569;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+  margin: 0.1rem 0 0;
+}
+
+/* ── Camera permission steps ─────────────────────────────────── */
+.bsm-permission-steps {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  text-align: left;
+  width: 100%;
+}
+.bsm-permission-steps p {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin: 0.25rem 0;
+}
+.bsm-permission-steps p strong {
+  color: #34d399;
+}
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .bsm-modal { padding: 1.1rem; border-radius: 18px; }
+  #sc-scanner-view { min-height: 200px; }
+}

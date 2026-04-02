@@ -19,9 +19,9 @@ const Success = () => {
       <div className="success-card glass-card">
         <CheckCircle className="success-icon bounce" size={80} color="#06B6D4" />
         
-        <h1 className="success-title">Order Successful!</h1>
+        <h1 className="success-title">Purchase Successful! 🎉</h1>
         <p className="success-message">
-          Your payment was processed successfully. You can now walk out of the store. No queues, no waiting!
+          Your purchase is confirmed! Walk out anytime — no queues, no waiting. SwiftCart handled it!
         </p>
 
         <div className="receipt-mock">

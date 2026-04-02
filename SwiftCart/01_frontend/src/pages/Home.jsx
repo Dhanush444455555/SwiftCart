@@ -1,25 +1,21 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Camera, Store, Tag, Grid } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from '../components/common/ProductCard';
 import Button from '../components/common/Button';
+import BarcodeScannerModal from '../components/scanner/BarcodeScannerModal';
 import './Home.css';
 
-const ALL = 'All';
-
 const Home = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const products = useSelector((state) => state.products.list);
-  const [activeCategory, setActiveCategory] = useState(ALL);
-
-  const categories = [ALL, ...Array.from(new Set(products.map(p => p.category))).sort()];
-
-  const filtered = activeCategory === ALL
-    ? products
-    : products.filter(p => p.category === activeCategory);
+  const { list: products } = useSelector((state) => state.products);
+  const [loading, setLoading] = useState(true);
+  const [showScanner, setShowScanner] = useState(false);
 
   return (
+    <>
     <div className="home-container">
       {/* Hero Section */}
       <section className="hero-section glass-card">
@@ -27,9 +23,9 @@ const Home = () => {
           <h1 className="hero-title">Welcome to <span className="text-gradient">SwiftCart</span></h1>
           <p className="hero-subtitle">Smart Shopping, Zero Queues.</p>
           <div className="hero-actions">
-            <Button variant="gradient" className="action-btn" onClick={() => navigate('/scan')}>
+            <Button variant="gradient" className="action-btn" onClick={() => setShowScanner(true)}>
               <Camera size={24} className="btn-icon" />
-              Scan Item
+              Scan Barcode
             </Button>
             <Button variant="secondary" className="action-btn" onClick={() => navigate('/stores')}>
               <Store size={24} className="btn-icon" />
@@ -56,29 +52,22 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Category Filter */}
+      {/* Products Section */}
       <section className="featured-section">
         <div className="section-header">
-          <h2><Grid size={20} /> All Products <span className="product-count">({filtered.length})</span></h2>
+          <h2><Grid size={20} /> All Products</h2>
         </div>
-
-        <div className="category-tabs">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              className={`cat-tab ${activeCategory === cat ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat)}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
         <div className="products-grid">
-          {filtered.map(p => <ProductCard key={p._id} product={p} />)}
+          {products.map(p => <ProductCard key={p._id} product={p} />)}
         </div>
       </section>
     </div>
+
+    {/* Barcode Scanner Modal */}
+    {showScanner && (
+      <BarcodeScannerModal onClose={() => setShowScanner(false)} />
+    )}
+    </>
   );
 };
 

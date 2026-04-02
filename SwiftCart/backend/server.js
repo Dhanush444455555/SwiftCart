@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 
 // Routes
 const authRoutes    = require('./routes/authRoutes');
@@ -30,6 +31,15 @@ app.use('/api/orders',   orderRoutes);
 app.use('/api/stores',   storeRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/payment',  paymentRoutes);
+
+// Serve frontend build
+const frontendDist = path.join(__dirname, '..', '01_frontend', 'dist');
+app.use(express.static(frontendDist));
+
+// Catch-all: send index.html for client-side routing (Express 5 syntax)
+app.get('/{*path}', (req, res) => {
+    res.sendFile(path.join(frontendDist, 'index.html'));
+});
 
 // Error Middleware
 app.use(notFound);
