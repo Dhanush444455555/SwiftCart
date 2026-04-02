@@ -7,6 +7,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import ProductCard from '../components/common/ProductCard';
 import Button from '../components/common/Button';
 import BarcodeScannerModal from '../components/scanner/BarcodeScannerModal';
+import PersonalisedCarousel from '../components/recommendation/PersonalisedCarousel';
 import './Home.css';
 
 const Home = () => {
@@ -116,27 +117,9 @@ const Home = () => {
         <div className="section-header">
           <h2><Tag size={24} /> Personalized For You</h2>
         </div>
-        <div className="offers-grid">
-          {offersLoading ? (
-            <p style={{ color: 'var(--text-secondary)' }}>Analyzing your preferences...</p>
-          ) : aiOffers.length > 0 ? (
-            aiOffers.map((offer) => (
-              <Tilt key={offer.id} options={tiltOptions} style={{ height: '100%', width: '100%' }}>
-                <div className="offer-card glass-card">
-                  <h3>{offer.discount}% OFF</h3>
-                  <p>{offer.title}</p>
-                </div>
-              </Tilt>
-            ))
-          ) : (
-            <Tilt options={tiltOptions} style={{ height: '100%', width: '100%' }}>
-              <div className="offer-card glass-card">
-                <h3>20% OFF</h3>
-                <p>On Chocolates Today</p>
-              </div>
-            </Tilt>
-          )}
-        </div>
+        
+        {/* Promotional Slides inside Personalized For You */}
+        <PersonalisedCarousel />
       </section>
 
       {/* Products Section */}
