@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  User, Home, Search, ShoppingCart, ScanLine, Package,
+  User, Home, Search, ShoppingCart, Package, MessageSquare,
   Store, Sparkles, Settings, LogOut, ShieldCheck, HelpCircle,
   ChevronRight, X, Menu
 } from 'lucide-react';
@@ -50,10 +50,11 @@ const Sidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   const navLinks = [
-    { to: '/',        icon: <Home size={19} />,         label: 'Home' },
-    { to: '/search',  icon: <Search size={19} />,       label: 'Search' },
-    { to: '/offers',  icon: <Sparkles size={19} />,     label: 'AI Offers' },
-    { to: '/stores',  icon: <Store size={19} />,        label: 'Nearby Stores' },
+    { to: '/',         icon: <Home size={19} />,         label: 'Home' },
+    { to: '/search',   icon: <Search size={19} />,       label: 'Search' },
+    { to: '/offers',   icon: <Sparkles size={19} />,     label: 'AI Offers' },
+    { to: '/stores',   icon: <Store size={19} />,        label: 'Nearby Stores' },
+    { to: '/feedback', icon: <MessageSquare size={19} />, label: 'Feedback' },
     ...(!isAdmin ? [{ to: '/cart', icon: <ShoppingCart size={19} />, label: 'Cart', badge: cartCount }] : []),
   ];
 

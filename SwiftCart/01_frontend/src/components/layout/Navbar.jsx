@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, Search, Home, Store, ShieldCheck, LogOut, MessageSquare, Sparkles } from 'lucide-react';
+import { ShoppingCart, User, Search, Home, Store, ShieldCheck, LogOut, Sparkles } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectIsAuthenticated, selectIsAdmin, selectUser, logout } from '../../store/authSlice';
+import { selectUnreadCount } from '../../store/slices/notificationSlice';
+import NotificationPanel from '../notifications/NotificationPanel';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -13,6 +15,7 @@ const Navbar = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const isAdmin         = useSelector(selectIsAdmin);
   const user            = useSelector(selectUser);
+  const unreadCount     = useSelector(selectUnreadCount);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -30,15 +33,10 @@ const Navbar = () => {
             fill="none" xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >
-            {/* Cart body */}
             <rect x="2" y="2" width="32" height="32" rx="8" fill="white"/>
-            {/* Cart wheel left */}
             <circle cx="13" cy="27" r="2" fill="#111"/>
-            {/* Cart wheel right */}
             <circle cx="23" cy="27" r="2" fill="#111"/>
-            {/* Cart basket */}
             <path d="M6 10h3l2.5 10h13l2.5-8H11" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            {/* Lightning bolt */}
             <path d="M20 8l-5 7h4l-2 7 7-9h-4l3-5-3 0z" fill="#111"/>
           </svg>
           <span className="logo-text">SwiftCart</span>
@@ -57,9 +55,15 @@ const Navbar = () => {
           <Link to="/offers" className="nav-icon-link" title="AI Offers">
             <Sparkles size={24} />
           </Link>
-          <Link to="/feedback" className="nav-icon-link" title="Feedback">
-            <MessageSquare size={24} />
-          </Link>
+
+          {/* 🔔 Notification Bell — replaces Feedback icon */}
+          <div className="nav-icon-link nav-notif-wrapper" title="Notifications">
+            <NotificationPanel />
+            {unreadCount > 0 && (
+              <span className="nav-notif-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
+            )}
+          </div>
+
           {!isAdmin && (
             <Link to="/cart" className="nav-icon-link cart-icon-wrapper" title="Cart">
               <ShoppingCart size={24} />

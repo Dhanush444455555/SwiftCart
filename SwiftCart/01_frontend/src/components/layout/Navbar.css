@@ -70,6 +70,29 @@
 
 .cart-icon-wrapper { position: relative; }
 
+/* ── Notification bell in navbar ── */
+.nav-notif-wrapper {
+  position: relative;
+}
+.nav-notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  background: #e11d48;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
 .cart-badge {
   position: absolute;
   top: -6px;
