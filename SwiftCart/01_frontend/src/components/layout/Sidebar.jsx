@@ -3,10 +3,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   User, Home, Search, ShoppingCart, ScanLine, Package,
   Store, Sparkles, Settings, LogOut, ShieldCheck, HelpCircle,
-  Bell, ChevronRight, X, Menu
+  ChevronRight, X, Menu
 } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectIsAuthenticated, selectIsAdmin, selectUser, logout } from '../../store/authSlice';
+import { selectUnreadCount } from '../../store/slices/notificationSlice';
+import NotificationPanel from '../notifications/NotificationPanel';
 import './Sidebar.css';
 
 const Sidebar = () => {
@@ -56,13 +58,14 @@ const Sidebar = () => {
     ...(!isAdmin ? [{ to: '/cart', icon: <ShoppingCart size={19} />, label: 'Cart', badge: cartCount }] : []),
   ];
 
+  const unreadCount = useSelector(selectUnreadCount);
+
   const accountLinks = isAuthenticated
     ? [
         { to: '/profile', icon: <User size={19} />,     label: 'My Profile' },
         { to: '/profile', icon: <Package size={19} />,  label: 'Order History' },
         ...(isAdmin ? [{ to: '/admin', icon: <ShieldCheck size={19} />, label: 'Admin Dashboard', admin: true }] : []),
         { to: '/profile', icon: <Settings size={19} />, label: 'Settings' },
-        { to: '/profile', icon: <Bell size={19} />,     label: 'Notifications' },
       ]
     : [];
 
@@ -171,6 +174,18 @@ const Sidebar = () => {
                 <ChevronRight size={15} className="sb-nav-arrow" />
               </Link>
             ))}
+
+            {/* ── Notifications row ── */}
+            <div className="sb-nav-item" style={{ cursor: 'default', justifyContent: 'space-between' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span className="sb-nav-icon-box"><span>🔔</span></span>
+                <span className="sb-nav-label">Notifications</span>
+                {unreadCount > 0 && (
+                  <span className="sb-nav-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
+                )}
+              </span>
+              <NotificationPanel />
+            </div>
           </nav>
         )}
 
