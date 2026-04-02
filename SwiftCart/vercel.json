@@ -27,11 +27,15 @@
       "dest": "/backend/server.js"
     },
     {
+      "src": "/(.*)",
+      "dest": "/01_frontend/$1"
+    },
+    {
       "handle": "filesystem"
     },
     {
-      "src": "/(.*)",
-      "dest": "/01_frontend/dist/index.html"
+      "src": "/01_frontend/(.*)",
+      "dest": "/01_frontend/index.html"
     }
   ]
 }
