@@ -6,19 +6,124 @@
   padding-bottom: 4rem;
 }
 
+/* ── Hero — Revolving Spiral ── */
 .hero-section {
-  padding: 4rem 2rem;
+  position: relative;
+  padding: 5rem 2rem 4rem;
   text-align: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border-card);
-  border-radius: var(--border-radius);
-  transition: var(--transition-smooth);
+  overflow: hidden;
+  border-radius: 20px;
+  background: radial-gradient(ellipse at 50% 60%, #1a0a2e 0%, #0a0a12 60%, #000 100%);
+  border: 1px solid rgba(255,255,255,0.06);
+  isolation: isolate;
 }
 
-.hero-section:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 40px rgba(108, 99, 255, 0.15);
+/* Glow blobs */
+.hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
 }
+.hero-blob-purple {
+  width: 420px; height: 280px;
+  background: rgba(120, 40, 220, 0.45);
+  top: -60px; left: 10%;
+}
+.hero-blob-orange {
+  width: 300px; height: 200px;
+  background: rgba(220, 120, 30, 0.35);
+  top: 20px; right: 8%;
+}
+
+/* Spiral container */
+.hero-spiral-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Base ring */
+.spiral-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+}
+
+/* Ring 1 — large outer, slow */
+.spiral-ring-1 {
+  width: 320px; height: 200px;
+  border-color: rgba(100, 160, 255, 0.7);
+  box-shadow: 0 0 24px rgba(100,160,255,0.4), inset 0 0 12px rgba(100,160,255,0.15);
+  animation: revolve1 5s linear infinite;
+}
+/* Ring 2 — tilted 60deg */
+.spiral-ring-2 {
+  width: 260px; height: 160px;
+  border-color: rgba(180, 100, 255, 0.8);
+  box-shadow: 0 0 20px rgba(180,100,255,0.45), inset 0 0 10px rgba(180,100,255,0.15);
+  animation: revolve2 4s linear infinite;
+}
+/* Ring 3 — tighter, fast */
+.spiral-ring-3 {
+  width: 200px; height: 120px;
+  border-color: rgba(100, 220, 255, 0.7);
+  box-shadow: 0 0 16px rgba(100,220,255,0.4);
+  animation: revolve3 3s linear infinite;
+}
+/* Ring 4 — innermost glow */
+.spiral-ring-4 {
+  width: 140px; height: 84px;
+  border-color: rgba(255, 200, 100, 0.6);
+  box-shadow: 0 0 14px rgba(255,200,100,0.35);
+  animation: revolve4 2.5s linear infinite reverse;
+}
+
+/* The SC core badge */
+.spiral-core {
+  position: absolute;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, #ddd 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  color: #000;
+  letter-spacing: 2px;
+  box-shadow: 0 0 30px rgba(255,255,255,0.5);
+  z-index: 2;
+}
+
+/* Rotation keyframes — each ring tilted differently */
+@keyframes revolve1 {
+  0%   { transform: rotateX(70deg) rotateY(0deg) rotateZ(30deg); }
+  100% { transform: rotateX(70deg) rotateY(360deg) rotateZ(30deg); }
+}
+@keyframes revolve2 {
+  0%   { transform: rotateX(50deg) rotateY(120deg) rotateZ(-20deg); }
+  100% { transform: rotateX(50deg) rotateY(480deg) rotateZ(-20deg); }
+}
+@keyframes revolve3 {
+  0%   { transform: rotateX(30deg) rotateY(240deg) rotateZ(60deg); }
+  100% { transform: rotateX(30deg) rotateY(600deg) rotateZ(60deg); }
+}
+@keyframes revolve4 {
+  0%   { transform: rotateX(80deg) rotateY(0deg) rotateZ(-45deg); }
+  100% { transform: rotateX(80deg) rotateY(360deg) rotateZ(-45deg); }
+}
+
+/* Content sits above spiral */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  padding-top: 1.5rem;
+}
+
 
 .hero-title {
   font-family: 'Bebas Neue', sans-serif;

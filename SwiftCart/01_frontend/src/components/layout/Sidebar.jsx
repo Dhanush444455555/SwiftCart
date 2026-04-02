@@ -3,12 +3,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   User, Home, Search, ShoppingCart, Package, MessageSquare,
   Store, Sparkles, Settings, LogOut, ShieldCheck, HelpCircle,
-  ChevronRight, X, Menu
+  ChevronRight, Menu
 } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectIsAuthenticated, selectIsAdmin, selectUser, logout } from '../../store/authSlice';
-import { selectUnreadCount } from '../../store/slices/notificationSlice';
-import NotificationPanel from '../notifications/NotificationPanel';
 import './Sidebar.css';
 
 const Sidebar = () => {
@@ -58,8 +56,6 @@ const Sidebar = () => {
     ...(!isAdmin ? [{ to: '/cart', icon: <ShoppingCart size={19} />, label: 'Cart', badge: cartCount }] : []),
   ];
 
-  const unreadCount = useSelector(selectUnreadCount);
-
   const accountLinks = isAuthenticated
     ? [
         { to: '/profile', icon: <User size={19} />,     label: 'My Profile' },
@@ -80,9 +76,9 @@ const Sidebar = () => {
         id="sidebar-toggle"
         className={`sb-toggle ${isOpen ? 'sb-toggle--open' : ''}`}
         onClick={() => setIsOpen(prev => !prev)}
-        aria-label="Toggle account menu"
+        aria-label="Toggle menu"
       >
-        {isOpen ? <X size={20} /> : <Menu size={20} />}
+        <Menu size={20} />
       </button>
 
       {/* Backdrop */}
@@ -98,12 +94,9 @@ const Sidebar = () => {
         className={`sb-panel ${isOpen ? 'sb-panel--open' : ''}`}
         aria-hidden={!isOpen}
       >
-        {/* Header */}
+        {/* Header — no X button, click outside to close */}
         <div className="sb-header">
           <span className="sb-brand">SwiftCart</span>
-          <button className="sb-close" onClick={() => setIsOpen(false)} aria-label="Close">
-            <X size={18} />
-          </button>
         </div>
 
         {/* User card */}
@@ -174,22 +167,6 @@ const Sidebar = () => {
                 <ChevronRight size={15} className="sb-nav-arrow" />
               </Link>
             ))}
-
-            {/* ── Notifications row ── */}
-            <div className="sb-nav-item sb-nav-item--notif">
-              <span className="sb-nav-icon-box">
-                <span style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  🔔
-                  {unreadCount > 0 && (
-                    <span className="sb-nav-badge sb-notif-badge">
-                      {unreadCount > 99 ? '99+' : unreadCount}
-                    </span>
-                  )}
-                </span>
-              </span>
-              <span className="sb-nav-label">Notifications</span>
-              <NotificationPanel />
-            </div>
           </nav>
         )}
 

@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, User, Search, Home, Store, ShieldCheck, LogOut, Sparkles } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectIsAuthenticated, selectIsAdmin, selectUser, logout } from '../../store/authSlice';
-import { selectUnreadCount } from '../../store/slices/notificationSlice';
 import NotificationPanel from '../notifications/NotificationPanel';
 import './Navbar.css';
 
@@ -15,7 +14,6 @@ const Navbar = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const isAdmin         = useSelector(selectIsAdmin);
   const user            = useSelector(selectUser);
-  const unreadCount     = useSelector(selectUnreadCount);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -56,13 +54,8 @@ const Navbar = () => {
             <Sparkles size={24} />
           </Link>
 
-          {/* 🔔 Notification Bell — replaces Feedback icon */}
-          <div className="nav-icon-link nav-notif-wrapper" title="Notifications">
-            <NotificationPanel />
-            {unreadCount > 0 && (
-              <span className="nav-notif-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
-            )}
-          </div>
+          {/* 🔔 Notification Bell — single icon, no wrapper */}
+          <NotificationPanel />
 
           {!isAdmin && (
             <Link to="/cart" className="nav-icon-link cart-icon-wrapper" title="Cart">

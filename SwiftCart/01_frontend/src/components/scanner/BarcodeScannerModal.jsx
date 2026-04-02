@@ -46,21 +46,27 @@ const detectBrand = (barcode) => {
   return null;
 };
 
-// Try multiple APIs for maximum product recognition
+// Try multiple APIs IN PARALLEL for maximum speed
 const fetchProduct = async (barcode) => {
   const urls = [
     `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`,
     `https://in.openfoodfacts.org/api/v0/product/${barcode}.json`,
   ];
-  for (const url of urls) {
-    try {
-      const res  = await fetch(url, { signal: AbortSignal.timeout(4000) });
-      const data = await res.json();
-      const p    = data.product || data.products?.[0];
-      if (p && (p.product_name || p.product_name_en)) return p;
-    } catch { /* try next */ }
+  try {
+    // Race both APIs — whichever responds first wins
+    const result = await Promise.any(
+      urls.map(async url => {
+        const res  = await fetch(url, { signal: AbortSignal.timeout(2000) });
+        const data = await res.json();
+        const p    = data.product || data.products?.[0];
+        if (p && (p.product_name || p.product_name_en)) return p;
+        throw new Error('no product');
+      })
+    );
+    return result;
+  } catch {
+    return null; // both failed — use fallback instantly
   }
-  return null;
 };
 
 // Map API response → SwiftCart product (NO discount)
@@ -145,14 +151,20 @@ const BarcodeScannerModal = ({ onClose }) => {
     if (processing.current) return;
     processing.current = true;
 
-    setLiveCode(barcode);                   // show full code immediately
+    setLiveCode(barcode);
     try { html5QrRef.current?.pause(true); } catch {}
-    setPhase('loading');
 
-    const apiProduct = await fetchProduct(barcode);
-    const mapped     = buildProduct(barcode, apiProduct);
-    setProduct(mapped);
+    // ⚡ 1. Show fallback product INSTANTLY — no waiting
+    const instant = buildProduct(barcode, null);
+    setProduct(instant);
     setPhase('found');
+
+    // 2. Silently fetch real data and upgrade details in background
+    fetchProduct(barcode).then(apiProduct => {
+      if (apiProduct) {
+        setProduct(buildProduct(barcode, apiProduct));
+      }
+    });
   }, []);
 
   const handleAddToCart = () => {

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { clearCart, saveOrderToHistory } from '../store/cartSlice';
 import { decreaseStock } from '../store/productSlice';
+import { notifyPaymentSuccess, notifyOrderPlaced } from '../store/slices/notificationSlice';
 import { orderService } from '../services/orderService';
 import toast from 'react-hot-toast';
 import { useAuth } from '../hooks/useAuth';
@@ -59,11 +60,19 @@ const Checkout = () => {
 
   /* ── Confirm order after payment ── */
   const finishOrder = () => {
-    // Decrease stock for each purchased item
+    const orderId   = `SWIFT-${Math.floor(Math.random() * 900000 + 100000)}`;
+    const itemCount = items.length;
+
+    // Update stock and save order
     dispatch(decreaseStock(items.map(i => ({ productId: i.product._id, quantity: i.quantity }))));
     dispatch(saveOrderToHistory({ finalAmount: parseFloat(finalAmount) }));
+
+    // 🔔 Fire notifications — appear in navbar bell
+    dispatch(notifyPaymentSuccess({ orderId, amount: finalAmount, method: method === 'upi' ? 'UPI' : 'Card' }));
+    dispatch(notifyOrderPlaced({ orderId, itemCount, total: finalAmount }));
+
     dispatch(clearCart());
-    toast.success('Payment Successful! Stock updated.');
+    toast.success('Payment Successful! Order placed.');
     navigate('/success');
   };
 

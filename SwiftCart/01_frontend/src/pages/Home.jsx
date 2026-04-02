@@ -88,18 +88,49 @@ const Home = () => {
   return (
     <>
     <div className="home-container">
-      {/* Hero Section */}
-      <motion.section 
-        className="hero-section glass-card"
-        initial="hidden"
-        animate="visible"
-        variants={floatingVariant}
+      {/* Hero Section — Revolving Spiral */}
+      <motion.section
+        className="hero-section"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
         style={{ y: yHero, opacity: opacityHero }}
       >
-        <motion.div className="hero-content" variants={floatingVariant} animate="float">
-          <h1 className="hero-title">Welcome to <span className="text-gradient">SwiftCart</span></h1>
-          <p className="hero-subtitle">Smart Shopping, Zero Queues.</p>
-          <div className="hero-actions">
+        {/* Animated spiral rings */}
+        <div className="hero-spiral-wrap" aria-hidden="true">
+          <div className="spiral-ring spiral-ring-1" />
+          <div className="spiral-ring spiral-ring-2" />
+          <div className="spiral-ring spiral-ring-3" />
+          <div className="spiral-ring spiral-ring-4" />
+        </div>
+
+        {/* Glow blobs */}
+        <div className="hero-blob hero-blob-purple" />
+        <div className="hero-blob hero-blob-orange" />
+
+        <div className="hero-content">
+          <motion.h1
+            className="hero-title"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+          >
+            Welcome to <span className="text-gradient">SwiftCart</span>
+          </motion.h1>
+          <motion.p
+            className="hero-subtitle"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.7 }}
+          >
+            Smart Shopping, Zero Queues.
+          </motion.p>
+          <motion.div
+            className="hero-actions"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.7 }}
+          >
             <Button variant="gradient" className="action-btn" onClick={() => setShowScanner(true)}>
               <Camera size={24} className="btn-icon" />
               Scan Barcode
@@ -108,8 +139,8 @@ const Home = () => {
               <Store size={24} className="btn-icon" />
               Nearby Stores
             </Button>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </motion.section>
 
       {/* AI Offers Section */}
