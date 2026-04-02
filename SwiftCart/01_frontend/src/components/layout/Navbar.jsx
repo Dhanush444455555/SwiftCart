@@ -41,16 +41,16 @@ const Navbar = () => {
         </Link>
 
         <div className="nav-links">
-          <Link to="/" className="nav-icon-link" title="Home">
+          <Link to="/" className="nav-icon-link hide-on-mobile" title="Home">
             <Home size={24} />
           </Link>
-          <Link to="/search" className="nav-icon-link" title="Search">
+          <Link to="/search" className="nav-icon-link hide-on-mobile" title="Search">
             <Search size={24} />
           </Link>
-          <Link to="/stores" className="nav-icon-link" title="Nearby Stores">
+          <Link to="/stores" className="nav-icon-link hide-on-mobile" title="Nearby Stores">
             <Store size={24} />
           </Link>
-          <Link to="/offers" className="nav-icon-link" title="AI Offers">
+          <Link to="/offers" className="nav-icon-link hide-on-mobile" title="AI Offers">
             <Sparkles size={24} />
           </Link>
 
