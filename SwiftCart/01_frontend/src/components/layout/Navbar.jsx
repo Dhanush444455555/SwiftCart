@@ -23,6 +23,24 @@ const Navbar = () => {
     <nav className="navbar glass-card">
       <div className="container nav-content">
         <Link to="/" className="nav-logo">
+          {/* SwiftCart logo mark — cart + lightning bolt */}
+          <svg
+            className="nav-logo-icon"
+            width="36" height="36" viewBox="0 0 36 36"
+            fill="none" xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            {/* Cart body */}
+            <rect x="2" y="2" width="32" height="32" rx="8" fill="white"/>
+            {/* Cart wheel left */}
+            <circle cx="13" cy="27" r="2" fill="#111"/>
+            {/* Cart wheel right */}
+            <circle cx="23" cy="27" r="2" fill="#111"/>
+            {/* Cart basket */}
+            <path d="M6 10h3l2.5 10h13l2.5-8H11" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            {/* Lightning bolt */}
+            <path d="M20 8l-5 7h4l-2 7 7-9h-4l3-5-3 0z" fill="#111"/>
+          </svg>
           <span className="logo-text">SwiftCart</span>
         </Link>
 
