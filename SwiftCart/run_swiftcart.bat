@@ -7,7 +7,7 @@ echo ============================================
 echo.
 
 echo [Step 1/2] Building frontend...
-cd /d c:\Users\HP\SwiftCart\SwiftCart\01_frontend
+cd /d "%~dp001_frontend"
 call npm install --silent
 call npm run build
 
@@ -20,7 +20,7 @@ echo   Open this link in your browser!
 echo ============================================
 echo.
 
-cd /d c:\Users\HP\SwiftCart\SwiftCart\backend
+cd /d "%~dp0backend"
 call npm install --silent
 start "" "http://localhost:5000"
 node server.js
