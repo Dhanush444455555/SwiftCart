@@ -46,10 +46,8 @@ app.use(notFound);
 app.use(errorHandler);
 
 // Database Connection Mock
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/swiftcart', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(async() => {
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/swiftcart')
+.then(async () => {
     console.log('MongoDB Connected');
 
     try {

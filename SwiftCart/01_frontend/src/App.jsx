@@ -12,6 +12,7 @@ import Success from './pages/Success';
 import Profile from './pages/Profile';
 import Stores from './pages/Stores';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import AdminProducts from './pages/AdminProducts';
 import Feedback from './pages/Feedback/Feedback';
 import OffersPage from './pages/OffersPage';
@@ -44,6 +45,7 @@ function App() {
           <Route path="/profile"  element={<PageTransition><Profile /></PageTransition>} />
           <Route path="/stores"   element={<PageTransition><Stores /></PageTransition>} />
           <Route path="/login"    element={<PageTransition><Login /></PageTransition>} />
+          <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
           <Route path="/admin"    element={<PageTransition><AdminProducts /></PageTransition>} />
           <Route path="/feedback" element={<PageTransition><Feedback /></PageTransition>} />
           <Route path="/offers"   element={<PageTransition><OffersPage /></PageTransition>} />
