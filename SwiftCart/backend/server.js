@@ -83,5 +83,9 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/swiftcart')
     console.log('App will continue running with in-memory fallback.');
 });
 
-// Start server whether DB connects or not
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Start server when not exported (local dev)
+if (require.main === module) {
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+module.exports = app;

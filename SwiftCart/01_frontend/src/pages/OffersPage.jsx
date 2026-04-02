@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../store/cartSlice';
 import './OffersPage.css';
 
-const AI_URL = 'http://localhost:5001';
+const AI_URL = '';
 
 const CATEGORY_CONFIG = [
   { key: 'all',         label: 'All Deals',          emoji: '🎯', desc: 'Best offers across all categories', color: '#6C63FF' },

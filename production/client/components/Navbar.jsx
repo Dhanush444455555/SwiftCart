@@ -13,12 +13,12 @@ export default function Navbar({ user, cartItems, onLogout }) {
 
   return (
     <nav className="bg-white shadow-md">
-      <div className="container py-4 flex justify-between items-center">
+      <div className="container py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
         <Link href="/" className="text-2xl font-bold text-blue-600">
           SwiftCart
         </Link>
 
-        <div className="flex gap-4 items-center">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 items-center">
           {user ? (
             <>
               <Link href="/products" className="btn-secondary">

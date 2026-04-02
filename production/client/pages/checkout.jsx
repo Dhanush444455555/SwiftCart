@@ -120,7 +120,7 @@ export default function Checkout() {
           <div className="card mb-6">
             <h2 className="text-2xl font-bold mb-4">Delivery Address</h2>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-gray-700 font-semibold mb-2">Street</label>
                 <input
@@ -172,7 +172,7 @@ export default function Checkout() {
                 />
               </div>
 
-              <div className="col-span-2">
+              <div className="col-span-1 sm:col-span-2">
                 <label className="block text-gray-700 font-semibold mb-2">Phone</label>
                 <input
                   type="tel"
@@ -209,7 +209,7 @@ export default function Checkout() {
           </div>
         </div>
 
-        <div className="card h-fit sticky top-4">
+        <div className="card h-fit lg:sticky lg:top-4 mt-6 lg:mt-0">
           <h2 className="text-2xl font-bold mb-6">Payment Summary</h2>
 
           <div className="space-y-3 mb-6 pb-6 border-b">

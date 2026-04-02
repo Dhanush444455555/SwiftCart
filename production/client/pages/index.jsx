@@ -9,10 +9,10 @@ export default function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20 px-6 rounded-lg mb-12">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12 md:py-20 px-4 md:px-6 rounded-lg mb-8 md:mb-12">
         <div className="container text-center">
-          <h1 className="text-5xl font-bold mb-4">Welcome to SwiftCart</h1>
-          <p className="text-xl mb-8">
+          <h1 className="text-3xl md:text-5xl font-bold mb-4">Welcome to SwiftCart</h1>
+          <p className="text-lg md:text-xl mb-8">
             Scan. Shop. Pay. Exit. No queues, no hassle. The future of retail is here.
           </p>
           {user ? (
@@ -20,11 +20,11 @@ export default function Home() {
               Start Shopping
             </Link>
           ) : (
-            <div className="space-x-4">
-              <Link href="/login" className="btn-primary inline-block px-8 py-3">
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Link href="/login" className="btn-primary w-full sm:w-auto px-8 py-3">
                 Login
               </Link>
-              <Link href="/register" className="btn-secondary inline-block px-8 py-3">
+              <Link href="/register" className="btn-secondary w-full sm:w-auto px-8 py-3">
                 Register
               </Link>
             </div>
@@ -34,7 +34,7 @@ export default function Home() {
 
       {/* Features Section */}
       <div className="mb-12">
-        <h2 className="text-4xl font-bold mb-8 text-center">How It Works</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">How It Works</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="card text-center">
             <div className="text-4xl mb-4">📱</div>
@@ -61,7 +61,7 @@ export default function Home() {
 
       {/* Benefits Section */}
       <div className="card bg-gradient-to-r from-green-50 to-blue-50 mb-12">
-        <h2 className="text-3xl font-bold mb-6">Why Choose SwiftCart?</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-6">Why Choose SwiftCart?</h2>
         <ul className="space-y-3">
           <li className="flex items-center">
             <span className="text-2xl mr-4">✓</span>
@@ -89,8 +89,8 @@ export default function Home() {
       {/* CTA Section */}
       {user && (
         <div className="card text-center bg-blue-50">
-          <h2 className="text-2xl font-bold mb-4">Ready to Shop Smarter?</h2>
-          <Link href="/products" className="btn-primary inline-block">
+          <h2 className="text-xl md:text-2xl font-bold mb-4">Ready to Shop Smarter?</h2>
+          <Link href="/products" className="btn-primary w-full sm:w-auto inline-block">
             Explore Products
           </Link>
         </div>

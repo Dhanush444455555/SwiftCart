@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import { useAuth } from '../hooks/useAuth';
 import './Checkout.css';
 
-const BACKEND      = 'http://localhost:5000';
+const BACKEND      = '';
 const MERCHANT_UPI = '8904062827@ibl';
 const MERCHANT_NAME= 'SwiftCart';
 

@@ -31,8 +31,12 @@ app.use('/api/offers', offerRoutes);
 // 404
 app.use((_req, res) => res.status(404).json({ message: 'Endpoint not found' }));
 
-app.listen(PORT, () => {
-  console.log(`\n🤖 SwiftCart AI Model running on http://localhost:${PORT}`);
-  console.log(`   POST /api/offers/predict  — Get AI-predicted offers`);
-  console.log(`   GET  /api/offers/categories — Browse categories\n`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`\n🤖 SwiftCart AI Model running on http://localhost:${PORT}`);
+    console.log(`   POST /api/offers/predict  — Get AI-predicted offers`);
+    console.log(`   GET  /api/offers/categories — Browse categories\n`);
+  });
+}
+
+module.exports = app;

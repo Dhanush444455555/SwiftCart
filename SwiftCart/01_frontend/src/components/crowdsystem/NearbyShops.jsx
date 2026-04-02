@@ -3,7 +3,7 @@ import { Store, RefreshCw, MapPin, Navigation, AlertTriangle, Loader2, ChevronDo
 import ShopCard from './ShopCard';
 import './NearbyShops.css';
 
-const BACKEND = 'http://localhost:5000';
+const BACKEND = '';
 
 const NearbyShops = () => {
   const [shops, setShops]         = useState([]);

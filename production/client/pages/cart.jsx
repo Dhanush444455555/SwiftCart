@@ -35,8 +35,8 @@ export default function Cart() {
             const itemTotal = discountedPrice * item.quantity;
 
             return (
-              <div key={item.product._id} className="card mb-4 flex gap-4">
-                <div className="relative w-24 h-24 flex-shrink-0">
+              <div key={item.product._id} className="card mb-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                <div className="relative w-full sm:w-24 h-48 sm:h-24 flex-shrink-0">
                   <Image
                     src={item.product.image}
                     alt={item.product.name}
@@ -76,11 +76,11 @@ export default function Cart() {
                   </div>
                 </div>
 
-                <div className="text-right">
+                <div className="text-left sm:text-right mt-4 sm:mt-0 w-full sm:w-auto flex flex-col justify-between">
                   <p className="text-lg font-bold mb-4">₹{itemTotal.toFixed(2)}</p>
                   <button
                     onClick={() => removeItem(item.product._id)}
-                    className="btn-danger"
+                    className="btn-danger w-full sm:w-auto"
                   >
                     Remove
                   </button>
@@ -90,7 +90,7 @@ export default function Cart() {
           })}
         </div>
 
-        <div className="card h-fit sticky top-4">
+        <div className="card h-fit lg:sticky lg:top-4 mt-6 lg:mt-0">
           <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
 
           <div className="space-y-3 mb-6 pb-6 border-b">

@@ -62,7 +62,7 @@ export default function OrderSuccess() {
       <div className="card mb-6">
         <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
 
-        <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 pb-6 border-b">
           <div>
             <p className="text-gray-600 text-sm">Order ID</p>
             <p className="font-bold text-lg">{order._id}</p>

@@ -28,7 +28,7 @@ const Home = () => {
         // 1. If user is logged in, fetch their previous orders to learn their preferences
         if (user && token) {
            try {
-             const orderRes = await fetch('http://localhost:5000/api/orders', {
+             const orderRes = await fetch('/api/orders', {
                 headers: { 'Authorization': `Bearer ${token}` }
              });
              const orders = await orderRes.json();
@@ -44,7 +44,7 @@ const Home = () => {
         }
 
         // 2. Fetch predicted offers from the AI model engine on port 5001
-        const res = await fetch('http://localhost:5001/api/offers/predict', {
+        const res = await fetch('/api/offers/predict', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ category: 'all', preferences, limit: 2 })
