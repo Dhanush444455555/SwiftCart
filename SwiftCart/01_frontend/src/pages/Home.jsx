@@ -6,6 +6,7 @@ import { productService } from '../services/productService';
 import { setProducts } from '../store/productSlice';
 import ProductCard from '../components/common/ProductCard';
 import Button from '../components/common/Button';
+import BarcodeScannerModal from '../components/scanner/BarcodeScannerModal';
 import './Home.css';
 
 const Home = () => {
@@ -13,6 +14,7 @@ const Home = () => {
   const navigate = useNavigate();
   const { list: products } = useSelector((state) => state.products);
   const [loading, setLoading] = useState(true);
+  const [showScanner, setShowScanner] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -29,6 +31,7 @@ const Home = () => {
   }, [dispatch]);
 
   return (
+    <>
     <div className="home-container">
       {/* Hero Section */}
       <section className="hero-section glass-card">
@@ -37,9 +40,9 @@ const Home = () => {
           <p className="hero-subtitle">Smart Shopping, Zero Queues.</p>
           
           <div className="hero-actions">
-            <Button variant="gradient" className="action-btn" onClick={() => navigate('/scan')}>
+            <Button variant="gradient" className="action-btn" onClick={() => setShowScanner(true)}>
               <Camera size={24} className="btn-icon" />
-              Scan Item
+              Scan Barcode
             </Button>
             <Button variant="secondary" className="action-btn" onClick={() => navigate('/stores')}>
               <Store size={24} className="btn-icon" />
@@ -79,6 +82,12 @@ const Home = () => {
         )}
       </section>
     </div>
+
+    {/* Barcode Scanner Modal */}
+    {showScanner && (
+      <BarcodeScannerModal onClose={() => setShowScanner(false)} />
+    )}
+    </>
   );
 };
 

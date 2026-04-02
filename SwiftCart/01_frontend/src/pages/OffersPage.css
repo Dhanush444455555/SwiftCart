@@ -1,133 +1,153 @@
-/* ============================================================
-   OffersPage.css — AI Offers, premium design
-   ============================================================ */
+/* ── OffersPage.css — Black Theme ── */
 
 .op-page {
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Oxanium', sans-serif;
   padding-bottom: 3rem;
   max-width: 1200px;
 }
 
-/* ── Hero ─────────────────────────────────────────────────── */
+/* ── Hero ── */
 .op-hero {
   display: flex;
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
+  padding: 1.5rem;
+  background: rgb(18,18,18);
+  border: 1px solid #333;
+  border-radius: 14px;
 }
+
 .op-hero-icon {
   width: 52px; height: 52px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(167,139,250,0.15));
-  border: 1px solid rgba(108,99,255,0.3);
+  border-radius: 50%;
+  background: #0a0a0a;
+  border: 1px solid #333;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
+  transition: all 0.3s ease;
 }
+
+.op-hero:hover .op-hero-icon {
+  background: #fff;
+  border-color: #fff;
+  box-shadow: 0 0 15px rgba(255,255,255,0.2);
+  color: #000;
+}
+
 .op-hero-title {
-  font-size: 1.7rem; font-weight: 800;
-  background: linear-gradient(90deg, #fff 20%, #a78bfa 60%, #06b6d4);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 0; display: flex; align-items: center; gap: 0.6rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: #fff;
+  margin: 0;
+  display: flex; align-items: center; gap: 0.6rem;
 }
+
 .op-hero-badge {
   display: inline-flex; align-items: center; gap: 0.3rem;
-  font-size: 0.7rem; font-weight: 700;
-  -webkit-text-fill-color: #34d399;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.65rem; font-weight: 700;
   color: #34d399;
-  background: rgba(52,211,153,0.12);
-  border: 1px solid rgba(52,211,153,0.3);
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.25);
   padding: 2px 8px; border-radius: 20px;
   animation: pulse 2s ease-in-out infinite;
 }
-@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.65;} }
 
-.op-hero-sub  { font-size: 0.82rem; color: #64748b; margin: 0.2rem 0 0; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.6;} }
+
+.op-hero-sub { font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: #888; margin: 0.2rem 0 0; }
 
 .op-refresh-btn {
   margin-left: auto;
   width: 38px; height: 38px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.04);
-  color: #94A3B8; cursor: pointer;
+  border: 1px solid #333;
+  background: #0a0a0a;
+  color: #888; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: all 0.25s ease;
   flex-shrink: 0;
 }
-.op-refresh-btn:hover { background: rgba(108,99,255,0.15); color: #a78bfa; }
+.op-refresh-btn:hover { background: #fff; color: #000; border-color: #fff; }
+
 .op-spin { animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Context pills ─────────────────────────────────────────── */
+/* ── Context pills ── */
 .op-context { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
 .op-ctx-pill {
   display: inline-flex; align-items: center; gap: 0.3rem;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.72rem; font-weight: 600;
   padding: 4px 12px; border-radius: 20px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #64748b;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  color: #888;
 }
 
-/* ── Category Grid ─────────────────────────────────────────── */
+/* ── Category Grid ── */
 .op-cat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.85rem;
 }
+
 .op-cat-card {
   display: flex; flex-direction: column; align-items: flex-start;
   gap: 0.25rem;
   padding: 1rem 1.1rem;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  background: rgb(18,18,18);
+  border: 1px solid #222;
   cursor: pointer; text-align: left;
-  font-family: 'Poppins', sans-serif;
-  transition: all 0.25s ease;
+  font-family: 'Oxanium', sans-serif;
+  transition: all 0.3s ease;
 }
-.op-cat-card:hover {
-  background: rgba(255,255,255,0.06);
-  border-color: rgba(255,255,255,0.15);
-  transform: translateY(-2px);
-}
-.op-cat-card.active {
-  background: rgba(108,99,255,0.1);
-}
-.op-cat-emoji { font-size: 1.6rem; }
-.op-cat-label { font-size: 0.88rem; font-weight: 700; color: #e2e8f0; }
-.op-cat-desc  { font-size: 0.68rem; color: #475569; }
 
-/* ── Preference tags ───────────────────────────────────────── */
-.op-prefs {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem;
+.op-cat-card:hover {
+  background: #0a0a0a;
+  border-color: #555;
+  transform: translateY(-3px) translateX(2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
 }
+
+.op-cat-card.active { background: #fff; border-color: #fff; }
+.op-cat-card.active .op-cat-label { color: #000; }
+.op-cat-card.active .op-cat-desc  { color: #444; }
+
+.op-cat-emoji { font-size: 1.6rem; }
+.op-cat-label { font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 700; color: #fff; }
+.op-cat-desc  { font-size: 0.68rem; font-weight: 300; color: #888; }
+
+/* ── Preference tags ── */
+.op-prefs { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem; }
+
 .op-prefs-label {
-  font-size: 0.75rem; font-weight: 700;
-  color: #475569; text-transform: uppercase; letter-spacing: 0.4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem; font-weight: 700;
+  color: #888; text-transform: uppercase; letter-spacing: 1px;
   margin-right: 0.25rem;
 }
+
 .op-pref-tag {
   padding: 4px 13px; border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.09);
-  background: rgba(255,255,255,0.04);
-  color: #64748b; font-size: 0.74rem; font-weight: 600;
-  font-family: 'Poppins', sans-serif; cursor: pointer;
-  transition: all 0.18s ease;
-}
-.op-pref-tag:hover   { background: rgba(108,99,255,0.1); color: #a78bfa; }
-.op-pref-tag.selected{
-  background: rgba(108,99,255,0.2);
-  border-color: rgba(108,99,255,0.4);
-  color: #c4b5fd;
+  border: 1px solid #333;
+  background: #0a0a0a;
+  color: #888; font-family: 'DM Sans', sans-serif;
+  font-size: 0.74rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s ease;
 }
 
-/* ── Offers Grid ───────────────────────────────────────────── */
+.op-pref-tag:hover { border-color: #888; color: #ddd; }
+.op-pref-tag.selected { background: #fff; border-color: #fff; color: #000; }
+
+/* ── Offers Grid ── */
 .op-offers-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -140,41 +160,33 @@
 }
 
 .op-card {
-  background: rgba(15,23,42,0.8);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 22px;
+  background: rgb(18,18,18);
+  border: 1px solid #222;
+  border-radius: 14px;
   overflow: hidden;
   display: flex; flex-direction: column;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  position: relative;
   animation: cardIn 0.4s ease both;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
+
 .op-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(108,99,255,0.35);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 25px rgba(108,99,255,0.1);
+  border-color: #444;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
 }
 
-/* Discount badge */
 .op-discount-badge {
-  position: absolute;
-  top: 12px; left: 12px; z-index: 2;
+  position: absolute; top: 12px; left: 12px; z-index: 2;
   display: inline-flex; align-items: center; gap: 4px;
   padding: 4px 11px; border-radius: 20px;
-  background: rgba(244,63,94,0.85);
+  background: rgba(244,63,94,0.9);
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.7rem; font-weight: 800;
   color: #fff; letter-spacing: 0.3px;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
 }
-/* card needs relative for badge */
-.op-card { position: relative; }
 
-/* Product image */
-.op-card-img-wrap {
-  position: relative; height: 200px; overflow: hidden;
-}
+.op-card-img-wrap { position: relative; height: 200px; overflow: hidden; }
 .op-card-img {
   width: 100%; height: 100%; object-fit: cover;
   display: block;
@@ -183,91 +195,95 @@
 .op-card:hover .op-card-img { transform: scale(1.05); }
 .op-card-img-grad {
   position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(15,23,42,0.05) 50%, rgba(15,23,42,0.7) 100%);
+  background: linear-gradient(to bottom, rgba(18,18,18,0.05) 50%, rgba(18,18,18,0.7) 100%);
 }
 
-/* Card body */
 .op-card-body {
   padding: 1.1rem;
   display: flex; flex-direction: column; gap: 0.5rem; flex: 1;
 }
+
 .op-card-brand {
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.65rem; font-weight: 800;
-  color: #6C63FF; text-transform: uppercase; letter-spacing: 0.6px;
+  color: #888; text-transform: uppercase; letter-spacing: 1px;
 }
+
 .op-card-title {
+  font-family: 'DM Sans', sans-serif;
   font-size: 1rem; font-weight: 700;
-  color: #f1f5f9; margin: 0; line-height: 1.3;
+  color: #fff; margin: 0; line-height: 1.3;
 }
-.op-card-qty   { font-size: 0.72rem; color: #64748b; margin: 0; }
-.op-card-desc  { font-size: 0.75rem; color: #475569; margin: 0; line-height: 1.45; }
 
-/* AI confidence bar */
+.op-card-qty  { font-size: 0.72rem; font-weight: 300; color: #888; margin: 0; }
+.op-card-desc { font-size: 0.75rem; font-weight: 300; color: #888; margin: 0; line-height: 1.45; }
+
 .op-conf-wrap  { display: flex; align-items: center; gap: 0.6rem; }
-.op-conf-track {
-  flex: 1; height: 5px;
-  background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden;
-}
-.op-conf-fill  {
-  height: 100%; border-radius: 99px;
-  animation: barGrow 1s ease both;
-}
+.op-conf-track { flex: 1; height: 4px; background: #222; border-radius: 99px; overflow: hidden; }
+.op-conf-fill  { height: 100%; border-radius: 99px; background: #fff; animation: barGrow 1s ease both; }
 @keyframes barGrow { from { width: 0 !important; } }
-.op-conf-label { font-size: 0.65rem; font-weight: 700; color: #475569; white-space: nowrap; }
+.op-conf-label { font-family: 'DM Sans', sans-serif; font-size: 0.65rem; font-weight: 700; color: #888; white-space: nowrap; }
 
-/* AI reason */
-.op-ai-reason  { font-size: 0.7rem; color: #6C63FF; font-weight: 600; }
+.op-ai-reason { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: #aaa; font-weight: 600; }
 
-/* Price row */
-.op-price-row  { display: flex; align-items: center; justify-content: space-between; }
-.op-prices     { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
-.op-offer-price{ font-size: 1.25rem; font-weight: 800; color: #06b6d4; }
-.op-orig-price { font-size: 0.82rem; color: #475569; text-decoration: line-through; }
-.op-savings    {
+.op-price-row { display: flex; align-items: center; justify-content: space-between; }
+.op-prices    { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+.op-offer-price { font-family: 'DM Sans', sans-serif; font-size: 1.25rem; font-weight: 800; color: #fff; }
+.op-orig-price  { font-size: 0.82rem; font-weight: 300; color: #555; text-decoration: line-through; }
+
+.op-savings {
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.68rem; font-weight: 700;
   color: #34d399;
-  background: rgba(52,211,153,0.12);
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.2);
   padding: 2px 7px; border-radius: 20px;
 }
 
-/* Add to cart button */
+/* ── Add btn — SliceButton style ── */
 .op-add-btn {
   display: flex; align-items: center; justify-content: center; gap: 0.4rem;
   width: 100%; padding: 0.62rem;
-  border-radius: 12px; border: none; cursor: pointer;
-  background: linear-gradient(90deg, #6C63FF, #06b6d4);
-  color: #fff; font-size: 0.85rem; font-weight: 700;
-  font-family: 'Poppins', sans-serif;
-  transition: all 0.25s ease;
+  border-radius: 10px; border: 1px solid #fff; cursor: pointer;
+  background: #fff; color: #000;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px;
+  transition: all 0.3s ease;
   margin-top: auto;
+  position: relative; overflow: hidden;
 }
-.op-add-btn:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(108,99,255,0.35); }
-.op-add-btn.added { background: linear-gradient(90deg, #34d399, #06b6d4); }
+.op-add-btn::before { content:''; position:absolute; inset:0; background:#000; transform:translateX(-101%); transition:transform 0.3s ease; }
+.op-add-btn:hover::before { transform:translateX(0); }
+.op-add-btn:hover { color:#fff; }
+.op-add-btn span, .op-add-btn svg { position:relative; z-index:1; }
+.op-add-btn.added { background:#34d399; border-color:#34d399; color:#000; }
 
-/* ── Skeletons ─────────────────────────────────────────────── */
+/* ── Skeletons ── */
 .op-skeleton-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.25rem;
 }
+
 .op-skeleton {
-  height: 420px; border-radius: 22px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.03) 75%);
+  height: 420px; border-radius: 14px;
+  background: linear-gradient(90deg, #111 25%, #1a1a1a 50%, #111 75%);
   background-size: 200% 100%;
   animation: shimmer 1.6s ease-in-out infinite;
 }
+
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-/* ── Empty ─────────────────────────────────────────────────── */
+/* ── Empty ── */
 .op-empty {
   text-align: center; padding: 4rem;
   display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
-  color: #334155; font-size: 0.9rem;
+  color: #555; font-size: 0.9rem; font-weight: 300;
 }
 
-/* ── Responsive ────────────────────────────────────────────── */
+/* ── Responsive ── */
 @media (max-width: 640px) {
   .op-offers-grid, .op-skeleton-grid { grid-template-columns: 1fr; }
   .op-cat-grid { grid-template-columns: repeat(2, 1fr); }
-  .op-hero-title { font-size: 1.3rem; }
+  .op-hero-title { font-size: 1.6rem; }
 }
