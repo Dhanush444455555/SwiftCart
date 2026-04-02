@@ -8,65 +8,33 @@ const generateToken = (id) =>
   jwt.sign({ id }, JWT_SECRET, { expiresIn: '30d' });
 
 /* ─────────────────────────────────────────────────────────
-   In-memory fallback store  (used when MongoDB is offline)
-   Seeded with demo accounts so the app always works.
+   In-memory fallback store (used when MongoDB is offline)
    ───────────────────────────────────────────────────────── */
 const memUsers = [
-  {
-    _id:      'admin-id',
-    name:     'Admin User',
-    email:    'admin@swiftcart.com',
-    password: bcrypt.hashSync('admin123', 10),
-    role:     'admin',
-  },
-  {
-    _id:      'user-id',
-    name:     'Demo User',
-    email:    'user@swiftcart.com',
-    password: bcrypt.hashSync('user123', 10),
-    role:     'user',
-  },
+  { _id: 'admin-id', name: 'Admin User',  email: 'admin@swiftcart.com', password: bcrypt.hashSync('admin123', 10), role: 'admin' },
+  { _id: 'user-id',  name: 'Demo User',   email: 'user@swiftcart.com',  password: bcrypt.hashSync('user123', 10),  role: 'user'  },
 ];
 
-/** Returns true when Mongoose has an open connection to MongoDB */
 const isDbConnected = () => mongoose.connection.readyState === 1;
-
-/* ── Helpers for in-memory store ── */
-const memFindByEmail = (email) =>
-  memUsers.find(u => u.email.toLowerCase() === email.toLowerCase()) || null;
-
-const memFindById = (id) =>
-  memUsers.find(u => u._id === id) || null;
-
+const memFindByEmail = (email) => memUsers.find(u => u.email.toLowerCase() === email.toLowerCase()) || null;
 const memCreate = async ({ name, email, password, role = 'user' }) => {
-  const hashed = await bcrypt.hash(password, 10);
-  const user = {
-    _id:      `mem-${Date.now()}`,
-    name,
-    email,
-    password: hashed,
-    role,
-  };
+  const user = { _id: `mem-${Date.now()}`, name, email, password: await bcrypt.hash(password, 10), role };
   memUsers.push(user);
   return user;
 };
 
 /* ─────────────────────────────────────────────────────────
-   Controllers
+   Register
    ───────────────────────────────────────────────────────── */
-
-const registerUser = async (req, res, next) => {
+const registerUser = async (req, res) => {
   try {
     const { name, email, password, role = 'user' } = req.body;
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password)
       return res.status(400).json({ message: 'Name, email and password are required' });
-    }
-    if (password.length < 6) {
+    if (password.length < 6)
       return res.status(400).json({ message: 'Password must be at least 6 characters' });
-    }
 
-    /* ── Try real DB first ── */
     if (isDbConnected()) {
       try {
         const User = require('../models/User');
@@ -93,33 +61,33 @@ const registerUser = async (req, res, next) => {
       }
     }
 
-    /* ── Fallback: in-memory ── */
-    if (memFindByEmail(email)) {
+    // In-memory fallback
+    if (memFindByEmail(email))
       return res.status(400).json({ message: 'An account with this email already exists' });
-    }
 
     const user = await memCreate({ name, email, password, role });
     console.log(`[Auth] Registered in-memory (no DB): ${email}`);
-
     return res.status(201).json({
       user:  { _id: user._id, name: user.name, email: user.email, role: user.role },
       token: generateToken(user._id),
     });
 
   } catch (err) {
-    next(err);
+    console.error('[Auth] Register error:', err.message);
+    return res.status(500).json({ message: err.message || 'Registration failed' });
   }
 };
 
-const loginUser = async (req, res, next) => {
+/* ─────────────────────────────────────────────────────────
+   Login
+   ───────────────────────────────────────────────────────── */
+const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password)
       return res.status(400).json({ message: 'Email and password are required' });
-    }
 
-    /* ── Try real DB first ── */
     if (isDbConnected()) {
       try {
         const User = require('../models/User');
@@ -156,29 +124,28 @@ const loginUser = async (req, res, next) => {
     });
 
   } catch (err) {
-    console.error('Server error during login:', err);
-    next(err);
+    console.error('[Auth] Login error:', err.message);
+    return res.status(500).json({ message: err.message || 'Login failed' });
   }
 };
 
-const getMe = async (req, res, next) => {
+/* ─────────────────────────────────────────────────────────
+   Get current user
+   ───────────────────────────────────────────────────────── */
+const getMe = async (req, res) => {
   try {
-    /* ── Try real DB ── */
     if (isDbConnected()) {
       const User = require('../models/User');
       const user = await User.findById(req.user._id || req.user.id).select('-password');
       if (user) return res.status(200).json(user);
     }
-
-    /* ── Fallback: in-memory ── */
-    const user = memFindById(req.user._id || req.user.id);
+    const user = memUsers.find(u => u._id === (req.user._id || req.user.id));
     if (!user) return res.status(404).json({ message: 'User not found' });
-
     const { password: _, ...safeUser } = user;
     return res.status(200).json(safeUser);
-
   } catch (err) {
-    next(err);
+    console.error('[Auth] getMe error:', err.message);
+    return res.status(500).json({ message: err.message || 'Server error' });
   }
 };
 
