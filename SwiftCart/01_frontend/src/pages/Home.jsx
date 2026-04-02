@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Camera, Store, Tag, Grid } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -13,8 +13,51 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { list: products } = useSelector((state) => state.products);
+  const { user, token } = useSelector((state) => state.auth || {});
   const [loading, setLoading] = useState(true);
   const [showScanner, setShowScanner] = useState(false);
+  const [aiOffers, setAiOffers] = useState([]);
+  const [offersLoading, setOffersLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDynamicOffers = async () => {
+      try {
+        let preferences = [];
+        
+        // 1. If user is logged in, fetch their previous orders to learn their preferences
+        if (user && token) {
+           try {
+             const orderRes = await fetch('http://localhost:5000/api/orders', {
+                headers: { 'Authorization': `Bearer ${token}` }
+             });
+             const orders = await orderRes.json();
+             if (Array.isArray(orders)) {
+                orders.forEach(order => {
+                   order.items?.forEach(item => {
+                      if (item.category) preferences.push(item.category.toLowerCase());
+                      if (item.name) preferences.push(item.name.split(' ')[0].toLowerCase());
+                   });
+                });
+             }
+           } catch { /* ignore order fetch error and fallback to generic */ }
+        }
+
+        // 2. Fetch predicted offers from the AI model engine on port 5001
+        const res = await fetch('http://localhost:5001/api/offers/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category: 'all', preferences, limit: 2 })
+        });
+        const data = await res.json();
+        setAiOffers(data.offers || []);
+      } catch (error) {
+        console.error("Failed to fetch AI offers:", error);
+      } finally {
+        setOffersLoading(false);
+      }
+    };
+    fetchDynamicOffers();
+  }, [user, token]);
 
   // Parallax Scroll Hooks
   const { scrollY } = useScroll();
@@ -74,18 +117,25 @@ const Home = () => {
           <h2><Tag size={24} /> Personalized For You</h2>
         </div>
         <div className="offers-grid">
-          <Tilt options={tiltOptions} style={{ height: '100%', width: '100%' }}>
-            <div className="offer-card glass-card">
-              <h3>20% OFF</h3>
-              <p>On Chocolates Today</p>
-            </div>
-          </Tilt>
-          <Tilt options={tiltOptions} style={{ height: '100%', width: '100%' }}>
-            <div className="offer-card glass-card">
-              <h3>Buy 1 Get 1</h3>
-              <p>Snacks &amp; Beverages Aisle C</p>
-            </div>
-          </Tilt>
+          {offersLoading ? (
+            <p style={{ color: 'var(--text-secondary)' }}>Analyzing your preferences...</p>
+          ) : aiOffers.length > 0 ? (
+            aiOffers.map((offer) => (
+              <Tilt key={offer.id} options={tiltOptions} style={{ height: '100%', width: '100%' }}>
+                <div className="offer-card glass-card">
+                  <h3>{offer.discount}% OFF</h3>
+                  <p>{offer.title}</p>
+                </div>
+              </Tilt>
+            ))
+          ) : (
+            <Tilt options={tiltOptions} style={{ height: '100%', width: '100%' }}>
+              <div className="offer-card glass-card">
+                <h3>20% OFF</h3>
+                <p>On Chocolates Today</p>
+              </div>
+            </Tilt>
+          )}
         </div>
       </section>
 

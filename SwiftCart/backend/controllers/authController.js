@@ -68,20 +68,29 @@ const registerUser = async (req, res, next) => {
 
     /* ── Try real DB first ── */
     if (isDbConnected()) {
-      const User = require('../models/User');
+      try {
+        const User = require('../models/User');
 
-      const existing = await User.findOne({ email });
-      if (existing) {
-        return res.status(400).json({ message: 'An account with this email already exists' });
+        // Race the query to prevent indefinite buffering
+        const existing = await Promise.race([
+          User.findOne({ email }),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('Timeout')), 2000))
+        ]);
+
+        if (existing) {
+          return res.status(400).json({ message: 'An account with this email already exists' });
+        }
+
+        const user = await User.create({ name, email, password, role });
+        console.log(`[Auth] Registered in MongoDB: ${email}`);
+
+        return res.status(201).json({
+          user:  { _id: user._id, name: user.name, email: user.email, role: user.role },
+          token: generateToken(user._id),
+        });
+      } catch (dbError) {
+        console.error('[Auth] MongoDB error during register, falling back:', dbError.message);
       }
-
-      const user = await User.create({ name, email, password, role });
-      console.log(`[Auth] Registered in MongoDB: ${email}`);
-
-      return res.status(201).json({
-        user:  { _id: user._id, name: user.name, email: user.email, role: user.role },
-        token: generateToken(user._id),
-      });
     }
 
     /* ── Fallback: in-memory ── */
@@ -112,33 +121,42 @@ const loginUser = async (req, res, next) => {
 
     /* ── Try real DB first ── */
     if (isDbConnected()) {
-      const User = require('../models/User');
+      try {
+        const User = require('../models/User');
 
-      const user = await User.findOne({ email });
-      if (!user || !(await user.matchPassword(password))) {
-        return res.status(401).json({ message: 'Invalid email or password' });
+        const user = await Promise.race([
+          User.findOne({ email }),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('Timeout')), 2000))
+        ]);
+
+        if (!user || !(await user.matchPassword(password))) {
+          return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        console.log(`[Auth] Logged in from MongoDB: ${email}`);
+        return res.json({
+          user:  { _id: user._id, name: user.name, email: user.email, role: user.role },
+          token: generateToken(user._id),
+        });
+      } catch (dbError) {
+        console.error('[Auth] MongoDB error during login, falling back:', dbError.message);
       }
-
-      console.log(`[Auth] Logged in from MongoDB: ${email}`);
-      return res.json({
-        user:  { _id: user._id, name: user.name, email: user.email, role: user.role },
-        token: generateToken(user._id),
-      });
     }
 
     /* ── Fallback: in-memory ── */
-    const user = memFindByEmail(email);
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    const memUser = memFindByEmail(email);
+    if (!memUser || !(await bcrypt.compare(password, memUser.password))) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     console.log(`[Auth] Logged in from in-memory store: ${email}`);
     return res.json({
-      user:  { _id: user._id, name: user.name, email: user.email, role: user.role },
-      token: generateToken(user._id),
+      user:  { _id: memUser._id, name: memUser.name, email: memUser.email, role: memUser.role },
+      token: generateToken(memUser._id),
     });
 
   } catch (err) {
+    console.error('Server error during login:', err);
     next(err);
   }
 };
