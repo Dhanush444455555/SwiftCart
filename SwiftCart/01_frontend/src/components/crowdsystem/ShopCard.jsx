@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Star, Users, ExternalLink } from 'lucide-react';
+import { MapPin, Star, Users, ExternalLink, Navigation } from 'lucide-react';
 import ShopDetailModal from './ShopDetailModal';
 import './ShopCard.css';
 
@@ -13,14 +13,22 @@ const STORE_BANNERS = {
   default:            'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=600&q=80',
 };
 
-const ShopCard = ({ shop, index }) => {
+const ShopCard = ({ shop, index, userCoords }) => {
   const [showModal, setShowModal] = useState(false);
   const { name, type, address, dist, rating, open_now, crowd, banner, lat, lng } = shop;
 
   const bannerUrl = banner || STORE_BANNERS[type] || STORE_BANNERS.default;
 
+  // View on map link
   const mapsUrl = lat && lng
     ? `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=17/${lat}/${lng}`
+    : null;
+
+  // Google Maps turn-by-turn directions from user's location
+  const directionsUrl = lat && lng
+    ? userCoords
+      ? `https://www.google.com/maps/dir/${userCoords.lat},${userCoords.lng}/${lat},${lng}`
+      : `https://www.google.com/maps/dir/Current+Location/${lat},${lng}`
     : null;
 
   return (
@@ -131,10 +139,24 @@ const ShopCard = ({ shop, index }) => {
             </div>
           )}
 
-          {/* CTA */}
-          <button className="sc-cta-btn">
-            View All Products
-          </button>
+          {/* CTA row */}
+          <div className="sc-cta-row">
+            <button className="sc-cta-btn">
+              View All Products
+            </button>
+            {directionsUrl && (
+              <a
+                href={directionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sc-directions-btn"
+                onClick={e => e.stopPropagation()}
+                title="Get directions"
+              >
+                <Navigation size={13} /> Directions
+              </a>
+            )}
+          </div>
         </div>
       </article>
 

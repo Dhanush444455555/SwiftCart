@@ -48,9 +48,9 @@ const NearbyShops = () => {
   // ── geolocation on mount ──────────────────────────────────────
   useEffect(() => {
     if (!navigator.geolocation) {
-      const fb = { lat: 13.0827, lng: 80.2707 };
+      const fb = { lat: 13.3392, lng: 77.1017 }; // Tumakuru
       setCoords(fb); setLocError(true);
-      setLocationName('Chennai, India');
+      setLocationName('Tumakuru, Karnataka');
       fetchStores(fb.lat, fb.lng);
       return;
     }
@@ -62,10 +62,10 @@ const NearbyShops = () => {
         fetchStores(loc.lat, loc.lng);
       },
       () => {
-        // denied → use Chennai fallback but still show stores
-        const fb = { lat: 13.0827, lng: 80.2707 };
+        // denied → use Tumakuru fallback
+        const fb = { lat: 13.3392, lng: 77.1017 };
         setCoords(fb); setLocError(true);
-        setLocationName('Chennai (default)');
+        setLocationName('Tumakuru (default)');
         fetchStores(fb.lat, fb.lng);
       },
       { timeout: 10000, enableHighAccuracy: true }
@@ -145,7 +145,7 @@ const NearbyShops = () => {
       {locError && (
         <div className="ns-loc-banner">
           <AlertTriangle size={14} />
-          <span>Location access denied — showing stores near Chennai as default.</span>
+          <span>Location access denied — showing stores near Tumakuru as default.</span>
           <button className="ns-loc-retry" onClick={retryLocation}>
             <Navigation size={11} /> Allow Location
           </button>
@@ -214,7 +214,7 @@ const NearbyShops = () => {
       ) : filtered.length > 0 ? (
         <div className="ns-cards-grid">
           {filtered.map((shop, i) => (
-            <ShopCard key={shop.place_id} shop={shop} index={i} />
+            <ShopCard key={shop.place_id} shop={shop} index={i} userCoords={coords} />
           ))}
         </div>
       ) : (

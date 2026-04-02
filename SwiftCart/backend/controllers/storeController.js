@@ -49,20 +49,21 @@ const BANNER = {
   default:           'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=600&q=80',
 };
 
-// ── Fetch from Overpass API ────────────────────────────────────────
-function fetchOverpass(lat, lng, radius = 3000) {
-  const query = `[out:json][timeout:10];
+// ── Fetch from Overpass API — 5 km radius ─────────────────────────
+function fetchOverpass(lat, lng, radius = 5000) {
+  const query = `[out:json][timeout:15];
 (
-  node["shop"~"supermarket|mall|department_store|convenience|hypermarket|electronics"](around:${radius},${lat},${lng});
-  way["shop"~"supermarket|mall|department_store|convenience|hypermarket|electronics"](around:${radius},${lat},${lng});
-  relation["building"="mall"](around:${radius},${lat},${lng});
+  node["shop"~"supermarket|mall|department_store|convenience|hypermarket|electronics|shopping_centre"](around:${radius},${lat},${lng});
+  way["shop"~"supermarket|mall|department_store|convenience|hypermarket|electronics|shopping_centre"](around:${radius},${lat},${lng});
+  relation["building"~"mall|retail|commercial"](around:${radius},${lat},${lng});
+  node["amenity"~"marketplace"](around:${radius},${lat},${lng});
 );
-out center 12;`;
+out center 15;`;
 
   const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
 
   return new Promise((resolve, reject) => {
-    https.get(url, { timeout: 10000 }, (res) => {
+    https.get(url, { timeout: 12000 }, (res) => {
       let raw = '';
       res.on('data', chunk => { raw += chunk; });
       res.on('end', () => {
