@@ -6,3 +6,8 @@ build
 .vscode
 **/node_modules/
 **/.env
+
+# Debug / temp artifacts
+git_status*.txt
+rebase_output.txt
+build_err*.txt

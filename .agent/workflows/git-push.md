@@ -4,7 +4,7 @@ description: Pull from remote, resolve any conflicts, then push to origin
 
 # Git Push Workflow (always pull first)
 
-Run from the SwiftCart repo root: `c:\Users\dhanu\OneDrive\Documents\SwiftCart\SwiftCart`
+Run from the SwiftCart repo root: `d:\SwiftCart`
 
 1. Stage all local changes
 ```powershell
