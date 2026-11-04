@@ -1,27 +1,25 @@
-const mongoose = require('mongoose');
+/**
+ * Feedback.js — MySQL query helpers for the `feedbacks` table.
+ * Replaces the Mongoose Feedback model.
+ */
+const pool = require('../db');
 
-const feedbackSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
+const Feedback = {
+  /** Create a new feedback entry */
+  async create({ name, phone, rating = 5, message }) {
+    const [result] = await pool.query(
+      'INSERT INTO feedbacks (name, phone, rating, message) VALUES (?, ?, ?, ?)',
+      [name, phone, rating, message]
+    );
+    const [rows] = await pool.query('SELECT * FROM feedbacks WHERE id = ? LIMIT 1', [result.insertId]);
+    return rows[0];
   },
-  phone: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  rating: {
-    type: Number,
-    min: 1,
-    max: 5,
-    default: 5,
-  },
-  message: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-}, { timestamps: true });
 
-module.exports = mongoose.model('Feedback', feedbackSchema);
+  /** Return all feedbacks, newest first */
+  async findAll() {
+    const [rows] = await pool.query('SELECT * FROM feedbacks ORDER BY created_at DESC');
+    return rows;
+  },
+};
+
+module.exports = Feedback;
