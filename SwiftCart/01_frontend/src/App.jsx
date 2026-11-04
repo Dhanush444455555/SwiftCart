@@ -56,6 +56,7 @@ function App() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/"          element={<PageTransition><Home /></PageTransition>} />
+          <Route path="/products"  element={<PageTransition><Home /></PageTransition>} />
           <Route path="/search"    element={<PageTransition><Search /></PageTransition>} />
           <Route path="/scan"      element={<PageTransition><Scan /></PageTransition>} />
           <Route path="/cart"      element={<PageTransition><Cart /></PageTransition>} />

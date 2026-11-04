@@ -201,7 +201,7 @@ const Home = () => {
       <section className="featured-section">
         <div className="section-header-row">
           <div className="section-header" style={{ marginBottom: 0 }}>
-            <h2><Grid size={22} /> Top Flipkart & Amazon Deals ({displayedProducts.length})</h2>
+            <h2><Grid size={22} /> ALL PRODUCTS ({displayedProducts.length})</h2>
           </div>
 
           {/* Quick Search */}

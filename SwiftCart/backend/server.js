@@ -15,6 +15,7 @@ const storeRoutes    = require('./routes/storeRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const paymentRoutes  = require('./routes/paymentRoutes');
 const adminRoutes    = require('./routes/adminRoutes');
+const offerRoutes    = require('./routes/offerRoutes');
 const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 
 dotenv.config();
@@ -52,6 +53,7 @@ app.use('/api/stores',   storeRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/payment',  paymentRoutes);
 app.use('/api/admin',    adminRoutes);
+app.use('/api/offers',   offerRoutes);
 
 // ── 404 for unknown API routes ────────────────────────────────────
 app.use('/api', notFound);
