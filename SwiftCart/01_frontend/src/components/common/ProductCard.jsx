@@ -15,12 +15,15 @@ const ProductCard = ({ product }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigate = useNavigate();
 
+  const pId = product?._id ?? product?.id;
+
   // Always read live stock from Redux store (reflects admin changes + purchases)
   const liveProduct = useSelector(state =>
-    state.products.list.find(p => p._id === product._id)
+    state.products.list.find(p => (p._id ?? p.id) === pId || p.id === pId || p._id === pId)
   ) || product;
 
-  const outOfStock = liveProduct.stockCount <= 0;
+  const stockCount = liveProduct?.stockCount ?? liveProduct?.stock_count ?? 50;
+  const outOfStock = stockCount <= 0;
 
   const handleAddToCart = () => {
     if (!isAuthenticated) { navigate('/login'); return; }
@@ -28,7 +31,7 @@ const ProductCard = ({ product }) => {
     addItem(liveProduct);
   };
 
-  const stockColor = liveProduct.stockCount > 20 ? '#34d399' : liveProduct.stockCount > 5 ? '#fbbf24' : '#f87171';
+  const stockColor = stockCount > 20 ? '#34d399' : stockCount > 5 ? '#fbbf24' : '#f87171';
 
   const tiltOptions = {
     max: 15,          // max tilt rotation (deg)
@@ -48,26 +51,26 @@ const ProductCard = ({ product }) => {
       <div className="product-card glass-card">
         <div className="product-image-container">
           <img
-            src={liveProduct.image}
-            alt={liveProduct.name}
+            src={liveProduct?.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80'}
+            alt={liveProduct?.name || 'Product'}
             className="product-image"
-            onError={e => { e.target.src = 'https://placehold.co/300x200/1e3a8a/ffffff?text=Product'; }}
+            onError={e => { e.target.src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80'; }}
           />
-          <div className="product-badge">{liveProduct.category}</div>
+          <div className="product-badge">{liveProduct?.category || 'General'}</div>
           {outOfStock && <div className="product-out-badge">Out of Stock</div>}
         </div>
         <div className="product-content">
-          <h3 className="product-title">{liveProduct.name}</h3>
-          <p className="product-desc">{liveProduct.description}</p>
+          <h3 className="product-title">{liveProduct?.name}</h3>
+          <p className="product-desc">{liveProduct?.description}</p>
           <div className="product-stock-row">
             <span className="product-stock-dot" style={{ background: stockColor }} />
             <span className="product-stock-text" style={{ color: stockColor }}>
-              {outOfStock ? 'Out of stock' : `${liveProduct.stockCount} left`}
+              {outOfStock ? 'Out of stock' : `${stockCount} left`}
             </span>
-            {liveProduct.aisle && <span className="product-aisle">Aisle {liveProduct.aisle}</span>}
+            {liveProduct?.aisle && <span className="product-aisle">Aisle {liveProduct.aisle}</span>}
           </div>
           <div className="product-footer">
-            <span className="product-price">{formatCurrency(liveProduct.price)}</span>
+            <span className="product-price">{formatCurrency(liveProduct?.price || 0)}</span>
             {!isAdmin && (
               <Button
                 onClick={handleAddToCart}

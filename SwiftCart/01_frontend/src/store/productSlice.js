@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { getMockProducts } from '../data/mockProducts';
 
 const initialState = {
-  list:    [],    // populated from MySQL backend on app load
-  loading: true,  // true until first fetch resolves
+  list:    getMockProducts(),  // Instant rich Flipkart & Amazon products (zero blank screen)
+  loading: false,
 };
 
 const productSlice = createSlice({
@@ -10,7 +11,9 @@ const productSlice = createSlice({
   initialState,
   reducers: {
     setProducts: (state, action) => {
-      state.list    = action.payload;
+      if (Array.isArray(action.payload) && action.payload.length > 0) {
+        state.list = action.payload;
+      }
       state.loading = false;
     },
     setLoading: (state, action) => {

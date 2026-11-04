@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Camera, Store, Tag, Grid } from 'lucide-react';
+import { Camera, Store, Tag, Grid, Search, Sparkles, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Tilt } from 'react-tilt';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -8,42 +8,61 @@ import ProductCard from '../components/common/ProductCard';
 import Button from '../components/common/Button';
 import BarcodeScannerModal from '../components/scanner/BarcodeScannerModal';
 import PersonalisedCarousel from '../components/recommendation/PersonalisedCarousel';
+import { getMockProducts } from '../data/mockProducts';
 import './Home.css';
+
+const CATEGORY_TABS = [
+  { id: 'All',         label: 'All Deals',         icon: '🔥' },
+  { id: 'Mobiles',     label: 'Mobiles',           icon: '📱' },
+  { id: 'Electronics', label: 'Laptops & Gadgets', icon: '💻' },
+  { id: 'Clothing',    label: 'Fashion',           icon: '👕' },
+  { id: 'Home',        label: 'Home & Kitchen',    icon: '🏠' },
+  { id: 'Snacks',      label: 'Snacks & Sweets',   icon: '🍫' },
+  { id: 'Grocery',     label: 'Groceries',         icon: '🛒' },
+  { id: 'Beauty',      label: 'Beauty & Care',     icon: '✨' },
+];
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { list: products } = useSelector((state) => state.products);
+  const reduxProducts = useSelector((state) => state.products.list);
   const { user, token } = useSelector((state) => state.auth || {});
-  const [loading, setLoading] = useState(true);
+
+  // Fallback to rich mock catalog if Redux store is still loading or empty
+  const allProducts = useMemo(() => {
+    if (Array.isArray(reduxProducts) && reduxProducts.length > 0) {
+      return reduxProducts;
+    }
+    return getMockProducts();
+  }, [reduxProducts]);
+
+  const [selectedCat, setSelectedCat] = useState('All');
+  const [searchTerm, setSearchTerm]   = useState('');
   const [showScanner, setShowScanner] = useState(false);
-  const [aiOffers, setAiOffers] = useState([]);
+  const [aiOffers, setAiOffers]       = useState([]);
   const [offersLoading, setOffersLoading] = useState(true);
 
   useEffect(() => {
     const fetchDynamicOffers = async () => {
       try {
         let preferences = [];
-        
-        // 1. If user is logged in, fetch their previous orders to learn their preferences
         if (user && token) {
-           try {
-             const orderRes = await fetch('/api/orders/my-orders', {
-                headers: { 'Authorization': `Bearer ${token}` }
-             });
-             const orders = await orderRes.json();
-             if (Array.isArray(orders)) {
-                orders.forEach(order => {
-                   order.items?.forEach(item => {
-                      if (item.category) preferences.push(item.category.toLowerCase());
-                      if (item.name) preferences.push(item.name.split(' ')[0].toLowerCase());
-                   });
+          try {
+            const orderRes = await fetch('/api/orders/my-orders', {
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const orders = await orderRes.json();
+            if (Array.isArray(orders)) {
+              orders.forEach(order => {
+                order.items?.forEach(item => {
+                  if (item.category) preferences.push(item.category.toLowerCase());
+                  if (item.name) preferences.push(item.name.split(' ')[0].toLowerCase());
                 });
-             }
-           } catch { /* ignore order fetch error and fallback to generic */ }
+              });
+            }
+          } catch { /* ignore order fetch error */ }
         }
 
-        // 2. Fetch predicted offers from the AI model engine on port 5001
         const res = await fetch('/api/offers/predict', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -52,7 +71,7 @@ const Home = () => {
         const data = await res.json();
         setAiOffers(data.offers || []);
       } catch (error) {
-        console.error("Failed to fetch AI offers:", error);
+        // AI model optional
       } finally {
         setOffersLoading(false);
       }
@@ -78,54 +97,79 @@ const Home = () => {
     }
   };
 
-  const tiltOptions = {
-    max: 15, perspective: 1000, scale: 1.05, speed: 1000,
-    transition: true, axis: null, reset: true,
-    easing: "cubic-bezier(.03,.98,.52,.99)",
-    glare: true, "max-glare": 0.4
-  };
+  // Filter products by selected category and search term
+  const displayedProducts = useMemo(() => {
+    return allProducts.filter(p => {
+      const cat = (p.category || '').toLowerCase();
+      const name = (p.name || '').toLowerCase();
+      const desc = (p.description || '').toLowerCase();
+
+      let matchCat = true;
+      if (selectedCat !== 'All') {
+        const target = selectedCat.toLowerCase();
+        if (target === 'mobiles') {
+          matchCat = cat.includes('mobile') || /iphone|galaxy|pixel|oneplus|redmi|smartphone/i.test(name);
+        } else if (target === 'electronics') {
+          matchCat = cat.includes('electronic') || /macbook|laptop|ipad|watch|headphone|earbud|speaker|asus|dell/i.test(name);
+        } else if (target === 'clothing') {
+          matchCat = cat.includes('cloth') || cat.includes('fashion') || /shirt|jean|sneaker|jordan|shoe|puma|nike|aviator/i.test(name);
+        } else if (target === 'home') {
+          matchCat = cat.includes('home') || /fryer|mixer|vacuum|purifier|cooker|geyser/i.test(name);
+        } else if (target === 'snacks') {
+          matchCat = cat.includes('snack') || cat.includes('choc') || /chips|biscuit|silk|ferrero|cookie|maggi/i.test(name);
+        } else if (target === 'grocery') {
+          matchCat = cat.includes('groc') || cat.includes('fresh') || cat.includes('dairy') || /atta|rice|dal|oil|coffee|tea|nutella/i.test(name);
+        } else if (target === 'beauty') {
+          matchCat = cat.includes('beauty') || /trimmer|dryer|lipstick|serum|wash/i.test(name);
+        } else {
+          matchCat = cat.includes(target);
+        }
+      }
+
+      let matchSearch = true;
+      if (searchTerm.trim()) {
+        const query = searchTerm.toLowerCase().trim();
+        matchSearch = name.includes(query) || desc.includes(query) || cat.includes(query);
+      }
+
+      return matchCat && matchSearch;
+    });
+  }, [allProducts, selectedCat, searchTerm]);
 
   return (
     <>
     <div className="home-container">
-      {/* Hero Section — Revolving Spiral */}
-      <motion.section
+      {/* Hero Section */}
+      <motion.section 
         className="hero-section"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
         style={{ y: yHero, opacity: opacityHero }}
       >
-        {/* Animated spiral rings */}
-        <div className="hero-spiral-wrap" aria-hidden="true">
-          <div className="spiral-ring spiral-ring-1" />
-          <div className="spiral-ring spiral-ring-2" />
-          <div className="spiral-ring spiral-ring-3" />
-          <div className="spiral-ring spiral-ring-4" />
-        </div>
-
-        {/* Glow blobs */}
-        <div className="hero-blob hero-blob-purple" />
-        <div className="hero-blob hero-blob-orange" />
-
         <div className="hero-content">
-          <motion.h1
-            className="hero-title"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
+          <motion.div 
+            className="hero-badge"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
           >
-            Welcome to <span className="text-gradient">SwiftCart</span>
+            ⚡ The Future of Supermarket Checkout
+          </motion.div>
+          <motion.h1 
+            className="hero-title"
+            variants={floatingVariant}
+            initial="hidden"
+            animate="visible"
+          >
+            Scan. Bag. <span className="gradient-text">Go.</span>
           </motion.h1>
-          <motion.p
+          <motion.p 
             className="hero-subtitle"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.7 }}
           >
-            Smart Shopping, Zero Queues.
+            Discover top Amazon & Flipkart deals, scan barcodes with your phone, and enjoy instant queue-free checkout.
           </motion.p>
-          <motion.div
+          <motion.div 
             className="hero-actions"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -153,14 +197,64 @@ const Home = () => {
         <PersonalisedCarousel />
       </section>
 
-      {/* Products Section */}
+      {/* Products Section — Flipkart & Amazon Catalog */}
       <section className="featured-section">
-        <div className="section-header">
-          <h2><Grid size={20} /> All Products</h2>
+        <div className="section-header-row">
+          <div className="section-header" style={{ marginBottom: 0 }}>
+            <h2><Grid size={22} /> Top Flipkart & Amazon Deals ({displayedProducts.length})</h2>
+          </div>
+
+          {/* Quick Search */}
+          <div className="home-search-bar">
+            <Search size={16} color="#94a3b8" />
+            <input
+              type="text"
+              className="home-search-input"
+              placeholder="Search mobiles, laptops, shoes, groceries..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <X size={16} color="#94a3b8" style={{ cursor: 'pointer' }} onClick={() => setSearchTerm('')} />
+            )}
+          </div>
         </div>
-        <div className="products-grid">
-          {products.map(p => <ProductCard key={p._id} product={p} />)}
+
+        {/* Category Navigation Tabs */}
+        <div className="category-tabs-container">
+          {CATEGORY_TABS.map(tab => (
+            <button
+              key={tab.id}
+              className={`category-tab-btn ${selectedCat === tab.id ? 'active' : ''}`}
+              onClick={() => setSelectedCat(tab.id)}
+            >
+              <span>{tab.icon}</span>
+              <span>{tab.label}</span>
+            </button>
+          ))}
         </div>
+
+        {/* Products Grid */}
+        {displayedProducts.length === 0 ? (
+          <div className="home-empty-products">
+            <Sparkles size={40} color="#6366f1" style={{ marginBottom: '0.75rem' }} />
+            <h3>No products found for "{searchTerm || selectedCat}"</h3>
+            <p>Try searching for iPhone, Galaxy, Nike, Atta, or reset your filters.</p>
+            <Button
+              variant="gradient"
+              style={{ marginTop: '1rem', padding: '0.5rem 1.5rem' }}
+              onClick={() => { setSelectedCat('All'); setSearchTerm(''); }}
+            >
+              View All Products
+            </Button>
+          </div>
+        ) : (
+          <div className="products-grid">
+            {displayedProducts.map(p => (
+              <ProductCard key={p._id || p.id || p.qrCode} product={p} />
+            ))}
+          </div>
+        )}
       </section>
     </div>
 
@@ -188,10 +282,11 @@ const Home = () => {
         <div className="footer-col">
           <h4 className="footer-col-title">Shop</h4>
           <ul className="footer-links">
-            <li><a href="#" onClick={() => navigate('/')}>Home</a></li>
-            <li><a href="#" onClick={() => navigate('/products')}>All Products</a></li>
-            <li><a href="#" onClick={() => navigate('/stores')}>Nearby Stores</a></li>
-            <li><a href="#" onClick={() => navigate('/cart')}>My Cart</a></li>
+            <li><a href="#" onClick={() => navigate('/search')}>Search Products</a></li>
+            <li><a href="#" onClick={() => setSelectedCat('Mobiles')}>Mobiles & Tablets</a></li>
+            <li><a href="#" onClick={() => setSelectedCat('Electronics')}>Laptops & Tech</a></li>
+            <li><a href="#" onClick={() => setSelectedCat('Clothing')}>Fashion & Shoes</a></li>
+            <li><a href="#" onClick={() => setSelectedCat('Home')}>Home & Kitchen</a></li>
           </ul>
         </div>
 
@@ -200,7 +295,7 @@ const Home = () => {
           <h4 className="footer-col-title">Account</h4>
           <ul className="footer-links">
             <li><a href="#" onClick={() => navigate('/login')}>Login</a></li>
-            <li><a href="#" onClick={() => navigate('/orders')}>My Orders</a></li>
+            <li><a href="#" onClick={() => navigate('/profile')}>My Orders & Profile</a></li>
             <li><a href="#" onClick={() => navigate('/feedback')}>Feedback</a></li>
             <li><a href="#" onClick={() => navigate('/ai-offers')}>AI Offers</a></li>
           </ul>
