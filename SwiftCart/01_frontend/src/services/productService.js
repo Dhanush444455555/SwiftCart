@@ -1,16 +1,28 @@
-import { getMockProducts } from '../data/mockProducts';
+import apiClient from './apiClient';
 
 export const productService = {
-  // Primary: use local curated mock products (always works, no network needed)
-  getAllProducts: async () => {
-    return getMockProducts();
-  },
-  searchProducts: (query) => {
-    const q = query.toLowerCase();
-    return getMockProducts().filter(
-      p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)
-    );
-  },
-  getProductById: (id) => getMockProducts().find(p => p._id === id) || null,
-  getProductByQrCode: (qrCode) => getMockProducts().find(p => p.qrCode === qrCode) || null,
+  /** Fetch all products from MySQL backend */
+  getAllProducts: () => apiClient.get('/products'),
+
+  /** Search products by name via backend */
+  searchProducts: (query) => apiClient.get('/products/search', { params: { query } }),
+
+  /** Get single product by ID */
+  getProductById: (id) => apiClient.get(`/products/${id}`),
+
+  /** Get product by QR code */
+  getProductByQrCode: (qrCode) => apiClient.get(`/products/qr/${qrCode}`),
+
+  // ── Admin CRUD ──────────────────────────────────────────────────
+  /** [Admin] Create a new product */
+  createProduct: (data) => apiClient.post('/admin/products', data),
+
+  /** [Admin] Update a product */
+  updateProduct: (id, data) => apiClient.put(`/admin/products/${id}`, data),
+
+  /** [Admin] Delete a product */
+  deleteProduct: (id) => apiClient.delete(`/admin/products/${id}`),
+
+  /** [Admin] Get dashboard stats */
+  getStats: () => apiClient.get('/admin/stats'),
 };

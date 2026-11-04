@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   User, Package, Settings, LogOut, ChevronDown, ChevronUp,
   ShoppingBag, MapPin, Phone, Mail, Calendar, CreditCard, CheckCircle
@@ -6,16 +6,53 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser, logout } from '../store/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { orderService } from '../services/orderService';
 import './Profile.css';
 
 const Profile = () => {
-  const user     = useSelector(selectUser);
-  const orders   = useSelector(state => state.cart.pastOrders);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const user         = useSelector(selectUser);
+  const reduxOrders  = useSelector(state => state.cart.pastOrders);
+  const dispatch     = useDispatch();
+  const navigate     = useNavigate();
 
-  const [activeTab, setActiveTab]       = useState('orders');
+  const [activeTab, setActiveTab]         = useState('orders');
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const [dbOrders, setDbOrders]           = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    setLoadingOrders(true);
+    orderService.getMyOrders()
+      .then(res => {
+        const data = Array.isArray(res) ? res : res?.data || [];
+        setDbOrders(data);
+      })
+      .catch(err => console.error('Failed to load user orders:', err))
+      .finally(() => setLoadingOrders(false));
+  }, [user]);
+
+  // Merge DB orders and local Redux orders, avoiding duplicates
+  const allOrders = React.useMemo(() => {
+    const formattedDb = dbOrders.map(o => ({
+      id: `ORD-${o.id}`,
+      date: o.created_at || o.createdAt,
+      items: (o.items || []).map(i => ({
+        quantity: i.quantity,
+        product: {
+          name: i.product?.name || i.name || 'Item',
+          price: parseFloat(i.price || i.product?.price || 0),
+          image: i.product?.image || i.image,
+          category: i.product?.category || i.category,
+        }
+      })),
+      totalPrice: parseFloat(o.total_amount || o.totalAmount || 0),
+    }));
+
+    const existingIds = new Set(formattedDb.map(o => o.id));
+    const nonDuplicates = reduxOrders.filter(o => !existingIds.has(o.id));
+    return [...formattedDb, ...nonDuplicates];
+  }, [dbOrders, reduxOrders]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -54,18 +91,18 @@ const Profile = () => {
         </div>
         <div className="profile-stats">
           <div className="profile-stat">
-            <span className="stat-value">{orders.length}</span>
+            <span className="stat-value">{allOrders.length}</span>
             <span className="stat-label">Orders</span>
           </div>
           <div className="profile-stat">
             <span className="stat-value">
-              ₹{orders.reduce((s, o) => s + (o.totalPrice || 0), 0).toFixed(0)}
+              ₹{allOrders.reduce((s, o) => s + (o.totalPrice || 0), 0).toFixed(0)}
             </span>
             <span className="stat-label">Total Spent</span>
           </div>
           <div className="profile-stat">
             <span className="stat-value">
-              {orders.reduce((s, o) => s + (o.items?.length || 0), 0)}
+              {allOrders.reduce((s, o) => s + (o.items?.length || 0), 0)}
             </span>
             <span className="stat-label">Items Bought</span>
           </div>
@@ -106,7 +143,9 @@ const Profile = () => {
           {activeTab === 'orders' && (
             <>
               <h2><Package size={20} /> Order History</h2>
-              {orders.length === 0 ? (
+              {loadingOrders ? (
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>Loading orders…</div>
+              ) : allOrders.length === 0 ? (
                 <div className="profile-empty">
                   <ShoppingBag size={48} color="#444" />
                   <p>No orders yet.</p>
@@ -116,7 +155,7 @@ const Profile = () => {
                 </div>
               ) : (
                 <div className="orders-list">
-                  {orders.map((order) => (
+                  {allOrders.map((order) => (
                     <div key={order.id} className="order-card">
                       <div className="order-header">
                         <div>

@@ -1,6 +1,9 @@
 import apiClient from './apiClient';
 
 export const cartService = {
-  getCart: (userId) => apiClient.get(`/cart/${userId}`),
-  syncCart: (userId, items, totalPrice) => apiClient.post('/cart/sync', { userId, items, totalPrice }),
+  /** Get the authenticated user's cart (token from apiClient interceptor) */
+  getCart: () => apiClient.get('/cart'),
+
+  /** Replace cart contents on the server */
+  syncCart: (items, totalPrice) => apiClient.post('/cart/sync', { items, totalPrice }),
 };

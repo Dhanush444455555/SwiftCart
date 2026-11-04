@@ -28,7 +28,7 @@ const Home = () => {
         // 1. If user is logged in, fetch their previous orders to learn their preferences
         if (user && token) {
            try {
-             const orderRes = await fetch('/api/orders', {
+             const orderRes = await fetch('/api/orders/my-orders', {
                 headers: { 'Authorization': `Bearer ${token}` }
              });
              const orders = await orderRes.json();

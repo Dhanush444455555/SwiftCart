@@ -1,5 +1,6 @@
 const express  = require('express');
 const router   = express.Router();
+const pool     = require('../db');
 const Order    = require('../models/Order');
 const Razorpay = require('razorpay');
 const crypto   = require('crypto');
@@ -70,6 +71,28 @@ router.get('/my-orders', protect, async (req, res) => {
     const userId = req.user.id || req.user._id;
     const orders = await Order.findByUser(userId);
     res.json(orders);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/orders/update-stock — called after successful payment to reduce product stock
+router.post('/update-stock', protect, async (req, res) => {
+  try {
+    const { items } = req.body; // [{ productId, quantity }]
+    if (!Array.isArray(items) || !items.length) {
+      return res.status(400).json({ message: 'items array required' });
+    }
+    for (const { productId, quantity } of items) {
+      await pool.query(
+        `UPDATE products 
+         SET stock_count = GREATEST(0, stock_count - ?),
+             in_stock = CASE WHEN GREATEST(0, stock_count - ?) > 0 THEN 1 ELSE 0 END
+         WHERE id = ?`,
+        [quantity, quantity, productId]
+      );
+    }
+    res.json({ message: 'Stock updated successfully' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

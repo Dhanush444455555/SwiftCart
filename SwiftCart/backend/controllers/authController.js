@@ -4,6 +4,10 @@ const User      = require('../models/User');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
 
+// Sanitize helpers
+const sanitizeEmail = (e) => (e || '').trim().toLowerCase();
+const sanitizeName  = (n) => (n || '').trim().slice(0, 100);
+
 const generateToken = (id) =>
   jwt.sign({ id }, JWT_SECRET, { expiresIn: '30d' });
 
@@ -12,7 +16,9 @@ const generateToken = (id) =>
    ───────────────────────────────────────────────────────── */
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role = 'user' } = req.body;
+    const { password, role = 'user' } = req.body;
+    const name  = sanitizeName(req.body.name);
+    const email = sanitizeEmail(req.body.email);
 
     if (!name || !email || !password)
       return res.status(400).json({ message: 'Name, email and password are required' });
@@ -41,7 +47,8 @@ const registerUser = async (req, res) => {
    ───────────────────────────────────────────────────────── */
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { password } = req.body;
+    const email = sanitizeEmail(req.body.email);
 
     if (!email || !password)
       return res.status(400).json({ message: 'Email and password are required' });

@@ -3,7 +3,8 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
-import { setProducts } from './store/productSlice';
+import { setProducts, setLoading } from './store/productSlice';
+import { productService } from './services/productService';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
 import Search from './pages/Search';
@@ -36,38 +37,40 @@ function App() {
   const location = useLocation();
   const dispatch = useDispatch();
 
+  // Load products from MySQL backend on startup
   useEffect(() => {
-    fetch('/api/products')
-      .then(res => res.json())
+    dispatch(setLoading(true));
+    productService.getAllProducts()
       .then(data => {
-        if (data && data.length > 0) {
+        if (Array.isArray(data) && data.length > 0) {
           dispatch(setProducts(data));
         }
       })
-      .catch(err => console.error("Failed to fetch products from backend:", err));
+      .catch(err => console.error('Failed to fetch products from backend:', err))
+      .finally(() => dispatch(setLoading(false)));
   }, [dispatch]);
-  
+
   return (
     <Layout>
-      <Toaster position="top-right" />
+      <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route path="/"         element={<PageTransition><Home /></PageTransition>} />
-          <Route path="/search"   element={<PageTransition><Search /></PageTransition>} />
-          <Route path="/scan"     element={<PageTransition><Scan /></PageTransition>} />
-          <Route path="/cart"     element={<PageTransition><Cart /></PageTransition>} />
-          <Route path="/checkout" element={<PageTransition><Checkout /></PageTransition>} />
-          <Route path="/success"  element={<PageTransition><Success /></PageTransition>} />
-          <Route path="/profile"  element={<PageTransition><Profile /></PageTransition>} />
-          <Route path="/stores"   element={<PageTransition><Stores /></PageTransition>} />
-          <Route path="/login"    element={<PageTransition><Login /></PageTransition>} />
-          <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
-          <Route path="/admin"    element={<PageTransition><AdminProducts /></PageTransition>} />
-          <Route path="/feedback" element={<PageTransition><Feedback /></PageTransition>} />
-          <Route path="/offers"   element={<PageTransition><OffersPage /></PageTransition>} />
+          <Route path="/"          element={<PageTransition><Home /></PageTransition>} />
+          <Route path="/search"    element={<PageTransition><Search /></PageTransition>} />
+          <Route path="/scan"      element={<PageTransition><Scan /></PageTransition>} />
+          <Route path="/cart"      element={<PageTransition><Cart /></PageTransition>} />
+          <Route path="/checkout"  element={<PageTransition><Checkout /></PageTransition>} />
+          <Route path="/success"   element={<PageTransition><Success /></PageTransition>} />
+          <Route path="/profile"   element={<PageTransition><Profile /></PageTransition>} />
+          <Route path="/stores"    element={<PageTransition><Stores /></PageTransition>} />
+          <Route path="/login"     element={<PageTransition><Login /></PageTransition>} />
+          <Route path="/register"  element={<PageTransition><Register /></PageTransition>} />
+          <Route path="/admin"     element={<PageTransition><AdminProducts /></PageTransition>} />
+          <Route path="/feedback"  element={<PageTransition><Feedback /></PageTransition>} />
+          <Route path="/offers"    element={<PageTransition><OffersPage /></PageTransition>} />
           <Route path="/ai-offers" element={<PageTransition><OffersPage /></PageTransition>} />
-          <Route path="/help"     element={<PageTransition><Help /></PageTransition>} />
-          <Route path="*"         element={<PageTransition><NotFound /></PageTransition>} />
+          <Route path="/help"      element={<PageTransition><Help /></PageTransition>} />
+          <Route path="*"          element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>
       </AnimatePresence>
     </Layout>
