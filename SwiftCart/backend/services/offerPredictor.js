@@ -367,3 +367,4 @@ function addOffer(category, offer) {
 }
 
 module.exports = { predictOffers, getTimeOfDay, getDayType, addOffer, OFFERS };
+
