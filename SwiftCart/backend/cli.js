@@ -44,3 +44,4 @@ if (argQuery) {
     rl.prompt();
   });
 }
+

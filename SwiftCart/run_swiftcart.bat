@@ -7,7 +7,7 @@ echo ============================================
 echo.
 
 echo [Step 1/3] Building frontend...
-cd /d "%~dp001_frontend"
+cd /d "%~dp0frontend"
 call npm install --silent
 call npm run build
 
@@ -16,7 +16,6 @@ echo [Step 2/3] Preparing MySQL Database & Seeding Products...
 cd /d "%~dp0backend"
 call npm install --silent
 call node initDb.js
-call node data/seedFlipkartAmazon.js
 
 echo.
 echo [Step 3/3] Starting server...

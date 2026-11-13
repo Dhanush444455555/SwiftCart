@@ -59,7 +59,7 @@ app.use('/api/offers',   offerRoutes);
 app.use('/api', notFound);
 
 // ── Serve frontend build ──────────────────────────────────────────
-const frontendDist = path.join(__dirname, '..', '01_frontend', 'dist');
+const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
 app.use(express.static(frontendDist));
 app.get('/{*path}', (req, res) => {
   res.sendFile(path.join(frontendDist, 'index.html'));
