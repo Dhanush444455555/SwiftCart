@@ -1,5 +1,5 @@
 /**
- * initDb.js — Creates the swiftcart MySQL database and all tables.
+ * initDb.js — Creates the swiftcart database and all tables on MySQL / TiDB Cloud.
  *
  * Run once: node backend/initDb.js
  *
@@ -10,15 +10,31 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 async function init() {
-  // Connect without selecting a database first (so we can create it)
-  const conn = await mysql.createConnection({
-    host:     process.env.MYSQL_HOST     || 'localhost',
-    port:     parseInt(process.env.MYSQL_PORT || '3306', 10),
-    user:     process.env.MYSQL_USER     || 'root',
-    password: process.env.MYSQL_PASSWORD || '',
-  });
+  const host     = process.env.MYSQL_HOST     || process.env.DB_HOST     || 'localhost';
+  const port     = parseInt(process.env.MYSQL_PORT || process.env.DB_PORT || '3306', 10);
+  const user     = process.env.MYSQL_USER     || process.env.DB_USERNAME || 'root';
+  const password = process.env.MYSQL_PASSWORD || process.env.DB_PASSWORD || '';
+  const db       = process.env.MYSQL_DATABASE || process.env.DB_DATABASE || 'swiftcart';
+  const isRemote = host !== 'localhost' && host !== '127.0.0.1';
+  const useSsl   = process.env.MYSQL_SSL === 'true' || (isRemote && process.env.MYSQL_SSL !== 'false');
 
-  const db = process.env.MYSQL_DATABASE || 'swiftcart';
+  const connectionUri = process.env.DATABASE_URL || process.env.MYSQL_URL;
+
+  let conn;
+  if (connectionUri) {
+    conn = await mysql.createConnection({
+      uri: connectionUri,
+      ssl: process.env.MYSQL_SSL === 'false' ? undefined : { minVersion: 'TLSv1.2', rejectUnauthorized: false }
+    });
+  } else {
+    conn = await mysql.createConnection({
+      host,
+      port,
+      user,
+      password,
+      ssl: useSsl ? { minVersion: 'TLSv1.2', rejectUnauthorized: false } : undefined,
+    });
+  }
 
   console.log(`Creating database '${db}' if it does not exist…`);
   await conn.query(`CREATE DATABASE IF NOT EXISTS \`${db}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
@@ -130,11 +146,10 @@ async function init() {
   console.log('  ✓ feedbacks');
 
   await conn.end();
-  console.log(`\n✅ Database '${db}' initialised successfully.`);
+  console.log(`\n✅ Database '${db}' initialised successfully on TiDB Cloud!`);
 }
 
 init().catch(err => {
   console.error('❌ initDb failed:', err.message);
   process.exit(1);
 });
-
