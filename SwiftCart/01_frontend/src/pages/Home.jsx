@@ -8,7 +8,6 @@ import ProductCard from '../components/common/ProductCard';
 import Button from '../components/common/Button';
 import BarcodeScannerModal from '../components/scanner/BarcodeScannerModal';
 import PersonalisedCarousel from '../components/recommendation/PersonalisedCarousel';
-import { getMockProducts } from '../data/mockProducts';
 import './Home.css';
 
 const CATEGORY_TABS = [
@@ -25,15 +24,13 @@ const CATEGORY_TABS = [
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const reduxProducts = useSelector((state) => state.products.list);
+  const reduxProducts   = useSelector((state) => state.products.list);
+  const productsLoading = useSelector((state) => state.products.loading);
   const { user, token } = useSelector((state) => state.auth || {});
 
-  // Fallback to rich mock catalog if Redux store is still loading or empty
+  // Products sourced exclusively from MySQL database via Redux
   const allProducts = useMemo(() => {
-    if (Array.isArray(reduxProducts) && reduxProducts.length > 0) {
-      return reduxProducts;
-    }
-    return getMockProducts();
+    return Array.isArray(reduxProducts) ? reduxProducts : [];
   }, [reduxProducts]);
 
   const [selectedCat, setSelectedCat] = useState('All');
@@ -241,7 +238,13 @@ const Home = () => {
         </div>
 
         {/* Products Grid */}
-        {displayedProducts.length === 0 ? (
+        {productsLoading ? (
+          <div className="home-empty-products" style={{ padding: '4rem 1rem' }}>
+            <Sparkles size={36} color="#a78bfa" style={{ marginBottom: '1rem', animation: 'spin 2s linear infinite' }} />
+            <h3 style={{ color: '#fff', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Loading Products from Database...</h3>
+            <p style={{ color: '#94a3b8' }}>Fetching live catalog from SQL</p>
+          </div>
+        ) : displayedProducts.length === 0 ? (
           <div className="home-empty-products">
             <Sparkles size={40} color="#6366f1" style={{ marginBottom: '0.75rem' }} />
             <h3>No products found for "{searchTerm || selectedCat}"</h3>

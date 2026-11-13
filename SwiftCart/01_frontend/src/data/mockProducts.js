@@ -13,6 +13,18 @@ const PRODUCTS = [
     "aisle": "E-01"
   },
   {
+    "_id": "fa_0232",
+    "name": "readmi note 14 pro + 5g",
+    "description": "Forged in titanium with A17 Pro chip, customizable Action button, and 48MP main camera system with 3x Telephoto.",
+    "price": 34000,
+    "category": "Mobiles",
+    "image": "https://th.bing.com/th/id/OIP.Db_-dJ6D1JQ3ssDidlrhLwHaED?w=285&h=180&c=7&r=0&o=7&dpr=1.1&pid=1.7&rm=3",
+    "stockCount": 45,
+    "inStock": true,
+    "qrCode": "QR-REDMINOTE14PRO-02",
+    "aisle": "E-01"
+  },
+  {
     "_id": "fa_002",
     "name": "Apple iPhone 15 (128 GB) - Midnight Black",
     "description": "Dynamic Island, 48MP Main Camera, durable color-infused glass and aluminum design with USB-C.",
@@ -388,7 +400,7 @@ const PRODUCTS = [
     "_id": "fa_033",
     "name": "Fortune Sunlite Refined Sunflower Cooking Oil 5 Liter Can",
     "description": "Light, healthy and easy to digest edible cooking oil, enriched with Vitamin A and Vitamin D.",
-    "price": 699,
+    "price": 69,
     "category": "Grocery",
     "image": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=600&q=80",
     "stockCount": 70,
@@ -444,7 +456,7 @@ const PRODUCTS = [
     "qrCode": "QR-MAYBELLINELIP-37",
     "aisle": "B-03"
   }
-,
+  ,
 
   // ── EXISTING SUPERMARKET PRODUCTS ──
   // ── GROCERIES ──

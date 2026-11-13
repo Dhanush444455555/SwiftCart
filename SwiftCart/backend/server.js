@@ -103,7 +103,9 @@ async function startServer() {
   } catch (err) {
     console.error('❌ MySQL connection error:', err.message);
     console.error('Make sure MySQL is running and .env is configured correctly.');
-    process.exit(1);
+    if (!process.env.VERCEL && require.main === module) {
+      process.exit(1);
+    }
   }
 }
 

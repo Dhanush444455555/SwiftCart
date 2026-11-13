@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getMockProducts } from '../data/mockProducts';
 
 const initialState = {
-  list:    getMockProducts(),  // Instant rich Flipkart & Amazon products (zero blank screen)
+  list:    [],
   loading: false,
 };
 
@@ -11,9 +10,7 @@ const productSlice = createSlice({
   initialState,
   reducers: {
     setProducts: (state, action) => {
-      if (Array.isArray(action.payload) && action.payload.length > 0) {
-        state.list = action.payload;
-      }
+      state.list = Array.isArray(action.payload) ? action.payload : [];
       state.loading = false;
     },
     setLoading: (state, action) => {

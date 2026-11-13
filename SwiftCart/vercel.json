@@ -11,17 +11,9 @@
     {
       "src": "backend/server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "03_ai_model/server.js",
-      "use": "@vercel/node"
     }
   ],
   "routes": [
-    {
-      "src": "/api/offers/(.*)",
-      "dest": "/03_ai_model/server.js"
-    },
     {
       "src": "/api/(.*)",
       "dest": "/backend/server.js"
