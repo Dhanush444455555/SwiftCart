@@ -139,50 +139,56 @@ const Home = () => {
   return (
     <>
     <div className="home-container">
-      {/* Hero Section */}
+      {/* Hero Section — Revolving Spiral */}
       <motion.section 
         className="hero-section"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
         style={{ y: yHero, opacity: opacityHero }}
       >
+        {/* Animated spiral rings */}
+        <div className="hero-spiral-wrap" aria-hidden="true">
+          <div className="spiral-ring spiral-ring-1" />
+          <div className="spiral-ring spiral-ring-2" />
+          <div className="spiral-ring spiral-ring-3" />
+        </div>
+
+        {/* Glow blobs */}
+        <div className="hero-blob hero-blob-purple" />
+        <div className="hero-blob hero-blob-orange" />
+
         <div className="hero-content">
-          <motion.div 
-            className="hero-badge"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            ⚡ The Future of Supermarket Checkout
-          </motion.div>
           <motion.h1 
             className="hero-title"
-            variants={floatingVariant}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.7 }}
           >
-            Scan. Bag. <span className="gradient-text">Go.</span>
+            WELCOME TO <span className="brand-gradient">SWIFTCART</span>
           </motion.h1>
           <motion.p 
             className="hero-subtitle"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.7 }}
+            transition={{ delay: 0.4, duration: 0.7 }}
           >
-            Discover top Amazon & Flipkart deals, scan barcodes with your phone, and enjoy instant queue-free checkout.
+            Smart Shopping, Zero Queues.
           </motion.p>
           <motion.div 
             className="hero-actions"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.7 }}
+            transition={{ delay: 0.6, duration: 0.7 }}
           >
-            <Button variant="gradient" className="action-btn" onClick={() => setShowScanner(true)}>
-              <Camera size={24} className="btn-icon" />
-              Scan Barcode
-            </Button>
-            <Button variant="secondary" className="action-btn" onClick={() => navigate('/stores')}>
-              <Store size={24} className="btn-icon" />
-              Nearby Stores
-            </Button>
+            <button className="hero-btn-white" onClick={() => setShowScanner(true)}>
+              <Camera size={18} strokeWidth={2.4} />
+              <span>SCAN BARCODE</span>
+            </button>
+            <button className="hero-btn-white" onClick={() => navigate('/stores')}>
+              <Store size={18} strokeWidth={2.4} />
+              <span>NEARBY STORES</span>
+            </button>
           </motion.div>
         </div>
       </motion.section>

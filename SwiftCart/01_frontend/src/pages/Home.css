@@ -9,12 +9,13 @@
 /* ── Hero — Revolving Spiral ── */
 .hero-section {
   position: relative;
-  padding: 5rem 2rem 4rem;
+  padding: 4.8rem 2rem 4rem;
   text-align: center;
   overflow: hidden;
   border-radius: 20px;
-  background: radial-gradient(ellipse at 50% 60%, #1a0a2e 0%, #0a0a12 60%, #000 100%);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: radial-gradient(ellipse at 35% 45%, #240b45 0%, #0d071a 50%, #05040a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
   isolation: isolate;
 }
 
@@ -57,24 +58,24 @@
 
 /* Ring 1 — large outer, slow */
 .spiral-ring-1 {
-  width: 320px; height: 200px;
-  border-color: rgba(100, 160, 255, 0.7);
-  box-shadow: 0 0 24px rgba(100,160,255,0.4), inset 0 0 12px rgba(100,160,255,0.15);
-  animation: revolve1 5s linear infinite;
+  width: 320px; height: 180px;
+  border-color: rgba(56, 189, 248, 0.7);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.45), inset 0 0 10px rgba(56, 189, 248, 0.2);
+  animation: revolve1 9s linear infinite;
 }
 /* Ring 2 — tilted 60deg */
 .spiral-ring-2 {
-  width: 260px; height: 160px;
-  border-color: rgba(180, 100, 255, 0.8);
-  box-shadow: 0 0 20px rgba(180,100,255,0.45), inset 0 0 10px rgba(180,100,255,0.15);
-  animation: revolve2 4s linear infinite;
+  width: 300px; height: 170px;
+  border-color: rgba(192, 132, 252, 0.85);
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.5), inset 0 0 12px rgba(168, 85, 247, 0.2);
+  animation: revolve2 8s linear infinite;
 }
 /* Ring 3 — tighter, fast */
 .spiral-ring-3 {
-  width: 200px; height: 120px;
-  border-color: rgba(100, 220, 255, 0.7);
-  box-shadow: 0 0 16px rgba(100,220,255,0.4);
-  animation: revolve3 3s linear infinite;
+  width: 240px; height: 140px;
+  border-color: rgba(147, 197, 253, 0.65);
+  box-shadow: 0 0 16px rgba(147, 197, 253, 0.4);
+  animation: revolve3 7s linear infinite;
 }
 /* Ring 4 — innermost glow */
 .spiral-ring-4 {
@@ -590,4 +591,68 @@
   border-radius: 16px;
   margin-top: 1rem;
   color: #94a3b8;
+}
+
+
+/* ── Hero Customization (Matches Screenshot) ── */
+.hero-title .brand-gradient {
+  background: linear-gradient(90deg, #9333ea 0%, #c084fc 35%, #ec4899 75%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.hero-subtitle {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 1.05rem !important;
+  color: #94a3b8 !important;
+  margin-top: 0.35rem !important;
+  margin-bottom: 2.2rem !important;
+  letter-spacing: 0.3px !important;
+}
+
+.hero-btn-white {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.82rem 1.75rem;
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #ffffff;
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease;
+  position: relative;
+  z-index: 10;
+}
+
+.hero-btn-white:hover {
+  transform: translateY(-2px);
+  background: #f8fafc;
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.25);
+  color: #000;
+}
+
+.hero-btn-white:active {
+  transform: translateY(0);
+}
+
+.hero-btn-white svg {
+  color: #0f172a;
+  stroke: #0f172a;
+  transition: transform 0.2s ease;
+}
+
+.hero-btn-white:hover svg {
+  transform: scale(1.1);
 }
